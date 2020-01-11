@@ -1,0 +1,18 @@
+.grid{
+    display: grid;
+    grid-template-rows: 6rem calc(100vh - 16rem) 10rem;
+    grid-template-areas: "toolbar"
+                          "main"
+                          "footer";
+
+}
+
+.grid_main{
+    background-color: chocolate;
+    grid-area: main;
+}
+
+.grid_footer{
+    grid-area: footer;
+    background-color: red;
+}

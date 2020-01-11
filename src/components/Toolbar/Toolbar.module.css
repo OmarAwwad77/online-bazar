@@ -1,0 +1,28 @@
+.toolbar{
+    grid-area: toolbar;
+    display: flex;
+    background-color: blueviolet;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.logo_container{
+    height: 80%;
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    height: 100%;
+}
+
+.logo_text{
+    margin: 0 auto 0 0.7rem;
+    font-size: 25px;
+    font-weight: 700;
+    color: #4e002d;
+}
+
+.logo_text span{
+    color:#ff0061;
+}
