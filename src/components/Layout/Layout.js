@@ -8,7 +8,8 @@ const Layout = (props) => {
     return (
         <div className={classes.grid}>
             <Toolbar />
-            <main className={classes.grid_main} />
+            {/* <main className={classes.grid_main} /> */}
+            {props.children}
             <footer className={classes.grid_footer} />
         </div>
 

@@ -1,7 +1,7 @@
 .toolbar{
     grid-area: toolbar;
     display: flex;
-    background-color: blueviolet;
+    background-color: #fff;
     justify-content: space-around;
     align-items: center;
 }
@@ -19,7 +19,7 @@
 .logo_text{
     margin: 0 auto 0 0.7rem;
     font-size: 25px;
-    font-weight: 700;
+    font-weight: 800;
     color: #4e002d;
 }
 

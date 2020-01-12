@@ -1,0 +1,22 @@
+.filters{
+    background: #fff;
+    text-align: center;
+    display: inline-block;
+    border-radius: .5rem;
+}
+
+
+.select{
+    width: 22rem;
+    height: 4rem;
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    border-radius: .5rem;
+}
+
+
+.filters .select:not(:last-child){
+    margin-right: .8rem;
+
+}

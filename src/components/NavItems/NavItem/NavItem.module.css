@@ -28,6 +28,7 @@
     top: -6%;
     left: 2rem;
     transform: rotate(45deg);
+    box-shadow: -2px -2px 2px rgba(0,0,0,0.10);
 }
 .nav_item ul{
     visibility: hidden;
