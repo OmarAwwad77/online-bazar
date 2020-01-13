@@ -3,6 +3,7 @@ import Hero from './Hero/Hero';
 import classes from './Main.module.css';
 import Filters from '../../containers/Filters/Filters';
 import H2 from '../../UI/H2/H2';
+import Card from '../Card/Card'
 
 
 const Main = () => {
@@ -13,6 +14,10 @@ const Main = () => {
                 <H2>filter products by categories</H2>
                 <Filters />
             </section>
+            <section className={classes.card_container}>
+                <Card />
+            </section>
+
 
         </div>
 

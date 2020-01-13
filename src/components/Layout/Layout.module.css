@@ -7,12 +7,7 @@
 
 }
 
-.grid_main{
-    background-color: chocolate;
-    grid-area: main;
-}
-
 .grid_footer{
     grid-area: footer;
-    background-color: red;
+    background: linear-gradient(to left, rgba(124,3,78,1) 0% ,rgba(29,15,42,1) 100%);
 }

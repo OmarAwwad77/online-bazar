@@ -7,8 +7,7 @@ import Toolbar from '../Toolbar/Toolbar';
 const Layout = (props) => {
     return (
         <div className={classes.grid}>
-            <Toolbar />
-            {/* <main className={classes.grid_main} /> */}
+            <Toolbar className={classes.my_toolbar} />
             {props.children}
             <footer className={classes.grid_footer} />
         </div>

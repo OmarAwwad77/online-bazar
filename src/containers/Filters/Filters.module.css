@@ -7,16 +7,16 @@
 
 
 .select{
-    width: 22rem;
+    width: 21rem;
     height: 4rem;
     font-family: inherit;
-    font-size: inherit;
+    font-size: 1.4rem;
     border: none;
     border-radius: .5rem;
 }
 
 
 .filters .select:not(:last-child){
-    margin-right: .8rem;
+    margin-right: 1.8rem;
 
 }
