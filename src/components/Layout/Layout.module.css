@@ -1,6 +1,6 @@
 .grid{
     display: grid;
-    grid-template-rows: 6rem minmax(calc(100vh - 16rem),1fr) 10rem;
+    grid-template-rows: 6rem minmax(calc(100vh - 38rem),1fr) 32rem;
     grid-template-areas: "toolbar"
                           "main"
                           "footer";
@@ -9,5 +9,5 @@
 
 .grid_footer{
     grid-area: footer;
-    background: linear-gradient(to left, rgba(124,3,78,1) 0% ,rgba(29,15,42,1) 100%);
+    background: #4e002d;
 }

@@ -4,7 +4,7 @@
     display: inline-block;
     flex-direction: column;
     height: 45rem;
-    width: 30rem;
+    width: 32rem;
     box-shadow: 0px 12px 8px rgba(0, 0, 0, 0.25);
     border-radius: .8rem;
     background-color: #fff;
@@ -82,6 +82,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .card .price svg, .card .time svg{

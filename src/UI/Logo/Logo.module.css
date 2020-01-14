@@ -1,0 +1,14 @@
+.logo_container{
+    display: flex;
+    align-items: center;
+}
+
+.logo_image{
+    height: 100%;
+}
+
+.logo_text{
+    margin: 0 auto 0 0.7rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Layout.module.css';
-import Toolbar from '../Toolbar/Toolbar';
-
+import Toolbar from './Toolbar/Toolbar';
+import Footer from './Footer/Footer';
 
 
 const Layout = (props) => {
@@ -9,7 +9,7 @@ const Layout = (props) => {
         <div className={classes.grid}>
             <Toolbar className={classes.my_toolbar} />
             {props.children}
-            <footer className={classes.grid_footer} />
+            <Footer styleClass={classes.grid_footer} />
         </div>
 
     );

@@ -1,9 +1,9 @@
 import React from 'react';
 import Hero from './Hero/Hero';
 import classes from './Main.module.css';
-import Filters from '../../containers/Filters/Filters';
+import Filters from './Filters/Filters';
 import H2 from '../../UI/H2/H2';
-import Card from '../Card/Card'
+import Card from './Card/Card'
 
 
 const Main = () => {
@@ -15,6 +15,12 @@ const Main = () => {
                 <Filters />
             </section>
             <section className={classes.card_container}>
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+                <Card />
                 <Card />
             </section>
 

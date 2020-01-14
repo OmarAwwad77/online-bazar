@@ -6,17 +6,17 @@
     align-items: center;
 }
 
-.logo_container{
+/* .logo_container{
     height: 80%;
     display: flex;
     align-items: center;
-}
+} */
 
-.logo{
+/* .logo{
     height: 100%;
-}
+} */
 
-.logo_text{
+/* .logo_text{
     margin: 0 auto 0 0.7rem;
     font-size: 25px;
     font-weight: 800;
@@ -25,4 +25,4 @@
 
 .logo_text span{
     color:#ff0061;
-}
+} */

@@ -39,7 +39,7 @@ const Filters = (props) => {
     const optionsArray = category ? setOptions(category) : ['All SubCategories'];
 
     const options = optionsArray.map((cat, index) => {
-        return <option selected={subCategory === 'all' && index === 0 ? true : null} >{cat}</option>
+        return <option key={cat} selected={subCategory === 'all' && index === 0 ? true : null} >{cat}</option>
     }
     );
 

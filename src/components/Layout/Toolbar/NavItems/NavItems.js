@@ -7,6 +7,7 @@ const NavItems = () => {
     return (
         <nav className={classes.main_nav}>
             <ul className={classes.nav_items}>
+                <NavItem link="#">Home</NavItem>
                 <NavItem link="#" config={{ 'Phones': ['Android', 'IOS'], 'Cameras': ['Canon', 'Sony'] }}>Categories</NavItem>
                 <NavItem link="#">My Items</NavItem>
                 <NavItem link="#">Add Item</NavItem>
