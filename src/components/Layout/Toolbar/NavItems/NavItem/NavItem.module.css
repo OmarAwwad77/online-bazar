@@ -4,17 +4,39 @@
     display: flex;
     align-items: center;
 }
+ 
+/* Gali  */
 
-.nav_item > a{
+.nav_item a{
     text-decoration: none;
-    font-weight: 700;
     color:#4e002d;
     transition: color .3s ease;
+    cursor: pointer;
 }
 
-.nav_item > a:hover{
+.nav_item > a{
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+.nav_item > a.active{
+    color: #ff0061;
+}
+
+.nav_item a:hover{
+    color: #ff0061;
+}
+
+.nav_item:hover > a{
     color:#ff0061;
 }
+
+.nav_item:hover > span{
+    border-top-color: #ff0061;
+    border-left-color: #ff0061;
+}
+
 
 .nav_item ul{
     visibility: hidden;
@@ -47,7 +69,7 @@
 }
 
 
-.nav_item:hover .main_dropdown,.nav_item .main_dropdown > li:hover .nested_dropdown {
+.nav_item:hover .main_dropdown, .main_dropdown > li:hover .nested_dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

@@ -2,20 +2,23 @@ import React from 'react';
 import classes from './NavItems.module.css';
 import NavItem from './NavItem/NavItem';
 
-
-const NavItems = () => {
+const navItems = (props) => {
     return (
         <nav className={classes.main_nav}>
             <ul className={classes.nav_items}>
-                <NavItem link="#">Home</NavItem>
-                <NavItem link="#" config={{ 'Phones': ['Android', 'IOS'], 'Cameras': ['Canon', 'Sony'] }}>Categories</NavItem>
-                <NavItem link="#">My Items</NavItem>
-                <NavItem link="#">Add Item</NavItem>
-                <NavItem link="#">Favourites</NavItem>
-                <NavItem link="#">Account</NavItem>
+                {props.items.map((item, i) => {
+                    let config = null;
+                    if (props.dropDowns) {
+                        props.dropDowns.map((dropDown) => {
+                            config = dropDown.itemIndex === i && dropDown.dropDownItems
+                        })
+                    }
+                    return <NavItem key={item.name} path={item.path} noActiveStyle={item.noActiveStyle} config={config} >{item.name}</NavItem>;
+                }
+                )}
             </ul>
         </nav>
     );
 }
 
-export default NavItems;
+export default navItems;

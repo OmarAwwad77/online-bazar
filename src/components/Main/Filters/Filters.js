@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import classes from './Filters.module.css';
+import Button from '../../../UI/Button/Button';
 
 
 const Filters = (props) => {
@@ -45,23 +46,25 @@ const Filters = (props) => {
 
 
     return (
-        <section className={classes.filters} >
-            <select className={classes.select} id="main" onChange={onChangedHandler} >
-                <option>All Categories</option>
-                <option>Phones</option>
-                <option>Cameras</option>
-                <option>Laptops</option>
-                <option>Tablets</option>
-            </select>
-            <select className={classes.select} onChange={onChangedHandler} >
-                {options}
-            </select>
-            <select className={classes.select} id="sort" onChange={onChangedHandler}>
-                <option>Sort By Price: High to Low</option>
-                <option>Sort By Price: Low to High</option>
-            </select>
-
-        </section>
+        <React.Fragment>
+            <section className={classes.filters} >
+                <select className={classes.select} id="main" onChange={onChangedHandler} >
+                    <option>All Categories</option>
+                    <option>Phones</option>
+                    <option>Cameras</option>
+                    <option>Laptops</option>
+                    <option>Tablets</option>
+                </select>
+                <select className={classes.select} onChange={onChangedHandler} >
+                    {options}
+                </select>
+                <select className={classes.select} id="sort" onChange={onChangedHandler}>
+                    <option>Sort By Price: High to Low</option>
+                    <option>Sort By Price: Low to High</option>
+                </select>
+            </section>
+            <Button colors={{ backgroundColor: '#4e002d', color: '#fff' }} hoverable >Search</Button>
+        </React.Fragment>
     );
 }
 

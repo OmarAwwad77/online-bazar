@@ -35,16 +35,16 @@ const footer = (props) => {
                         <a>home</a>
                     </li>
                     <li>
-                        <a>add item</a>
+                        <a>account</a>
                     </li>
                     <li>
                         <a>my items</a>
                     </li>
                     <li>
-                        <a>favourites</a>
+                        <a>add itme</a>
                     </li>
                     <li>
-                        <a>account</a>
+                        <a>favourits</a>
                     </li>
                 </ul>
             </section>

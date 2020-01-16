@@ -11,7 +11,7 @@ const Main = () => {
         <div className={classes.main} >
             <Hero />
             <section className={classes.filters_container}>
-                <H2>filter products by categories</H2>
+                <H2 id='products'>filter products by categories</H2>
                 <Filters />
             </section>
             <section className={classes.card_container}>

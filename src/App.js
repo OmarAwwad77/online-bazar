@@ -9,7 +9,7 @@ function App() {
 
   const routes = (
     <Switch>/>
-      <Route component={Main} path="/" exact />
+      <Route component={Main} path="/home" />
       <Route component={notFound} />
     </Switch>
   );
