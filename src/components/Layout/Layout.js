@@ -5,9 +5,10 @@ import Footer from './Footer/Footer';
 
 
 const Layout = (props) => {
+    const auth = false;
     return (
         <div className={classes.grid}>
-            <Toolbar className={classes.my_toolbar} />
+            <Toolbar auth={auth} />
             {props.children}
             <Footer styleClass={classes.grid_footer} />
         </div>

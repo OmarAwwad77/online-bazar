@@ -4,6 +4,7 @@ import { ReactComponent as HeartEmpty } from '../../../assets/heart-empty.svg';
 import { ReactComponent as HeartSolid } from '../../../assets/heart-solid.svg';
 import { ReactComponent as DollarSign } from '../../../assets/dollar-sign.svg';
 import { ReactComponent as Clock } from '../../../assets/clock.svg';
+import { ReactComponent as Info } from '../../../assets/info.svg';
 
 const url = 'https://i.picsum.photos/id/0/5616/3744.jpg';
 
@@ -29,6 +30,9 @@ const card = (props) => {
             <div className={classes.card_info}>
                 <div className={classes.price}>
                     <DollarSign style={{ marginRight: '-.4rem' }} /><span style={{ fontWeight: '400' }}>500</span>
+                </div>
+                <div className={classes.info}>
+                    <Info /> <span >details</span>
                 </div>
                 <div className={classes.time}>
                     <Clock /> <span >2 hours ago</span>

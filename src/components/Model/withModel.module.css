@@ -1,0 +1,60 @@
+.backdrop{
+    position: fixed;
+    height: 100vh;
+    width: 100vw; 
+    background-color: rgba(0, 0, 0, .45);
+    z-index: 100;
+    /* text-align: center; */
+}
+
+.backdrop .model{
+    position: fixed;
+    width: 35%;
+    height: 57%;
+    background-color: #fff;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    animation: slideDown .4s ease-out forwards;
+}
+
+.backdrop .model .cancel{
+    position: absolute;
+    top: .9rem;
+    right: 1.6rem;
+    cursor: pointer;
+}
+
+.backdrop .model .cancel:hover span{
+   background-color: #ff0061;
+}
+
+.backdrop .model .cancel span{
+    position: absolute;
+    /* top:.5rem;
+    right: .5rem; */
+    width: 1px;
+    height: 1.3rem;
+    background-color: grey;
+    display: inline-block;
+    transform: rotate(45deg);
+    transition: all .3s ease;
+}
+.backdrop .model .cancel span:last-of-type{
+    transform: rotate(-45deg);
+}
+
+@keyframes slideDown {
+    0%{
+        top: -30%;
+    }
+
+    70%{
+        top: 50%;
+    }
+
+    100%{
+        top:40%;
+    }
+}

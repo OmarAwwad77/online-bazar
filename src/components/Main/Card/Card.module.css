@@ -10,7 +10,6 @@
     background-color: #fff;
     overflow: hidden;
     text-align: center;
-    cursor: pointer;
 }
 
 .card .image{
@@ -43,6 +42,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     transition: all .3s ease;
+    cursor: pointer;
 }
 
 .card .image:hover .overlay{
@@ -71,21 +71,31 @@
 
 .card .card_info{
     display: flex;
-    justify-content: space-around;
     color: #fff;
     background-color: #ff0061;
     border-radius: .5rem;
     margin-bottom: 2rem;
     height: 13%;
 }
-.card .price, .card .time{
+.card .price, .card .time, .card .info{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.card .price svg, .card .time svg{
+.card .info{
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+.card .info:hover {
+    color:  #ff0061;
+    background-color: #fff;
+
+}
+
+.card .price svg, .card .time svg, .card .info svg{
     height: 30%;
     width: 17%;
 

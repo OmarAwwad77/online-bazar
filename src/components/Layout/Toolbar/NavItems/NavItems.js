@@ -13,7 +13,15 @@ const navItems = (props) => {
                             config = dropDown.itemIndex === i && dropDown.dropDownItems
                         })
                     }
-                    return <NavItem key={item.name} path={item.path} noActiveStyle={item.noActiveStyle} config={config} >{item.name}</NavItem>;
+                    return <NavItem
+                        key={item.name}
+                        path={item.path}
+                        relative={item.relative}
+                        exact={item.exact}
+                        noActiveStyle={item.noActiveStyle}
+                        config={config} >
+                        {item.name}
+                    </NavItem>;
                 }
                 )}
             </ul>

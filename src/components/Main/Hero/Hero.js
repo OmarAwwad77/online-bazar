@@ -9,8 +9,17 @@ const Hero = () => {
             <h1>Online Bazar Marketplace</h1>
             <p>Explore from thousands of premium quality second-hand products.</p>
             <section className={classes.hero_action_buttons}>
-                <Button colors={{ backgroundColor: '#fff', color: '#4e002d' }} hoverable active activeStyles={{ backgroundColor: '#ff0061', color: '#fff' }} >Explore Now</Button>
-                <Button colors={{ backgroundColor: '#fff', color: '#4e002d' }} >Become a Seller</Button>
+                <Button
+                    styles={{ backgroundColor: '#fff', color: '#4e002d' }}
+                    hoverable active
+                    activeStyles={{ backgroundColor: '#ff0061', color: '#fff' }} >Explore Now
+                </Button>
+                <Button
+                    styles={{ backgroundColor: '#fff', color: '#4e002d' }}
+                    hoverable
+                    hoverStyles={{ backgroundColor: '#ff0061', color: '#fff' }}
+                >Become a Seller
+                </Button>
             </section>
         </section>
     );

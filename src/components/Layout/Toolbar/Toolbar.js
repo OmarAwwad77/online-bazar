@@ -4,11 +4,12 @@ import classes from './Toolbar.module.css'
 import NavItems from './NavItems/NavItems';
 import Logo from '../../../UI/Logo/Logo';
 
-const Toolbar = () => {
-    const items = [
+const toolbar = (props) => {
+    const links = [
         {
             name: 'Home',
-            path: '/home',
+            path: '/',
+            exact: true
         },
         {
             name: 'Categories',
@@ -22,18 +23,16 @@ const Toolbar = () => {
         {
             name: 'Favourites',
             path: '/favourites',
-        },
-        {
-            name: 'Account',
-            path: '/account',
         }
-
     ];
+
+    !props.auth ? links.push({ name: 'Sign in/up', path: '/sign', relative: true }) : links.push({ name: 'Account', path: '/account' });
+
     return (
         <header className={classes.toolbar}>
             <Logo height='80%' spanFrist="#ff0061" spanSecond="#4e002d" />
             <NavItems
-                items={items}
+                items={links}
                 paths={[]}
                 dropDowns={[
                     {
@@ -50,4 +49,4 @@ const Toolbar = () => {
     );
 }
 
-export default Toolbar;
+export default toolbar;

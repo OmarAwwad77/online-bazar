@@ -63,7 +63,7 @@ const Filters = (props) => {
                     <option>Sort By Price: Low to High</option>
                 </select>
             </section>
-            <Button colors={{ backgroundColor: '#4e002d', color: '#fff' }} hoverable >Search</Button>
+            <Button styles={{ backgroundColor: '#4e002d', color: '#fff' }} hoverable >Search</Button>
         </React.Fragment>
     );
 }
