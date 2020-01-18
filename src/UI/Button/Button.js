@@ -6,9 +6,13 @@ const Button = (props) => {
     // props.active && styles.push(classes.active);
     const active = props.active && (props.activeStyles || { backgroundColor: props.styles.color, color: props.styles.backgroundColor });
     const hover = props.hoverable && (props.hoverStyles || (props.active ? props.styles : { color: props.styles.backgroundColor, backgroundColor: props.styles.color }));
+    const disabled = props.disabled && (`
+        opacity: 0.3;
+        cursor: not-allowed;
+    `);
     const StyledLink = styled.a`
         &:hover{
-            ${hover}
+            ${!props.disabled && hover}
         }
         &:active{
             box-shadow: 2px 3px 5px rgba(0,0,0,.25);
@@ -22,6 +26,7 @@ const Button = (props) => {
         cursor: pointer;
         ${props.styles}
         ${active}
+        ${disabled}
     `;
     return (
         <StyledLink onClick={props.onClick} className={props.className} >{props.children}</StyledLink>

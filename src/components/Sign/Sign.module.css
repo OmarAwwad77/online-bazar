@@ -36,8 +36,16 @@
     outline: none;
     padding: 1rem 2rem;
     border: none;
-    border-bottom: 1px solid #ff0061;
+    border-bottom: 1px solid rgba(0, 0, 0, .35);
     animation: inputOpacity .6s ease-out .1s forwards;
+
+}
+
+.form .error_messages{
+    color: red;
+    height: 1.4rem;
+    font-size: 1.2rem;
+    margin-top: -1rem;
 }
 
 @keyframes inputOpacity{
@@ -56,7 +64,7 @@
 }
 
 .form .button:first-of-type{
-    margin-top: 5rem;
+    margin-top: 3.5rem;
 }
 
 .form .sign_with_button:last-of-type{
