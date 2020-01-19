@@ -4,8 +4,12 @@ import Button from '../../UI/Button/Button';
 import withModel from '../Model/withModel';
 import { ReactComponent as Google } from '../../assets/google.svg';
 import { ReactComponent as Facebook } from '../../assets/facebook.svg'
+import { connect } from 'react-redux';
+import * as actionCreators from '../../store/actions'
+import fb from '../../config/configfb';
 
-const chechValidity = (val, validationObj) => {
+
+const checkValidity = (val, validationObj) => {
     let isValid = true;
     const errorsArr = [];
 
@@ -35,7 +39,7 @@ const chechValidity = (val, validationObj) => {
     return { isValid, errors: errorsArr };
 }
 
-const Sign = () => {
+const Sign = (props) => {
 
     const [isSignInState, setSingInState] = useState(true);
     const signInStateHandler = () => {
@@ -64,7 +68,7 @@ const Sign = () => {
     const inputChangedHandler = (e, inputIdentifier) => {
         const newVal = e.target.value;
         const inputUpdatedState = { ...inputsState[inputIdentifier] };
-        const { isValid, errors } = chechValidity(newVal, inputUpdatedState['validation']);
+        const { isValid, errors } = checkValidity(newVal, inputUpdatedState['validation']);
         inputUpdatedState['value'] = newVal;
         inputUpdatedState['touched'] = true;
         inputUpdatedState['isValid'] = isValid;
@@ -74,8 +78,12 @@ const Sign = () => {
         setFromValidity(checkOverallFormValidity(newInputsState));
     }
 
+    const formOnSubmitHandler = async (email, password) => {
+        props.authenticateUser(email, password, isSignInState);
+    }
+
     return (
-        <form className={classes.form} autoComplete='on' >
+        <form className={classes.form} onSubmit={formOnSubmitHandler} >
             <div className={classes.sign_with_button}>
                 <Google />
                 <span>Sign in with Google</span>
@@ -84,7 +92,7 @@ const Sign = () => {
                 <Facebook />
                 <span>Sign in with Facebook</span>
             </div>
-            <input erro style={!inputsState.email.isValid && inputsState.email.touched ? { borderBottom: '1px solid red' } : null} onChange={(e) => inputChangedHandler(e, 'email')} value={inputsState.email.value} placeholder="Email" className={classes.input} />
+            <input style={!inputsState.email.isValid && inputsState.email.touched ? { borderBottom: '1px solid red' } : null} onChange={(e) => inputChangedHandler(e, 'email')} value={inputsState.email.value} placeholder="Email" className={classes.input} />
             <span className={classes.error_messages}>
                 {inputsState.email.errors[0] === 'Required Field' ? 'Required Field' : inputsState.email.errors.join(', ')}
             </span>
@@ -100,6 +108,7 @@ const Sign = () => {
                 </span>
             </>}
             <Button
+                onClick={() => formOnSubmitHandler(inputsState.email.value, inputsState.password.value)}
                 disabled={!isFormValidState}
                 className={classes.button}
                 styles={{ borderRadius: '2.5rem', border: '1px solid #ff0061', backgroundColor: '#fff', color: '#ff0061' }}
@@ -117,4 +126,14 @@ const Sign = () => {
     );
 }
 
-export default withModel(Sign);
+// const mapStateToProps = state => {
+
+// }
+const mapDispatchToProps = dispatch => {
+    return {
+        authenticateUser: (email, password, isSignIn) => dispatch(actionCreators.auth(email, password, isSignIn))
+    }
+
+}
+
+export default connect(null, mapDispatchToProps)(withModel(Sign));
