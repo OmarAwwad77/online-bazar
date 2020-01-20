@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
+
 const initialState = {
     loading: false,
     error: null,
@@ -8,6 +9,11 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+
+        // case actionTypes.GOOGLE_SIGN_IN:
+        //     return {
+
+        //     }
 
         case actionTypes.AUTH_START:
             return {
@@ -19,17 +25,18 @@ const authReducer = (state = initialState, action) => {
         case actionTypes.SET_CURRENT_USER:
             return {
                 ...state,
-                user: action.payload.user
+                user: action.payload.currentUser
             }
 
         case actionTypes.AUTH_SUCCESS:
             return {
-                loading: false,
-                user: action.payload.user
+                ...state,
+                loading: false
             };
 
         case actionTypes.AUTH_FAIL:
             return {
+                ...state,
                 loading: false,
                 error: action.payload.error
             };

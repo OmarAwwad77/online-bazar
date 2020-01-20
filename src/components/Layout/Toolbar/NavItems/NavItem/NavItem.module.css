@@ -4,7 +4,6 @@
     align-items: center;
 }
  
-/* Gali  */
 
 .nav_item a{
     text-decoration: none;
@@ -83,7 +82,7 @@
     border-right: 2px solid #fff;
     background-color: #fff;
     position: absolute;
-    top: -6%;
+    top: -4%;
     left: 2rem;
     transform: rotate(45deg);
     box-shadow: -2px -2px 2px rgba(0,0,0,0.10);

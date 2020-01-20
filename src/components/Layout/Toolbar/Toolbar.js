@@ -26,25 +26,39 @@ const toolbar = (props) => {
         }
     ];
 
-    !props.auth ? links.push({ name: 'Sign in/up', path: '/sign', relative: true }) : links.push({ name: 'Account', path: '/account' });
+    const dropDowns = [
+        {
+            itemIndex: 1,
+            dropDownItems: {
+                'Phones': ['Android', 'IOS'],
+                'Cameras': ['Canon', 'Sony'],
+                'Laptop': ['MacOs', 'Windows'],
+                'Tablets': ['IPad', 'Android']
+            },
+        }
+    ];
+
+    props.auth && dropDowns.push(
+        {
+            itemIndex: 4,
+            dropDownItems: [
+                'Sign Out',
+                'Change Password',
+                'Delete Account'
+            ]
+        });
+
+    (props.providerId === 'google.com' || props.providerId === 'facebook.com') && dropDowns[dropDowns.length - 1].dropDownItems.splice(1, 1);
+
+    !props.auth ? links.push({ name: 'Sign in/up', path: '/sign', relative: true }) : links.push({ name: 'Account', path: '/account', noActiveStyle: true });
 
     return (
         <header className={classes.toolbar}>
-            <Logo height='80%' spanFrist="#ff0061" spanSecond="#4e002d" />
+            <Logo height='80%' spanFirst="#ff0061" spanSecond="#4e002d" />
             <NavItems
                 items={links}
-                paths={[]}
-                dropDowns={[
-                    {
-                        itemIndex: 1,
-                        dropDownItems: {
-                            'Phones': ['Android', 'IOS'],
-                            'Cameras': ['Canon', 'Sony'],
-                            'Laptop': ['MacOs', 'Windows'],
-                            'Tablets': ['IPad', 'Android']
-                        }
-                    }
-                ]} />
+
+                dropDowns={dropDowns} />
         </header>
     );
 }

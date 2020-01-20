@@ -13,9 +13,47 @@ export const authFail = (error) => (
     { type: actionTypes.AUTH_FAIL, payload: { error } }
 )
 
-export const setCurrentUser = (user) => (
-    { type: actionTypes.SET_CURRENT_USER, payload: { user } }
+export const setCurrentUser = (user) => {
+    const gotAuser = user ? true : false;
+    let currentUser = null;
+    if (gotAuser) {
+        localStorage.setItem('uid', user.uid);
+        localStorage.setItem('email', user.email);
+        localStorage.setItem('providerId', user.providerId);
+        currentUser = { uid: user.uid, email: user.email, providerId: user.providerId };
+    }
+    return { type: actionTypes.SET_CURRENT_USER, payload: { currentUser } }
+}
+
+export const signOut = () => (
+    { type: actionTypes.SIGN_OUT }
 )
+
+export const providerSignIn = (provider) => {
+    return async dispatch => {
+        dispatch(authStart());
+        if (provider === 'google') {
+            const provider = new fb.auth.GoogleAuthProvider();
+            try {
+                await fb.auth().signInWithPopup(provider);
+                dispatch(authSuccess());
+            } catch (error) {
+                dispatch(authFail(error.message));
+            }
+        } else if (provider === 'facebook') {
+            const provider = new fb.auth.FacebookAuthProvider();
+            try {
+                await fb.auth().signInWithPopup(provider);
+                dispatch(authSuccess());
+            } catch (error) {
+                dispatch(authFail(error.message));
+            }
+        }
+
+
+
+    }
+}
 
 export const auth = (email, password, isSignIn) => {
     return async dispatch => {

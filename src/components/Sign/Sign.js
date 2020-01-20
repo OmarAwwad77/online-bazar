@@ -6,8 +6,6 @@ import { ReactComponent as Google } from '../../assets/google.svg';
 import { ReactComponent as Facebook } from '../../assets/facebook.svg'
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions'
-import fb from '../../config/configfb';
-
 
 const checkValidity = (val, validationObj) => {
     let isValid = true;
@@ -63,7 +61,9 @@ const Sign = (props) => {
         return isFormValid;
     }
 
-    useEffect(() => (setFromValidity(checkOverallFormValidity(inputsState))), [isSignInState, checkOverallFormValidity]);
+
+    useEffect(() => (setFromValidity(checkOverallFormValidity(inputsState))), [isSignInState]);
+
 
     const inputChangedHandler = (e, inputIdentifier) => {
         const newVal = e.target.value;
@@ -78,17 +78,24 @@ const Sign = (props) => {
         setFromValidity(checkOverallFormValidity(newInputsState));
     }
 
-    const formOnSubmitHandler = async (email, password) => {
-        props.authenticateUser(email, password, isSignInState);
+    const formOnSubmitHandler = async (provider, email, password) => {
+        if (provider) {
+            props.authenticateUserWithProvider(provider);
+        } else {
+            props.authenticateUser(email, password, isSignInState);
+        }
+
     }
+
+
 
     return (
         <form className={classes.form} onSubmit={formOnSubmitHandler} >
-            <div className={classes.sign_with_button}>
+            <div onClick={() => formOnSubmitHandler('google')} className={classes.sign_with_button}>
                 <Google />
                 <span>Sign in with Google</span>
             </div>
-            <div className={classes.sign_with_button}>
+            <div onClick={() => formOnSubmitHandler('facebook')} className={classes.sign_with_button}>
                 <Facebook />
                 <span>Sign in with Facebook</span>
             </div>
@@ -108,7 +115,7 @@ const Sign = (props) => {
                 </span>
             </>}
             <Button
-                onClick={() => formOnSubmitHandler(inputsState.email.value, inputsState.password.value)}
+                onClick={() => formOnSubmitHandler(null, inputsState.email.value, inputsState.password.value)}
                 disabled={!isFormValidState}
                 className={classes.button}
                 styles={{ borderRadius: '2.5rem', border: '1px solid #ff0061', backgroundColor: '#fff', color: '#ff0061' }}
@@ -131,6 +138,7 @@ const Sign = (props) => {
 // }
 const mapDispatchToProps = dispatch => {
     return {
+        authenticateUserWithProvider: (provider) => dispatch(actionCreators.providerSignIn(provider)),
         authenticateUser: (email, password, isSignIn) => dispatch(actionCreators.auth(email, password, isSignIn))
     }
 

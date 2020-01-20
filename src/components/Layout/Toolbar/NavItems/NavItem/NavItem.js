@@ -14,14 +14,42 @@ const NavItem = (props) => {
         </ul>
     }
 
-    const list = props.config ? <ul className={classes.main_dropdown}>
-        {Object.keys(props.config).map((el) => (
-            <li key={el} >
-                <NavLink smooth to="/#products">{el}
-                </NavLink>
-                {createUnorderedList(props.config[el])}
-            </li>))}
-    </ul> : null;
+    let list = null;
+    // [Sign out, change password]
+
+    if (props.config) {
+        let listContent = null;
+        if (Array.isArray(props.config)) {
+            listContent = props.config.map((li) => (
+                <li key={li}>
+                    <NavLink to="/">
+                        {li}
+                    </NavLink>
+                </li>
+            ));
+        } else {
+            listContent = Object.keys(props.config).map((el) => (
+                <li key={el} >
+                    <NavLink smooth to="/#products">{el}
+                    </NavLink>
+                    {createUnorderedList(props.config[el])}
+                </li>));
+        }
+
+        list = (
+            <ul className={classes.main_dropdown}>
+                {listContent}
+            </ul>)
+    }
+
+    // const list = props.config ? <ul className={classes.main_dropdown}>
+    //     {Object.keys(props.config).map((el) => (
+    //         <li key={el}>
+    //             <NavLink smooth to="/#products">{el}
+    //             </NavLink>
+    //             {createUnorderedList(props.config[el])}
+    //         </li>))}
+    // </ul> : null;
 
 
 

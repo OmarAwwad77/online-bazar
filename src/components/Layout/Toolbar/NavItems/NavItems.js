@@ -9,9 +9,11 @@ const navItems = (props) => {
                 {props.items.map((item, i) => {
                     let config = null;
                     if (props.dropDowns) {
-                        props.dropDowns.map((dropDown) => {
-                            config = dropDown.itemIndex === i && dropDown.dropDownItems
-                        })
+                        // props.dropDowns.map((dropDown) => {
+                        //     config = (dropDown.itemIndex === i) ? dropDown.dropDownItems : null;
+                        // })
+                        const dropDown = props.dropDowns.filter((dropDown) => (dropDown.itemIndex === i));
+                        config = dropDown[0] && dropDown[0].dropDownItems;
                     }
                     return <NavItem
                         key={item.name}

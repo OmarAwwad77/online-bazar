@@ -1,4 +1,6 @@
 export {
     auth,
-    setCurrentUser
+    setCurrentUser,
+    providerSignIn,
+    signOut
 } from './auth';
