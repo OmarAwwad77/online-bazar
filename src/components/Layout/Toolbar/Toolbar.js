@@ -29,6 +29,7 @@ const toolbar = (props) => {
     const dropDowns = [
         {
             itemIndex: 1,
+            hasNested: true,
             dropDownItems: {
                 'Phones': ['Android', 'IOS'],
                 'Cameras': ['Canon', 'Sony'],
@@ -41,14 +42,40 @@ const toolbar = (props) => {
     props.auth && dropDowns.push(
         {
             itemIndex: 4,
-            dropDownItems: [
-                'Sign Out',
-                'Change Password',
-                'Delete Account'
-            ]
+            hasRoutes: true,
+            hasCallBacks: true,
+            dropDownItems: {
+                'Sing Out': { func: () => { }, path: '/sign-out' },
+                'Change Password': { func: () => { }, path: '/re-auth' },
+                'Delete Account': { func: () => { }, path: '/re-auth' }
+            }
         });
 
-    (props.providerId === 'google.com' || props.providerId === 'facebook.com') && dropDowns[dropDowns.length - 1].dropDownItems.splice(1, 1);
+    const signWithPassword = (props.providerId !== 'google.com' && props.providerId !== 'facebook.com');
+
+    !signWithPassword && delete dropDowns[dropDowns.length - 1].dropDownItems['Change Password'];
+    dropDowns.forEach((dropDown, i) => {
+        if (dropDown.hasCallBacks) {
+            Object.keys(dropDown.dropDownItems).forEach((key) => {
+                dropDowns[i].dropDownItems[key].func = props.actions[key];
+            })
+        }
+    });
+
+    // if (props.providerId === 'google.com' || props.providerId === 'facebook.com') {
+    //     delete dropDowns[dropDowns.length - 1].dropDownItems['Change Password'];
+
+    //     const dropDownsWithCallBacks = dropDowns.filter((obj) => (obj.hasCallBacks));
+    //     dropDownsWithCallBacks.forEach((obj, i, arr) => (
+    //         Object.keys(obj.dropDownItems).forEach((key) => (
+    //             arr[i].dropDownItems[key].func = props.actions
+    //         ))
+    //     ));
+    // }else{
+
+    // }
+
+    // (props.providerId === 'google.com' || props.providerId === 'facebook.com') && delete dropDowns[dropDowns.length - 1].dropDownItems['Change Password'];
 
     !props.auth ? links.push({ name: 'Sign in/up', path: '/sign', relative: true }) : links.push({ name: 'Account', path: '/account', noActiveStyle: true });
 

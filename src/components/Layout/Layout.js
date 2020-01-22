@@ -16,11 +16,13 @@ const Layout = (props) => {
         console.log('have an auth listener');
     });
 
-    (!props.auth && localStorage.getItem('uid')) && props.setCurrentUser({ uid: localStorage.getItem('uid'), email: localStorage.getItem('email'), providerId: localStorage.getItem('providerId') });
+    console.log('layout');
+
+    (!props.auth && localStorage.getItem('uid')) && props.setCurrentUser('localStorage');
 
     return (
         <div className={classes.grid}>
-            <Toolbar auth={isAuth} providerId={props.providerId} />
+            <Toolbar auth={isAuth} actions={{ 'Sing Out': null, 'Change Password': props.changePasswordRequest, 'Delete Account': props.deleteAccountRequest }} providerId={props.providerId} />
             {props.children}
             <Footer styleClass={classes.grid_footer} />
         </div>
@@ -30,7 +32,10 @@ const Layout = (props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setCurrentUser: (user) => dispatch(actionCreators.setCurrentUser(user))
+        setCurrentUser: (user) => dispatch(actionCreators.setCurrentUser(user)),
+        deleteAccountRequest: () => dispatch(actionCreators.deleteAccountRequest()),
+        changePasswordRequest: () => dispatch(actionCreators.changePasswordRequest())
+
     }
 }
 

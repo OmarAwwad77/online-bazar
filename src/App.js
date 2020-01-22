@@ -3,14 +3,17 @@ import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Main from './components/Main/Main';
-import notFound from './components/404';
 import Sign from './components/Sign/Sign';
+import ReAuth from './components/ReAuth/ReAuth';
+import SignOut from './components/SignOut/SignOut';
 
 function App() {
 
   const routes = (
     <Fragment>
       <Route component={Sign} path="/sign" />
+      <Route component={ReAuth} path="/re-auth" />
+      <Route component={SignOut} path="/sign-out" />
       <Switch>
         <Route component={Main} path="/" />
         <Route render={(props) => (props.history.push("/notfound"))} />

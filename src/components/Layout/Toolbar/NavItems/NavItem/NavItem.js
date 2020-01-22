@@ -19,14 +19,16 @@ const NavItem = (props) => {
 
     if (props.config) {
         let listContent = null;
-        if (Array.isArray(props.config)) {
-            listContent = props.config.map((li) => (
-                <li key={li}>
-                    <NavLink to="/">
-                        {li}
-                    </NavLink>
-                </li>
-            ));
+        if (!props.nested) {
+            if (props.routes) {
+                listContent = Object.keys(props.config).map((key) => (
+                    <li key={key}>
+                        <NavLink onClick={props.callBacks && props.config[key].func} to={props.config[key].path}>
+                            {key}
+                        </NavLink>
+                    </li>
+                ))
+            }
         } else {
             listContent = Object.keys(props.config).map((el) => (
                 <li key={el} >

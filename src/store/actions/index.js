@@ -2,5 +2,8 @@ export {
     auth,
     setCurrentUser,
     providerSignIn,
-    signOut
+    signOut,
+    deleteAccountRequest,
+    changePasswordRequest,
+    reAuth
 } from './auth';

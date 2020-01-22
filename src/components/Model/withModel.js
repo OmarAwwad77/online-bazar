@@ -13,7 +13,7 @@ const withModel = (Component) => {
                 <div className={classes.cancel} onClick={backDropCloseHandler}>
                     <span></span> <span></span>
                 </div>
-                {<Component {...props} />}
+                {<Component {...props} closeModel={backDropCloseHandler} />}
             </section>
 
         </div>
