@@ -6,6 +6,8 @@ import Main from './components/Main/Main';
 import Sign from './components/Sign/Sign';
 import ReAuth from './components/ReAuth/ReAuth';
 import SignOut from './components/SignOut/SignOut';
+import AddItem from './components/AddItem/AddItem';
+
 
 function App() {
 
@@ -15,6 +17,7 @@ function App() {
       <Route component={ReAuth} path="/re-auth" />
       <Route component={SignOut} path="/sign-out" />
       <Switch>
+        <Route component={AddItem} path="/add-item" />
         <Route component={Main} path="/" />
         <Route render={(props) => (props.history.push("/notfound"))} />
       </Switch>

@@ -3,8 +3,11 @@ import React from 'react';
 import classes from './Toolbar.module.css'
 import NavItems from './NavItems/NavItems';
 import Logo from '../../../UI/Logo/Logo';
+import { withRouter } from 'react-router-dom'
 
 const toolbar = (props) => {
+    const toolbarBackgroundColor = (props.location.pathname === '/add-item') ?
+        { backgroundColor: 'rgba(0,0,0,0.1)' } : { backgroundColor: '#fff' };
     const links = [
         {
             name: 'Home',
@@ -80,7 +83,7 @@ const toolbar = (props) => {
     !props.auth ? links.push({ name: 'Sign in/up', path: '/sign', relative: true }) : links.push({ name: 'Account', path: '/account', noActiveStyle: true });
 
     return (
-        <header className={classes.toolbar}>
+        <header style={toolbarBackgroundColor} className={classes.toolbar}>
             <Logo height='80%' spanFirst="#ff0061" spanSecond="#4e002d" />
             <NavItems
                 items={links}
@@ -90,4 +93,4 @@ const toolbar = (props) => {
     );
 }
 
-export default toolbar;
+export default withRouter(toolbar);
