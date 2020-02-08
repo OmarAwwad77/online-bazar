@@ -1,9 +1,12 @@
 export {
-    auth,
-    setCurrentUser,
-    providerSignIn,
-    signOut,
-    deleteAccountRequest,
-    changePasswordRequest,
-    reAuth
+	auth,
+	setCurrentUser,
+	providerSignIn,
+	signOut,
+	deleteAccountRequest,
+	changePasswordRequest,
+	reAuth,
+	setSignRedirectPath
 } from './auth';
+
+export { deleteItem } from './items';

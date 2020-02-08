@@ -200,3 +200,7 @@ export const reAuth = (user, isDeleteAction, credentialsObj = null) => {
     }
 
 }
+
+export const setSignRedirectPath = path => (
+    { type: actionTypes.SET_SIGN_REDIRECT_PATH, payload: { path } }
+)

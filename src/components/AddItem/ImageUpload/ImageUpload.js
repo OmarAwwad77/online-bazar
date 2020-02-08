@@ -13,7 +13,7 @@ const imageUpload = (props) => {
             }
             const reader = new FileReader();
             reader.onloadend = () => {
-                props.setImageState({ ...props.imageState, [id]: { url: reader.result }, errors: null })
+                props.setImageState({ ...props.imageState, [id]: { url: reader.result, name: file.name }, errors: null })
             }
             reader.readAsDataURL(file);
         }
@@ -24,18 +24,17 @@ const imageUpload = (props) => {
         const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
         const fileSize = file.size / 1000000;
         const validExtensions = ['jpg', 'png', 'jpeg'];
-        if (fileSize > 3) {
+        if (fileSize > 9) {
             arr.push('file is too big. (max 2mb per image)');
         }
         if (!validExtensions.includes(fileExtension)) {
             arr.push(`only these extensions are allowed (${validExtensions.join(', ')})`)
         }
-
         return arr.length === 0 ? null : arr;
     }
 
     const clearImageUploads = (id) => {
-        props.setImageState({ ...props.imageState, [id]: { url: null } })
+        props.setImageState({ ...props.imageState, [id]: { url: null, name: '' } })
     }
 
     return (

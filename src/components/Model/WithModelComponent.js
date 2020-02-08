@@ -1,20 +1,25 @@
 import React from 'react';
 import classes from './withModel.module.css';
+import { withRouter } from 'react-router-dom';
 
-const withModel = Component => {
-	return props => {
-		const backDropCloseHandler = () => props.history.goBack();
+const WithModelComponent = props => {
+	const backDropCloseHandler = props.usingRouter
+		? props.history.goBack
+		: props.cancel;
+	if (props.noModel) {
+		return props.children(backDropCloseHandler);
+	} else {
 		return (
 			<div onClick={backDropCloseHandler} className={classes.backdrop}>
 				<section onClick={e => e.stopPropagation()} className={classes.model}>
 					<div className={classes.cancel} onClick={backDropCloseHandler}>
 						<span></span> <span></span>
 					</div>
-					{<Component {...props} closeModel={backDropCloseHandler} />}
+					{props.children(backDropCloseHandler)}
 				</section>
 			</div>
 		);
-	};
+	}
 };
 
-export default withModel;
+export default withRouter(WithModelComponent);

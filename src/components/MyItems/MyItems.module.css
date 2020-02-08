@@ -1,0 +1,33 @@
+.my-items {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.my-items__title {
+	margin: 0;
+	margin-top: 5.5rem;
+	font-size: 2.5rem;
+	font-weight: lighter;
+	color: #ff0061;
+	text-transform: uppercase;
+}
+
+.my-items__divider {
+	margin: 5.5rem 0;
+	background-color: rgba(0, 0, 0, 0.2);
+	height: 0.1rem;
+	width: 60%;
+}
+
+.my-items__cards-container {
+	width: 60%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.my-items__card:not(:last-child) {
+	margin-bottom: 3.5rem;
+}
