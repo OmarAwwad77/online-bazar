@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './MyItems.module.css';
 import Card from './Card/Card';
 import Confirmation from '../../UI/Confirmation/Confirmation';
 import { connect } from 'react-redux';
-import { deleteItem } from '../../store/actions';
+import { deleteItem, fetchMyItems } from '../../store/actions';
 
 const MyItems = props => {
 	const [showConfirmationState, setConfirmationState] = useState(false);
-	const [itemState, setItemState] = useState({ id: null, delete: false });
+	const [itemState, setItemState] = useState({ itemId: null });
+	useEffect(() => {
+		// fetch data
+		props.fetchMyItems(props.userId);
+	}, []);
 
-	const deleteAction = id => {
+	const deleteAction = itemId => {
 		setConfirmationState(!showConfirmationState);
-		setItemState({ id, delete: false });
+		setItemState({ itemId });
 	};
-	const id = 1;
 
-	itemState.delete && props.deleteItem(itemState.id);
+	const editAction = itemId => {
+		props.history.push(`${props.match.url}/edit-item?itemId=${itemId}`);
+	};
 
+	const itemUrls = itemId => {
+		const { extras, mainUrl } = props.myItems.find(
+			item => item.itemId === itemId
+		);
+		return [...extras, mainUrl];
+	};
+
+	// props.deleteItem('osWm2rvQxqT4U3GkVyiB', [...extras, mainUrl]);
 	return (
 		<>
 			{showConfirmationState && (
@@ -25,7 +38,7 @@ const MyItems = props => {
 					cancel={() => setConfirmationState(false)}
 					action={() => {
 						setConfirmationState(false);
-						setItemState({ ...itemState, delete: true });
+						props.deleteItem(itemState.itemId, itemUrls(itemState.itemId));
 					}}
 				/>
 			)}
@@ -34,11 +47,25 @@ const MyItems = props => {
 				<h2 className={classes['my-items__title']}>My Items</h2>
 				<div className={classes['my-items__divider']} />
 				<section className={classes['my-items__cards-container']}>
-					<Card
-						id={id}
-						actions={{ delete: () => deleteAction(id), edit: '' }}
-						className={classes['my-items__card']}
-					/>
+					{props.myItems.length === 0 ? (
+						<p className={classes['my-items__no-items']}>(no items yet)</p>
+					) : (
+						props.myItems.map(item => (
+							<Card
+								key={item.itemId}
+								id={item.itemId}
+								itemDesc={item.itemDesc}
+								timeStamp={item.timeStamp}
+								itemPrice={item.itemPrice}
+								mainUrl={item.mainUrl}
+								className={classes['my-items__card']}
+								actions={{
+									delete: () => deleteAction(item.itemId),
+									edit: () => editAction(item.itemId)
+								}}
+							/>
+						))
+					)}
 				</section>
 				<div className={classes['my-items__divider']} />
 			</section>
@@ -47,7 +74,13 @@ const MyItems = props => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	deleteItem: id => dispatch(deleteItem(id))
+	deleteItem: (id, urls) => dispatch(deleteItem(id, urls)),
+	fetchMyItems: userId => dispatch(fetchMyItems(userId))
 });
 
-export default connect(null, mapDispatchToProps)(MyItems);
+const mapStateToProps = ({ auth, items }) => ({
+	myItems: items.myItems,
+	userId: auth.user.uid
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyItems);

@@ -31,3 +31,10 @@
 .my-items__card:not(:last-child) {
 	margin-bottom: 3.5rem;
 }
+
+.my-items__no-items {
+	font-size: 2rem;
+	text-transform: capitalize;
+	font-style: italic;
+	font-weight: 800;
+}

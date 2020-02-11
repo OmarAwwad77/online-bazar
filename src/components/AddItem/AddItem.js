@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './AddItem.module.css';
 import CategoriesDropDown from '../CategoriesDropDown/CategoriesDropDown';
 import ImageUpload from './ImageUpload/ImageUpload';
 import Button from '../../UI/Button/Button';
 import imageCompression from 'browser-image-compression';
-import { db, storageRef } from '../../config/configfb';
+import { db, storageRef, storage } from '../../config/configfb';
+import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { updateItem } from '../../store/actions';
 
 const AddItem = props => {
 	const [imageUploadsState, setImageUploadsState] = useState({
@@ -25,6 +27,52 @@ const AddItem = props => {
 
 	const [categoryState, setCategoryState] = useState('Categories');
 	const [subCategoryState, setSubCategoryState] = useState('SubCategories');
+
+	const queryItemId = new URLSearchParams(useLocation().search).get('itemId');
+	const isInEditingMode = queryItemId ? true : false;
+
+	useEffect(() => {
+		if (isInEditingMode) {
+			// get the item
+			const item = props.myItems.find(item => item.itemId === queryItemId);
+
+			// set images
+			const imagesState = {
+				...imageUploadsState,
+				mainImage: { url: item.mainUrl, name: '' }
+			};
+			switch (item.extras.length) {
+				case 1:
+					setImageUploadsState({
+						...imagesState,
+						extra1: { url: item.extras[0], name: '' }
+					});
+					break;
+				case 2:
+					setImageUploadsState({
+						...imagesState,
+						extra1: { url: item.extras[0], name: '' },
+						extra2: { url: item.extras[1], name: '' }
+					});
+					break;
+				default:
+					break;
+			}
+
+			// set categories
+			setCategoryState(item.mainCategory);
+			setSubCategoryState(item.subCategory);
+
+			// set inputs
+			setFormInputsState({
+				itemName: { value: item.itemName },
+				itemPrice: { value: item.itemPrice, errors: null },
+				itemDesc: { value: item.itemDesc }
+			});
+		}
+	}, []);
+
+	const deleteImageByUrl = url => storage.refFromURL(url).delete();
 
 	const formInputsHandler = (e, id) => {
 		let errors = null;
@@ -51,10 +99,24 @@ const AddItem = props => {
 		});
 	};
 
+	const checkExtras = (item, key) => {
+		switch (key) {
+			case 'extra1':
+				item.extras[0] && deleteImageByUrl(item.extras[0]);
+				break;
+
+			case 'extra2':
+				item.extras[1] && deleteImageByUrl(item.extras[1]);
+				break;
+			default:
+		}
+	};
+
 	const submitHandler = e => {
 		e && e.preventDefault();
 		setOverAllFormState({ submitted: true });
 		if (formInputsState.itemPrice.value.trim() === '') {
+			// set price errors
 			setFormInputsState({
 				...formInputsState,
 				itemPrice: {
@@ -64,6 +126,7 @@ const AddItem = props => {
 			});
 		}
 		if (imageUploadsState.mainImage.url === null) {
+			// set main image errors
 			setImageUploadsState({
 				...imageUploadsState,
 				errors: ['main image is required']
@@ -86,7 +149,7 @@ const AddItem = props => {
 					itemDesc: formInputsState.itemDesc.value,
 					mainCategory: categoryState,
 					subCategory: subCategoryState,
-					mainUrl: null,
+					mainUrl: imageUploadsState.mainImage.url,
 					extras: [],
 					ownerUid: props.user.uid,
 					timeStamp: Date.now()
@@ -103,7 +166,34 @@ const AddItem = props => {
 
 				Object.keys(imageUploadsState).forEach(async (key, i) => {
 					if (key !== 'errors' && imageUploadsState[key].url) {
+						if (isInEditingMode) {
+							const item = props.myItems.find(
+								item => item.itemId === queryItemId
+							);
+							if (key === 'mainImage') {
+								if (imageUploadsState[key].url === item.mainUrl) {
+									imageCount++;
+									urlCount++;
+									check(imageCount, urlCount, itemToUpload);
+									return;
+								} else {
+									deleteImageByUrl(item.mainUrl);
+								}
+							} else {
+								const exists = item.extras.includes(imageUploadsState[key].url);
+								if (exists) {
+									imageCount++;
+									urlCount++;
+									itemToUpload.extras.push(imageUploadsState[key].url);
+									check(imageCount, urlCount, itemToUpload);
+									return;
+								} else {
+									checkExtras(item, key);
+								}
+							}
+						}
 						imageCount++;
+						console.log('compressing');
 						const originalFile = await imageCompression.getFilefromDataUrl(
 							imageUploadsState[key].url
 						);
@@ -111,7 +201,6 @@ const AddItem = props => {
 							originalFile,
 							options
 						);
-						console.log('index', i);
 
 						if (key === 'mainImage') {
 							const snapshot = await storageRef
@@ -130,6 +219,15 @@ const AddItem = props => {
 							itemToUpload.extras.push(url);
 							check(imageCount, urlCount, itemToUpload);
 						}
+					} else if (
+						key !== 'errors' &&
+						!imageUploadsState[key].url &&
+						isInEditingMode
+					) {
+						const item = props.myItems.find(
+							item => item.itemId === queryItemId
+						);
+						checkExtras(item, key);
 					}
 				});
 			}
@@ -139,8 +237,14 @@ const AddItem = props => {
 	const check = (images, urls, item) => {
 		if (images === urls) {
 			console.log('item ready', item);
-			// upload item
-			db.collection('items').add(item);
+			// upload item or update
+			if (isInEditingMode) {
+				props.updateItem(queryItemId, item);
+			} else {
+				db.collection('items')
+					.add(item)
+					.then(() => console.log('item added check firebase'));
+			}
 		}
 	};
 	return (
@@ -161,7 +265,7 @@ const AddItem = props => {
 				<input
 					value={formInputsState.itemPrice.value}
 					onChange={e => formInputsHandler(e, 'itemPrice')}
-					placeholder='Product Price'
+					placeholder='Product Price In $'
 					className={classes['form__input']}
 				/>
 				<span className={classes['form__error-message']}>
@@ -195,18 +299,21 @@ const AddItem = props => {
 				</span>
 				<section className={classes['form__image-uploads']}>
 					<ImageUpload
+						isInEditingMode={isInEditingMode}
 						url={imageUploadsState.mainImage.url}
 						id='mainImage'
 						imageState={imageUploadsState}
 						setImageState={setImageUploadsState}
 					/>
 					<ImageUpload
+						isInEditingMode={isInEditingMode}
 						url={imageUploadsState.extra1.url}
 						id='extra1'
 						imageState={imageUploadsState}
 						setImageState={setImageUploadsState}
 					/>
 					<ImageUpload
+						isInEditingMode={isInEditingMode}
 						url={imageUploadsState.extra2.url}
 						id='extra2'
 						imageState={imageUploadsState}
@@ -227,15 +334,20 @@ const AddItem = props => {
 					}}
 					hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
 				>
-					Upload
+					{isInEditingMode ? 'Edit' : 'Upload'}
 				</Button>
 			</form>
 		</section>
 	);
 };
 
-const mapStateToProps = ({ auth }) => ({
-	user: auth.user
+const mapStateToProps = ({ auth, items }) => ({
+	user: auth.user,
+	myItems: items.myItems
 });
 
-export default connect(mapStateToProps)(AddItem);
+const mapDisptachToProps = dispatch => ({
+	updateItem: (itemId, item) => dispatch(updateItem(itemId, item))
+});
+
+export default connect(mapStateToProps, mapDisptachToProps)(AddItem);

@@ -11,7 +11,11 @@ const WithModelComponent = props => {
 	} else {
 		return (
 			<div onClick={backDropCloseHandler} className={classes.backdrop}>
-				<section onClick={e => e.stopPropagation()} className={classes.model}>
+				<section
+					onClick={e => e.stopPropagation()}
+					style={props.modelStyles}
+					className={classes.model}
+				>
 					<div className={classes.cancel} onClick={backDropCloseHandler}>
 						<span></span> <span></span>
 					</div>

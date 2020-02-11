@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from './store/actions';
 import fb from './config/configfb';
 import MyItems from './components/MyItems/MyItems';
+import WithModelComponent from './components/Model/WithModelComponent';
 
 function App(props) {
 	const isAuth = localStorage.getItem('uid') || props.auth;
@@ -44,6 +45,17 @@ function App(props) {
 			<Route component={Sign} path='/sign' />
 			<Route component={ReAuth} path='/:path/re-auth' />
 			<Route component={SignOut} path='/sign-out' />
+			<Route
+				render={() => (
+					<WithModelComponent
+						modelStyles={{ width: '50%', height: '80%' }}
+						usingRouter
+					>
+						{close => <AddItem />}
+					</WithModelComponent>
+				)}
+				path='/:path/edit-item'
+			/>
 			<Switch>
 				<Route component={AddItem} path='/add-item' />
 				<Route component={MyItems} path='/my-items' />

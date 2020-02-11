@@ -9,4 +9,4 @@ export {
 	setSignRedirectPath
 } from './auth';
 
-export { deleteItem } from './items';
+export { deleteItem, fetchMyItems, updateItem } from './items';

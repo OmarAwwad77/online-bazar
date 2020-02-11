@@ -1,63 +1,61 @@
-.add-item,.form{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+.add-item,
+.form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
 }
 
-.add-item{
-    margin: 0rem auto;
-    padding: 8rem 0;
-    width: 50%;
+.add-item {
+	padding: 8rem 0;
 }
 
-.form{
-    width: 41.6rem;
+.form {
+	width: 41.6rem;
 }
 
-.form > *{
-    width: 100%;
-    margin-bottom: 5rem;
-    font-family: inherit;
-    font-size: inherit;
+.form > * {
+	width: 100%;
+	margin-bottom: 5rem;
+	font-family: inherit;
+	font-size: inherit;
 }
-.form__input{
-    padding: 1rem 2rem ;
-    outline: none;
-    font-weight: inherit;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, .35);
-}
-
-.form__error-message{
-    height: 1.5rem;
-    color: red;
-    margin-bottom: 3rem;
-    margin-top: -4rem;
-    font-size: 1.3rem;
-    font-family: inherit;
-    text-align: center;
-    text-transform: capitalize;
+.form__input {
+	padding: 1rem 2rem;
+	outline: none;
+	font-weight: inherit;
+	border: none;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.35);
 }
 
-.form__text-area{
-    height: 6rem;
-    line-height: 1.9rem;
-    padding: 1rem 2rem;
-    outline: none;
-    border: none;
-    resize: none;
-    border-bottom: 1px solid rgba(0, 0, 0, .35);
+.form__error-message {
+	height: 1.5rem;
+	color: red;
+	margin-bottom: 3rem;
+	margin-top: -4rem;
+	font-size: 1.3rem;
+	font-family: inherit;
+	text-align: center;
+	text-transform: capitalize;
 }
 
-.form__select{
-    height: 3rem;
-    font-size: 1.4rem;
+.form__text-area {
+	height: 6rem;
+	line-height: 1.9rem;
+	padding: 1rem 2rem;
+	outline: none;
+	border: none;
+	resize: none;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.35);
 }
 
-.form__image-uploads{
-    display: flex;
-    justify-content: space-between;
-    height: 11rem;
+.form__select {
+	height: 3rem;
+	font-size: 1.4rem;
 }
 
+.form__image-uploads {
+	display: flex;
+	justify-content: space-between;
+	height: 11rem;
+}
