@@ -42,6 +42,9 @@ const AddItem = props => {
 				mainImage: { url: item.mainUrl, name: '' }
 			};
 			switch (item.extras.length) {
+				case 0:
+					setImageUploadsState(imagesState);
+					break;
 				case 1:
 					setImageUploadsState({
 						...imagesState,

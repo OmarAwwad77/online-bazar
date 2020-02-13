@@ -4,6 +4,7 @@ import Card from './Card/Card';
 import Confirmation from '../../UI/Confirmation/Confirmation';
 import { connect } from 'react-redux';
 import { deleteItem, fetchMyItems } from '../../store/actions';
+import Page from '../../UI/Page/Page';
 
 const MyItems = props => {
 	const [showConfirmationState, setConfirmationState] = useState(false);
@@ -29,7 +30,26 @@ const MyItems = props => {
 		return [...extras, mainUrl];
 	};
 
-	// props.deleteItem('osWm2rvQxqT4U3GkVyiB', [...extras, mainUrl]);
+	let content = props.myItems.map(item => (
+		<Card
+			key={item.itemId}
+			id={item.itemId}
+			itemDesc={item.itemDesc}
+			timeStamp={item.timeStamp}
+			itemPrice={item.itemPrice}
+			mainUrl={item.mainUrl}
+			className={classes['my-items__card']}
+			actions={{
+				delete: () => deleteAction(item.itemId),
+				edit: () => editAction(item.itemId)
+			}}
+		/>
+	));
+
+	if (props.myItems.length === 0) {
+		content = <p className={classes['my-items__no-items']}>(no items yet)</p>;
+	}
+
 	return (
 		<>
 			{showConfirmationState && (
@@ -43,32 +63,7 @@ const MyItems = props => {
 				/>
 			)}
 
-			<section className={classes['my-items']}>
-				<h2 className={classes['my-items__title']}>My Items</h2>
-				<div className={classes['my-items__divider']} />
-				<section className={classes['my-items__cards-container']}>
-					{props.myItems.length === 0 ? (
-						<p className={classes['my-items__no-items']}>(no items yet)</p>
-					) : (
-						props.myItems.map(item => (
-							<Card
-								key={item.itemId}
-								id={item.itemId}
-								itemDesc={item.itemDesc}
-								timeStamp={item.timeStamp}
-								itemPrice={item.itemPrice}
-								mainUrl={item.mainUrl}
-								className={classes['my-items__card']}
-								actions={{
-									delete: () => deleteAction(item.itemId),
-									edit: () => editAction(item.itemId)
-								}}
-							/>
-						))
-					)}
-				</section>
-				<div className={classes['my-items__divider']} />
-			</section>
+			<Page>{content}</Page>
 		</>
 	);
 };

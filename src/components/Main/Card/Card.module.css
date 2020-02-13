@@ -63,11 +63,13 @@
 
 .card .product_title {
 	color: #4e002d;
-	font-size: 1.8rem;
 	font-weight: 800;
 	height: 10%;
 	margin: 0;
-	padding: 0.8rem;
+	padding: 0.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .card .card_info {

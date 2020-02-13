@@ -12,6 +12,8 @@ import * as actionCreators from './store/actions';
 import fb from './config/configfb';
 import MyItems from './components/MyItems/MyItems';
 import WithModelComponent from './components/Model/WithModelComponent';
+import Favorites from './components/Favorites/Favorites';
+import ItemDetails from './components/ItemDetails/ItemDetails';
 
 function App(props) {
 	const isAuth = localStorage.getItem('uid') || props.auth;
@@ -42,7 +44,17 @@ function App(props) {
 	);
 	const routes = (
 		<Fragment>
-			<Route component={Sign} path='/sign' />
+			<Route
+				render={() => (
+					<WithModelComponent
+						modelStyles={{ width: '50%', height: '90%', overflowX: 'hidden' }}
+						usingRouter
+					>
+						{close => <ItemDetails close={close} />}
+					</WithModelComponent>
+				)}
+				path='/:path/item-details'
+			/>
 			<Route component={ReAuth} path='/:path/re-auth' />
 			<Route component={SignOut} path='/sign-out' />
 			<Route
@@ -57,6 +69,7 @@ function App(props) {
 				path='/:path/edit-item'
 			/>
 			<Switch>
+				<Route component={Favorites} path='/favorites' />
 				<Route component={AddItem} path='/add-item' />
 				<Route component={MyItems} path='/my-items' />
 				<Route component={Main} path='/' />

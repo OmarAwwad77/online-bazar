@@ -1,0 +1,29 @@
+.Page {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.Page__title {
+	margin: 0;
+	margin-top: 5.5rem;
+	font-size: 2.5rem;
+	font-weight: lighter;
+	color: #ff0061;
+	text-transform: uppercase;
+}
+
+.Page__divider {
+	margin: 5.5rem 0;
+	background-color: rgba(0, 0, 0, 0.2);
+	height: 0.1rem;
+	width: 60%;
+}
+
+.Page__content-container {
+	width: 60%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

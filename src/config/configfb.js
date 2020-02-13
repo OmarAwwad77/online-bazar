@@ -15,6 +15,8 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
+export const addArray = firebase.firestore.FieldValue.arrayUnion;
+export const removeArr = firebase.firestore.FieldValue.arrayRemove;
 export const storageRef = firebase.storage().ref();
 export const storage = firebase.storage();
 

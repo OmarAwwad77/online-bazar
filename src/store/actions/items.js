@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { db, storage } from '../../config/configfb';
+import { db, storage, addArray, removeArr } from '../../config/configfb';
 
 export const addItem = () => {};
 
@@ -32,6 +32,59 @@ export const fetchMyItems = userId => {
 			dispatch(fetchMyItemsSync(items));
 		} catch (error) {
 			dispatch(fetchMyItemsFailed(error));
+		}
+	};
+};
+
+const fetchingFavorites = () => ({ type: actionTypes.FETCHING_FAVORITES });
+
+const fetchFavoritesSync = favorites => ({
+	type: actionTypes.FETCH_FAVORITES,
+	payload: { favorites }
+});
+
+const fetchFavoritesFailed = error => ({
+	type: actionTypes.FETCH_FAVORITES_FAILED,
+	payload: { error }
+});
+
+export const fetchFavorites = userId => {
+	return async dispatch => {
+		dispatch(fetchingFavorites());
+		const doc = await db
+			.collection('users')
+			.doc(userId)
+			.get();
+		if (doc.exists) {
+			const promises = [];
+			doc.data().favorites.forEach(itemId => {
+				promises.push(
+					db
+						.collection('items')
+						.doc(itemId)
+						.get()
+				);
+			});
+			Promise.all(promises)
+				.then(items => {
+					// if (!items[0].exists) {
+					// 	return Promise.reject('item do not exist');
+					// }
+					const transformedItems = doc
+						.data()
+						.favorites.map((itemId, index) => ({
+							...items[index].data(),
+							itemId
+						}));
+					console.log('transformedItems', transformedItems);
+					dispatch(fetchFavoritesSync(transformedItems));
+				})
+				.catch(error => {
+					console.log('error', error);
+					dispatch(fetchFavoritesFailed(error));
+				});
+		} else {
+			dispatch(fetchFavoritesSync([]));
 		}
 	};
 };
@@ -94,6 +147,42 @@ export const updateItem = (itemId, item) => {
 			dispatch(updateItemSync(itemId, item));
 		} catch (error) {
 			dispatch(updateItemFailed(error));
+		}
+	};
+};
+
+const unFavoriteItem = itemId => ({
+	type: actionTypes.UNFAVORITE_ITEM,
+	payload: { itemId }
+});
+
+const FavoriteItem = itemId => ({
+	type: actionTypes.FAVORITE_ITEM,
+	payload: { itemId }
+});
+
+export const toggleItemFav = (itemId, userId, remove) => {
+	return async dispatch => {
+		try {
+			if (remove) {
+				dispatch(unFavoriteItem(itemId));
+				await db
+					.collection('users')
+					.doc(userId)
+					.set({
+						favorites: removeArr(itemId)
+					});
+			} else {
+				dispatch(FavoriteItem(itemId));
+				await db
+					.collection('users')
+					.doc(userId)
+					.set({
+						favorites: addArray(itemId)
+					});
+			}
+		} catch (error) {
+			console.log('error', error);
 		}
 	};
 };

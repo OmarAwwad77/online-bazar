@@ -1,24 +1,23 @@
-.main{
-    grid-area: main;
-    padding-bottom: 15rem;
+.main {
+	grid-area: main;
+	padding-bottom: 15rem;
 }
 
-.filters_container{
-    text-align: center;
-    background: #e9e9e9;
-    padding:5.5rem;
+.filters_container {
+	text-align: center;
+	background: #e9e9e9;
+	padding: 5.5rem;
 }
 
-.card_container{
-    background: #f2f2f270;
-    display: grid;
-    margin: 0 auto;
-    grid-row-gap: 4rem;
-    grid-column-gap: 2rem;
-    justify-items: center;
-    padding:5rem 0;
-    width: 90%;
-    grid-template-rows: repeat(2,minmax(45rem, min-content));
-    grid-auto-rows: 45rem;
-    grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
+.card_container {
+	background: #f2f2f270;
+	display: grid;
+	margin: 0 auto;
+	gap: 4rem 2rem;
+	justify-items: center;
+	padding: 5rem 0;
+	width: 90%;
+	grid-template-rows: repeat(2, minmax(45rem, min-content));
+	grid-auto-rows: 45rem;
+	grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
 }

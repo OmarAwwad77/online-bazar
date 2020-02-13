@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
 	favorites: [],
+	queryItems: [{ itemId: 'npBZh2np7hz7tQjZSkDE', isFav: false }],
 	myItems: [],
 	error: null,
 	loading: false
@@ -15,8 +16,69 @@ const updateMyItems = (itemId, item, arr) => {
 	return newArr;
 };
 
+const updateQueryItemsFav = (itemId, items, remove, queryItems = true) => {
+	if (queryItems) {
+		const updatedItem = {
+			...items.find(item => item.itemId === itemId),
+			isFav: remove ? false : true
+		};
+		const newArr = items.filter(item => item.itemId !== itemId);
+		newArr.push(updatedItem);
+		return newArr;
+	} else {
+		return removeItem(items, itemId);
+	}
+};
+
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case actionTypes.FETCHING_FAVORITES:
+			return {
+				...state,
+				loading: true,
+				error: null
+			};
+
+		case actionTypes.FETCH_FAVORITES:
+			return {
+				...state,
+				loading: false,
+				favorites: action.payload.favorites
+			};
+
+		case actionTypes.FETCH_FAVORITES_FAILED:
+			return {
+				...state,
+				loading: false,
+				error: action.payload.error
+			};
+
+		case actionTypes.FAVORITE_ITEM:
+			return {
+				...state,
+				queryItems: updateQueryItemsFav(
+					action.payload.itemId,
+					state.queryItems,
+					false
+				)
+			};
+
+		case actionTypes.UNFAVORITE_ITEM:
+			return {
+				...state,
+				favorites: updateQueryItemsFav(
+					action.payload.itemId,
+					state.favorites,
+					true,
+					false
+				),
+				queryItems: updateQueryItemsFav(
+					action.payload.itemId,
+					state.queryItems,
+					true
+				)
+			};
+
 		case actionTypes.FETCHING_MY_ITEMS:
 			return {
 				...state,
