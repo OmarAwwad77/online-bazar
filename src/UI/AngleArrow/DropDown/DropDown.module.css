@@ -1,28 +1,32 @@
-.drop-down{
-    height: 3rem;
-    cursor: pointer;
-    position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+.drop-down {
+	cursor: pointer;
+	position: relative;
+	border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.drop-down__chosen{
-    display: inline-block;
-    margin: .5rem;
-    padding-left: .5rem;
+.drop-down__chosen {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 14%;
+	transform: translate(0, -50%);
+	font-size: 1.5rem;
 }
 
-.drop-down__list{
-    opacity: 0;
-    visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5px 10px;
-    border: 1px solid #eee;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    background-color: #eee;
-    position: relative;
-    transition: all .3s ease;
+.drop-down__list {
+	opacity: 0;
+	visibility: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+	background-color: #eee;
+	position: relative;
+	top: 100%;
+	z-index: 500;
+	transition: all 0.3s ease;
 }
 
 /* .drop-down:hover .drop-down__list{
@@ -31,37 +35,36 @@
     visibility: visible;
 } */
 
-.drop-down__list-item{
-    margin: 4px 0;
+.drop-down__list-item {
+	margin: 4px 0;
 }
 
-.drop-down__list-item:active .drop-down__list{
-    opacity: 1;
-    z-index: 5;
-    visibility: visible;
+.drop-down__list-item:active .drop-down__list {
+	opacity: 1;
+	z-index: 5;
+	visibility: visible;
 }
 
-.drop-down__list--show{
-    opacity: 1;
-    z-index: 5;
-    visibility: visible;
+.drop-down__list--show {
+	opacity: 1;
+	z-index: 5;
+	visibility: visible;
 }
 
-.drop-down__list-item:hover{
-    color: #ff0061;
+.drop-down__list-item:hover {
+	color: #ff0061;
 }
 
-.drop-down::after{
-    content: "";
-    display: inline-block;
-    width: .6rem;
-    height: 0.6rem;
-    border: none;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    transform: rotate(45deg) translate(-50%, -50%);
-    
+.drop-down::after {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	right: 5%;
+	top: 45%;
+	transform: rotate(180deg);
+	width: 0;
+	height: 0;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	border-bottom: 6px solid black;
 }

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 const WithModelComponent = props => {
 	const backDropCloseHandler = props.usingRouter
-		? props.history.goBack
+		? () => props.history.goBack()
 		: props.cancel;
 	if (props.noModel) {
 		return props.children(backDropCloseHandler);

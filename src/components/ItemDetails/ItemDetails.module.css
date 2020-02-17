@@ -4,9 +4,10 @@
 	display: grid;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 1.5rem;
-	grid-template-rows: 50% repeat(6, min-content);
+	text-transform: capitalize;
+	grid-template-rows: 50% repeat(7, min-content);
 	grid-template-columns: repeat(2, 1fr);
-	gap: 1rem 4rem;
+	gap: 1rem 5rem;
 	grid-template-areas:
 		'slider slider'
 		'name name'
@@ -14,7 +15,8 @@
 		'category categoryValue'
 		'time timeValue'
 		'contact contactValue'
-		'desc descValue';
+		'desc desc'
+		'descValue descValue';
 }
 
 .item-details__slider {
@@ -209,4 +211,29 @@
 .item-details__time-value {
 	grid-area: timeValue;
 	justify-self: start;
+}
+
+.item-details__contact {
+	grid-area: contact;
+	justify-self: end;
+}
+
+.item-details__contact-value {
+	grid-area: contactValue;
+	justify-self: start;
+}
+
+.item-details__desc {
+	margin-top: 2.5rem;
+	grid-area: desc;
+	justify-self: center;
+}
+
+.item-details__desc-value {
+	grid-area: descValue;
+	justify-self: center;
+	padding: 0 3rem;
+	columns: 10rem 1;
+	text-align: justify;
+	line-height: 1.5;
 }

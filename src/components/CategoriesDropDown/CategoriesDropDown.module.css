@@ -1,7 +1,5 @@
-.drop-downs-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 3rem;
+.drop-downs-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
-

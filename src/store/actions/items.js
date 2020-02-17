@@ -1,7 +1,73 @@
 import * as actionTypes from './actionTypes';
 import { db, storage, addArray, removeArr } from '../../config/configfb';
 
-export const addItem = () => {};
+export const setToolbarQuery = toolbarQuery => ({
+	type: actionTypes.SET_TOOLBAR_QUERY,
+	payload: { toolbarQuery }
+});
+
+const queryingItems = () => ({ type: actionTypes.QUERYING_ITEMS });
+
+const queryItemsSync = queryItems => ({
+	type: actionTypes.QUERY_ITEMS,
+	payload: { queryItems }
+});
+
+const queryItemsFailed = error => ({
+	type: actionTypes.QUERY_ITEMS_FAILED,
+	payload: { error }
+});
+
+export const queryItems = (queryObj, all = false) => {
+	return async dispatch => {
+		const queryItems = [];
+		const order = queryObj.asc ? ['itemPrice'] : ['itemPrice', 'desc'];
+		const extractItems = (querySnapshot, filterOut) => {
+			querySnapshot.forEach(doc => {
+				if (filterOut && filterOut.includes(doc.data().subCategory)) return;
+				queryItems.push({ itemId: doc.id, ...doc.data() });
+			});
+			dispatch(queryItemsSync(queryItems));
+		};
+		dispatch(queryingItems());
+		try {
+			if (all) {
+				const querySnapshot = await db
+					.collection('items')
+					.orderBy(...order)
+					.get();
+				console.log('querySnapshot', querySnapshot);
+				extractItems(querySnapshot);
+			} else {
+				if (!queryObj.subCategory || queryObj.subCategory === 'Others') {
+					const querySnapshot = await db
+						.collection('items')
+						.where('mainCategory', '==', queryObj.mainCategory)
+						.orderBy(...order)
+						.get();
+
+					const filterOut = queryObj.subCategory === 'Others' && [
+						'Sony',
+						'Canon'
+					];
+					extractItems(querySnapshot, filterOut);
+				} else {
+					const querySnapshot = await db
+						.collection('items')
+						.where('mainCategory', '==', queryObj.mainCategory)
+						.where('subCategory', '==', queryObj.subCategory)
+						.orderBy(...order)
+						.get();
+
+					extractItems(querySnapshot);
+				}
+			}
+		} catch (error) {
+			console.log(error);
+			dispatch(queryItemsFailed(error));
+		}
+	};
+};
 
 const fetchingMyItems = () => ({ type: actionTypes.FETCHING_MY_ITEMS });
 
@@ -111,9 +177,7 @@ export const deleteItem = (id, urls) => {
 			.delete();
 
 		promises.push(promise1);
-
 		urls.forEach(url => {
-			console.log('url', url);
 			const imgRef = storage.refFromURL(url);
 			promises.push(imgRef.delete());
 		});

@@ -31,7 +31,7 @@ const card = props => {
 					<DollarSign style={{ marginRight: '-.4rem' }} />
 					<span style={{ fontWeight: '400' }}>{props.itemPrice}</span>
 				</div>
-				<div className={classes.info}>
+				<div className={classes.info} onClick={props.infoClicked}>
 					<Info /> <span>details</span>
 				</div>
 				<div className={classes.time}>

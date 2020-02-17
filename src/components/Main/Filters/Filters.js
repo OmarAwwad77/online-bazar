@@ -1,71 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './Filters.module.css';
 import Button from '../../../UI/Button/Button';
+import CategoriesDropDown from '../../CategoriesDropDown/CategoriesDropDown';
+import DropDown from '../../../UI/AngleArrow/DropDown/DropDown';
+import { connect } from 'react-redux';
+import { queryItems } from '../../../store/actions';
+import { withRouter } from 'react-router-dom';
 
+const Filters = props => {
+	const [category, setCategory] = useState('Laptops');
+	const [subCategory, setSubCategory] = useState('All SubCategories');
+	const [ascending, setAscending] = useState('Sort By Price: Low to High');
 
-const Filters = (props) => {
+	useEffect(() => {
+		setCategory(props.toolbarQuery.category);
+		setSubCategory(props.toolbarQuery.subCategory);
+		query(props.toolbarQuery);
+	}, [props.toolbarQuery]);
 
-    const [category, setCategory] = useState(null);
-    const [subCategory, setSubCategory] = useState(null);
-    const [ascending, setAscending] = useState(false);
-    const onChangedHandler = (event) => {
-        if (event.target.id === 'main') {
-            setCategory((event.target.value).toLowerCase() === 'all categories' ? 'all' : (event.target.value).toLowerCase());
-            setSubCategory('all')
-            return;
-        } else if (event.target.id === 'sort') {
-            setAscending((state) => {
-                return !state
-            });
+	const query = queryState => {
+		const asc =
+			queryState.ascending === 'Sort By Price: Low to High' ? true : false;
+		const queryObj = { asc };
+		if (queryState.category === 'All Categories') {
+			props.queryItems(queryObj, true);
+		} else if (queryState.subCategory === 'All SubCategories') {
+			queryObj['mainCategory'] = queryState.category;
+			props.queryItems(queryObj);
+		} else {
+			props.queryItems({
+				...queryObj,
+				mainCategory: queryState.category,
+				subCategory: queryState.subCategory
+			});
+		}
+	};
 
-            return;
-        }
-        setSubCategory((event.target.value).toLowerCase() === 'all subcategories' ? 'all' : (event.target.value).toLowerCase());
-    }
+	return (
+		<section className={classes.filters}>
+			<CategoriesDropDown
+				query
+				className={classes['drop-downs-container']}
+				setCategoryState={setCategory}
+				setSubCategoryState={setSubCategory}
+				categoryState={category}
+				subCategoryState={subCategory}
+			/>
+			<DropDown
+				className={classes['drop-down']}
+				value={ascending}
+				list={['Sort By Price: High to Low', 'Sort By Price: Low to High']}
+				onChangeHandler={setAscending}
+			/>
+			<Button
+				onClick={() => query({ category, subCategory, ascending })}
+				styles={{
+					margin: '0',
+					marginLeft: '1rem',
+					backgroundColor: '#4e002d',
+					color: '#fff'
+				}}
+				hoverable
+			>
+				Search
+			</Button>
+		</section>
+	);
+};
 
-    const setOptions = (cat) => {
-        if (cat === 'phones') {
-            return ['All SubCategories', 'IOS', 'Android'];
-        } else if (cat === 'cameras') {
-            return ['All SubCategories', 'Canon', 'Sony', 'All brands'];
-        } else if (cat === 'laptops') {
-            return ['All SubCategories', 'MacOs', 'Windows'];
-        } else if (cat === 'tablets') {
-            return ['All SubCategories', 'IPad', 'Android'];
-        } else {
-            return ["All SubCategories"];
-        }
-    };
+const mapDispatchToProps = dispatch => ({
+	queryItems: (queryObj, all) => dispatch(queryItems(queryObj, all))
+});
 
-    const optionsArray = category ? setOptions(category) : ['All SubCategories'];
+const mapStateToProps = ({ items }) => ({
+	toolbarQuery: items.toolbarQuery
+});
 
-    const options = optionsArray.map((cat, index) => {
-        return <option key={cat} selected={subCategory === 'all' && index === 0 ? true : null} >{cat}</option>
-    }
-    );
-
-
-    return (
-        <React.Fragment>
-            <section className={classes.filters} >
-                <select className={classes.select} id="main" onChange={onChangedHandler} >
-                    <option>All Categories</option>
-                    <option>Phones</option>
-                    <option>Cameras</option>
-                    <option>Laptops</option>
-                    <option>Tablets</option>
-                </select>
-                <select className={classes.select} onChange={onChangedHandler} >
-                    {options}
-                </select>
-                <select className={classes.select} id="sort" onChange={onChangedHandler}>
-                    <option>Sort By Price: High to Low</option>
-                    <option>Sort By Price: Low to High</option>
-                </select>
-            </section>
-            <Button styles={{ backgroundColor: '#4e002d', color: '#fff' }} hoverable >Search</Button>
-        </React.Fragment>
-    );
-}
-
-export default Filters;
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withRouter(Filters));

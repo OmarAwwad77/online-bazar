@@ -1,22 +1,24 @@
-.filters{
-    background: #fff;
-    text-align: center;
-    display: inline-block;
-    border-radius: .5rem;
+.filters {
+	background: #fff;
+	text-align: center;
+	display: flex;
+	border-radius: 0.5rem;
+	height: 4rem;
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.4rem;
 }
 
-
-.select{
-    width: 21rem;
-    height: 4rem;
-    font-family: inherit;
-    font-size: 1.4rem;
-    border: none;
-    border-radius: .5rem;
+.drop-downs-container {
+	flex: 2;
+	height: 100%;
 }
 
+.drop-down {
+	margin-left: 1rem;
+	flex: 1;
+	height: 100%;
+}
 
-.filters .select:not(:last-child){
-    margin-right: 1.8rem;
-
+.filters .select:not(:last-child) {
+	margin-right: 1.8rem;
 }

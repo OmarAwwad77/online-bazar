@@ -14,5 +14,7 @@ export {
 	fetchMyItems,
 	updateItem,
 	toggleItemFav,
-	fetchFavorites
+	fetchFavorites,
+	queryItems,
+	setToolbarQuery
 } from './items';

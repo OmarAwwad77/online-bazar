@@ -2,7 +2,12 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
 	favorites: [],
-	queryItems: [{ itemId: 'npBZh2np7hz7tQjZSkDE', isFav: false }],
+	toolbarQuery: {
+		category: 'Laptops',
+		subCategory: 'All SubCategories',
+		ascending: 'Sort By Price: Low to High'
+	},
+	queryItems: [],
 	myItems: [],
 	error: null,
 	loading: false
@@ -32,6 +37,33 @@ const updateQueryItemsFav = (itemId, items, remove, queryItems = true) => {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case actionTypes.SET_TOOLBAR_QUERY:
+			return {
+				...state,
+				toolbarQuery: action.payload.toolbarQuery
+			};
+
+		case actionTypes.QUERYING_ITEMS:
+			return {
+				...state,
+				loading: true,
+				error: null
+			};
+
+		case actionTypes.QUERY_ITEMS:
+			return {
+				...state,
+				loading: false,
+				queryItems: action.payload.queryItems
+			};
+
+		case actionTypes.QUERY_ITEMS_FAILED:
+			return {
+				...state,
+				loading: false,
+				error: action.payload.error
+			};
+
 		case actionTypes.FETCHING_FAVORITES:
 			return {
 				...state,
@@ -146,11 +178,11 @@ export default (state = initialState, action) => {
 				error: action.payload.error
 			};
 
-		case actionTypes.ADD_ITEM:
-			return {
-				...state,
-				myItems: addItem(state.myItems, action.payload.item)
-			};
+		// case actionTypes.ADD_ITEM:
+		// 	return {
+		// 		...state,
+		// 		myItems: addItem(state.myItems, action.payload.item)
+		// 	};
 
 		default:
 			return state;

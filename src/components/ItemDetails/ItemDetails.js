@@ -7,6 +7,15 @@ const ItemDetails = props => {
 		// fetch item by id
 		// set item state
 	}, []);
+	const dummyText = `Lorem Ipsum is simply dummy text of the printing and typesetting
+	industry. Lorem Ipsum has been the industry's standard dummy text ever
+	since the 1500s, when an unknown printer took a galley of type and
+	scrambled it to make a type specimen book. It has survived not only five
+	centuries, but also the leap into electronic typesetting, remaining
+	essentially unchanged. It was popularised in the 1960s with the release
+	of Letraset sheets containing Lorem Ipsum passages, and more recently
+	with desktop publishing software like Aldus PageMaker including versions
+	of Lorem Ipsum`;
 	const [animClassesState, setAnimClassesState] = useState({
 		out: null,
 		in: null,
@@ -96,6 +105,20 @@ const ItemDetails = props => {
 				className={classes['item-details__time-value']}
 				datetime={Date.now()}
 			/>
+			<div className={classes['item-details__contact']}>
+				<span className={classes['item-details__titles']}>
+					owner's contact:
+				</span>
+			</div>
+			<span className={classes['item-details__contact-value']}>
+				omarawwad010@gmail.com
+			</span>
+			<div className={classes['item-details__desc']}>
+				<span className={classes['item-details__titles']}>
+					Product Description:
+				</span>
+			</div>
+			<span className={classes['item-details__desc-value']}>{dummyText}</span>
 		</section>
 	);
 };

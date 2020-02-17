@@ -9,27 +9,27 @@ import { toggleItemFav } from '../../store/actions';
 import { db } from '../../config/configfb';
 
 const Main = props => {
-	useEffect(() => {
-		if (props.uerId) {
-			db.collection('users')
-				.doc(props.userId)
-				.get()
-				.then(doc => {
-					if (doc.exists) {
-						console.log(doc.data().favorites);
-					} else {
-						console.log(`doesn't exists`);
-					}
-				})
-				.catch(error => {
-					console.log('error', error);
-				});
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (props.uerId) {
+	// 		db.collection('users')
+	// 			.doc(props.userId)
+	// 			.get()
+	// 			.then(doc => {
+	// 				if (doc.exists) {
+	// 					console.log(doc.data().favorites);
+	// 				} else {
+	// 					console.log(`doesn't exists`);
+	// 				}
+	// 			})
+	// 			.catch(error => {
+	// 				console.log('error', error);
+	// 			});
+	// 	}
+	// }, []);
 
 	return (
 		<div className={classes.main}>
-			<Hero />
+			<Hero auth={props.userId} />
 			<section className={classes.filters_container}>
 				<H2 id='products'>filter products by categories</H2>
 				<Filters />

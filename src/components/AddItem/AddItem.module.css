@@ -10,13 +10,17 @@
 	padding: 8rem 0;
 }
 
+.drop-downs-container {
+	height: 3rem;
+}
+
 .form {
 	width: 41.6rem;
 }
 
 .form > * {
 	width: 100%;
-	margin-bottom: 5rem;
+	margin-bottom: 4rem;
 	font-family: inherit;
 	font-size: inherit;
 }
@@ -40,7 +44,7 @@
 }
 
 .form__text-area {
-	height: 6rem;
+	height: 9rem;
 	line-height: 1.9rem;
 	padding: 1rem 2rem;
 	outline: none;
@@ -57,5 +61,10 @@
 .form__image-uploads {
 	display: flex;
 	justify-content: space-between;
-	height: 11rem;
+	height: 15rem;
+}
+
+.form__submit-button--disabled {
+	cursor: not-allowed !important;
+	opacity: 0.3;
 }

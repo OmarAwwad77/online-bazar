@@ -3,14 +3,26 @@ import AngleArrow from '../../../../../UI/AngleArrow/AngleArrow';
 import classes from './NavItem.module.css';
 import { NavHashLink as NavLink } from 'react-router-hash-link';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setToolbarQuery } from '../../../../../store/actions';
 
 const NavItem = props => {
-	const createUnorderedList = arr => {
+	const createUnorderedList = (arr, main) => {
 		return (
 			<ul className={classes.nested_dropdown}>
 				{arr.map(el => (
 					<li key={el}>
-						<NavLink smooth to='/#products'>
+						<NavLink
+							onClick={() =>
+								props.setToolbarQuery({
+									category: main,
+									subCategory: el,
+									ascending: 'Sort By Price: Low to High'
+								})
+							}
+							smooth
+							to='/#products'
+						>
 							{el}
 						</NavLink>
 					</li>
@@ -40,10 +52,20 @@ const NavItem = props => {
 		} else {
 			listContent = Object.keys(props.config).map(el => (
 				<li key={el}>
-					<NavLink smooth to='/#products'>
+					<NavLink
+						smooth
+						to='/#products'
+						onClick={() =>
+							props.setToolbarQuery({
+								category: el,
+								subCategory: 'All SubCategories',
+								ascending: 'Sort By Price: Low to High'
+							})
+						}
+					>
 						{el}
 					</NavLink>
-					{createUnorderedList(props.config[el])}
+					{createUnorderedList(props.config[el], el)}
 				</li>
 			));
 		}
@@ -77,4 +99,8 @@ const NavItem = props => {
 	);
 };
 
-export default withRouter(NavItem);
+const mapDispatchToProps = dispatch => ({
+	setToolbarQuery: toolbarQuery => dispatch(setToolbarQuery(toolbarQuery))
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(NavItem));

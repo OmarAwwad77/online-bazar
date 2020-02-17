@@ -23,6 +23,9 @@ const Favorites = props => {
 					itemPrice={item.itemPrice}
 					itemName={item.itemName}
 					isFav
+					infoClicked={() =>
+						props.history.push(props.match.url + '/item-details')
+					}
 					toggleFavHandler={() =>
 						props.toggleFav(item.itemId, props.userId, true)
 					}

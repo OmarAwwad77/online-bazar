@@ -34,12 +34,8 @@ function App(props) {
 
 	const mainRoutes = (
 		<>
-			<Route component={Sign} path='/sign' />
-			<Route component={Sign} path='/add-item' />
-			<Switch>
-				<Route component={Main} path='/' />
-				<Route render={props => props.history.push('/notfound')} />
-			</Switch>
+			<Route component={Sign} path={['/sign', '/add-item']} />
+			<Route component={Main} path='/' />
 		</>
 	);
 	const routes = (
@@ -53,7 +49,7 @@ function App(props) {
 						{close => <ItemDetails close={close} />}
 					</WithModelComponent>
 				)}
-				path='/:path/item-details'
+				path={['/:path/item-details', '/item-details']}
 			/>
 			<Route component={ReAuth} path='/:path/re-auth' />
 			<Route component={SignOut} path='/sign-out' />
@@ -72,8 +68,7 @@ function App(props) {
 				<Route component={Favorites} path='/favorites' />
 				<Route component={AddItem} path='/add-item' />
 				<Route component={MyItems} path='/my-items' />
-				<Route component={Main} path='/' />
-				<Route render={props => props.history.push('/notfound')} />
+				<Route component={Main} path='/' />>
 			</Switch>
 		</Fragment>
 	);

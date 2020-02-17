@@ -1,14 +1,25 @@
 import React from 'react';
-// import { ReactComponent as Logo } from '../../assets/logo.svg';
 import classes from './Toolbar.module.css';
 import NavItems from './NavItems/NavItems';
 import Logo from '../../../UI/Logo/Logo';
 import { withRouter } from 'react-router-dom';
 
 const toolbar = props => {
-	const toolbarBackgroundColor = !['/'].includes(props.location.pathname)
-		? { backgroundColor: 'rgba(0,0,0,0.1)' }
-		: { backgroundColor: '#fff' };
+	const knownPaths = [
+		'/add-item',
+		'/my-items',
+		'/my-items/edit-item',
+		'/item-details',
+		'/favorites',
+		'/favorites/item-details'
+	];
+	const currentPath = props.location.pathname;
+
+	const toolbarBackgroundColor =
+		knownPaths.includes(currentPath) ||
+		currentPath.substr(currentPath.lastIndexOf('/')) === '/re-auth'
+			? { backgroundColor: 'rgba(0,0,0,0.1)' }
+			: { backgroundColor: '#fff' };
 	const links = [
 		{
 			name: 'Home',
@@ -34,7 +45,7 @@ const toolbar = props => {
 			dropDownItems: {
 				Phones: ['Android', 'IOS'],
 				Cameras: ['Canon', 'Sony'],
-				Laptop: ['MacOs', 'Windows'],
+				Laptops: ['MacOs', 'Windows'],
 				Tablets: ['IPad', 'Android']
 			}
 		}
