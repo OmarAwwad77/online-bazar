@@ -39,10 +39,17 @@ const Main = props => {
 					<Card
 						key={item.itemId}
 						id={item.itemId}
+						url={item.mainUrl}
+						timeStamp={item.timeStamp}
+						itemPrice={item.itemPrice}
+						itemName={item.itemName}
+						isFav={item.isFav}
+						infoClicked={() =>
+							props.history.push(props.match.url + '/item-details')
+						}
 						toggleFavHandler={() =>
 							props.toggleFav(item.itemId, props.userId, item.isFav)
 						}
-						isFav={item.isFav}
 					/>
 				))}
 			</section>

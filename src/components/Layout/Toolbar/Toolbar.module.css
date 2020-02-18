@@ -1,9 +1,25 @@
-.toolbar{
-    grid-area: toolbar;
-    display: flex;
-    background-color: #fff;
-    justify-content: space-around;
-    align-items: center;
+.toolbar {
+	grid-area: toolbar;
+	display: flex;
+	background-color: #fff;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.bars-icon {
+	display: none;
+	width: 3rem;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 931px) {
+	.toolbar {
+		position: relative;
+		padding: 0 5rem;
+	}
+	.bars-icon {
+		display: block;
+	}
 }
 
 /* .logo_container{

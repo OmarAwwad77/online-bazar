@@ -3,8 +3,10 @@ import classes from './NavItems.module.css';
 import NavItem from './NavItem/NavItem';
 
 const navItems = props => {
+	const mainNavClasses = [classes.main_nav];
+	props.show && mainNavClasses.push(classes['main_nav--show']);
 	return (
-		<nav className={classes.main_nav}>
+		<nav className={mainNavClasses.join(' ')}>
 			<ul className={classes.nav_items}>
 				{props.items.map((item, i) => {
 					let config = null;
@@ -30,6 +32,7 @@ const navItems = props => {
 							key={item.name}
 							path={item.path}
 							onClick={item.action}
+							closeNav={props.closeNav}
 							exact={item.exact}
 							noActiveStyle={item.noActiveStyle}
 							routes={routes}

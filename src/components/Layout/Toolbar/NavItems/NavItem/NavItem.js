@@ -83,7 +83,7 @@ const NavItem = props => {
 	// </ul> : null;
 
 	return (
-		<li className={classes.nav_item}>
+		<li className={classes.nav_item} onClick={props.closeNav}>
 			<NavLink
 				onClick={props.onClick}
 				smooth

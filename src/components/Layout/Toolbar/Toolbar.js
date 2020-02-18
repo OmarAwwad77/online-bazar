@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Toolbar.module.css';
 import NavItems from './NavItems/NavItems';
 import Logo from '../../../UI/Logo/Logo';
+import { ReactComponent as Bars } from '../../../assets/bars.svg';
 import { withRouter } from 'react-router-dom';
 
-const toolbar = props => {
+const Toolbar = props => {
+	const [barsS, setBarsS] = useState(null);
 	const knownPaths = [
 		'/add-item',
 		'/my-items',
@@ -88,21 +90,6 @@ const toolbar = props => {
 		}
 	});
 
-	// if (props.providerId === 'google.com' || props.providerId === 'facebook.com') {
-	//     delete dropDowns[dropDowns.length - 1].dropDownItems['Change Password'];
-
-	//     const dropDownsWithCallBacks = dropDowns.filter((obj) => (obj.hasCallBacks));
-	//     dropDownsWithCallBacks.forEach((obj, i, arr) => (
-	//         Object.keys(obj.dropDownItems).forEach((key) => (
-	//             arr[i].dropDownItems[key].func = props.actions
-	//         ))
-	//     ));
-	// }else{
-
-	// }
-
-	// (props.providerId === 'google.com' || props.providerId === 'facebook.com') && delete dropDowns[dropDowns.length - 1].dropDownItems['Change Password'];
-
 	!props.auth
 		? links.push({
 				name: 'Sign in/up',
@@ -126,10 +113,19 @@ const toolbar = props => {
 
 	return (
 		<header style={toolbarBackgroundColor} className={classes.toolbar}>
-			<Logo height='80%' spanFirst='#ff0061' spanSecond='#4e002d' />
-			<NavItems items={links} dropDowns={dropDowns} />
+			<Logo height='80%' width='25%' spanFirst='#ff0061' spanSecond='#4e002d' />
+			<Bars
+				className={classes['bars-icon']}
+				onClick={() => setBarsS(prevState => !prevState)}
+			/>
+			<NavItems
+				closeNav={() => setBarsS(prevState => !prevState)}
+				items={links}
+				show={barsS}
+				dropDowns={dropDowns}
+			/>
 		</header>
 	);
 };
 
-export default withRouter(toolbar);
+export default withRouter(Toolbar);

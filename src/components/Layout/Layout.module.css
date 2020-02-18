@@ -1,13 +1,15 @@
-.grid{
-    display: grid;
-    grid-template-rows: 6rem minmax(calc(100vh - 38rem),1fr) 32rem;
-    grid-template-areas: "toolbar"
-                          "main"
-                          "footer";
-
+.grid {
+	display: grid;
+	grid-template-rows: 6rem minmax(calc(100vh - 38rem), auto) minmax(32rem, 1fr);
+	grid-template-areas:
+		'toolbar'
+		'main'
+		'footer';
+	grid-template-columns: 100%;
+	/* overflow: hidden; */
 }
 
-.grid_footer{
-    grid-area: footer;
-    background: #4e002d;
+.grid_footer {
+	grid-area: footer;
+	background: #4e002d;
 }
