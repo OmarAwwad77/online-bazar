@@ -310,6 +310,7 @@ const AddItem = props => {
 				<span className={classes['form__error-message']}></span>
 				<CategoriesDropDown
 					className={classes['drop-downs-container']}
+					dropDownsClass={classes['categories__drop-downs']}
 					setCategoryState={setCategoryState}
 					categoryState={categoryState}
 					setSubCategoryState={setSubCategoryState}
@@ -355,7 +356,8 @@ const AddItem = props => {
 					styles={{
 						color: '#fff',
 						backgroundColor: '#ff0061',
-						textAlign: 'center'
+						textAlign: 'center',
+						maxWidth: '42rem'
 					}}
 					hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
 				>

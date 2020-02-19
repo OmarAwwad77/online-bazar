@@ -63,7 +63,7 @@ const MyItems = props => {
 				/>
 			)}
 
-			<Page>{content}</Page>
+			<Page title='MY Items'>{content}</Page>
 		</>
 	);
 };

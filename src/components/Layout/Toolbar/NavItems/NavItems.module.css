@@ -41,4 +41,12 @@
 	}
 }
 
+@media only screen and (max-width: 540px) {
+	.main_nav {
+		width: 100%;
+		left: 0%;
+		transform: translate(0, 0);
+	}
+}
+
 /* Diva */

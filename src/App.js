@@ -40,7 +40,7 @@ function App(props) {
 	);
 	const routes = (
 		<Fragment>
-			<Route
+			{/* <Route
 				render={() => (
 					<WithModelComponent
 						modelStyles={{ width: '50%', height: '90%', overflowX: 'hidden' }}
@@ -49,6 +49,10 @@ function App(props) {
 						{close => <ItemDetails close={close} />}
 					</WithModelComponent>
 				)}
+				path={['/:path/item-details', '/item-details']}
+			/> */}
+			<Route
+				component={ItemDetails}
 				path={['/:path/item-details', '/item-details']}
 			/>
 			<Route component={ReAuth} path='/:path/re-auth' />

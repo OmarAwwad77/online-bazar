@@ -41,6 +41,12 @@
 	margin-top: 3.5rem;
 }
 
+@media only screen and (min-height: 900px) {
+	.hero {
+		height: 55vh;
+	}
+}
+
 @media only screen and (max-width: 874px) {
 	.hero h1 {
 		font-family: inherit;

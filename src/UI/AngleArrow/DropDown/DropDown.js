@@ -20,13 +20,9 @@ const DropDown = props => {
 		dropDownEl.current.focus();
 	};
 	const containerClasses = [classes['drop-down']];
-	props.className && containerClasses.unshift(props.className);
+	props.className && containerClasses.push(props.className);
 	return (
-		<div
-			style={{ ...props.size }}
-			className={containerClasses.join(' ')}
-			onClick={xhandler}
-		>
+		<div className={containerClasses.join(' ')} onClick={xhandler}>
 			<input
 				style={{
 					height: '0',

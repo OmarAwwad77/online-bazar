@@ -14,7 +14,7 @@ const WithModelComponent = props => {
 				<section
 					onClick={e => e.stopPropagation()}
 					style={props.modelStyles}
-					className={classes.model}
+					className={[classes.model, props.modelClass].join(' ')}
 				>
 					<div className={classes.cancel} onClick={backDropCloseHandler}>
 						<span></span> <span></span>

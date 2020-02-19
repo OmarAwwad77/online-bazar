@@ -4,6 +4,7 @@
 	background-color: #fff;
 	justify-content: space-between;
 	align-items: center;
+	overflow: hidden;
 }
 
 .bars-icon {
@@ -19,6 +20,18 @@
 	}
 	.bars-icon {
 		display: block;
+	}
+}
+
+@media only screen and (max-width: 540px) {
+	.toolbar {
+		padding: 0 2rem;
+	}
+}
+
+@media only screen and (max-width: 375px) {
+	.toolbar {
+		padding: 0 1rem;
 	}
 }
 

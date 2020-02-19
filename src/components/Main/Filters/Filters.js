@@ -39,6 +39,7 @@ const Filters = props => {
 	return (
 		<section className={classes.filters}>
 			<CategoriesDropDown
+				dropDownsClass={classes['categories__drop-downs']}
 				query
 				className={classes['drop-downs-container']}
 				setCategoryState={setCategory}
@@ -46,24 +47,32 @@ const Filters = props => {
 				categoryState={category}
 				subCategoryState={subCategory}
 			/>
-			<DropDown
-				className={classes['drop-down']}
-				value={ascending}
-				list={['Sort By Price: High to Low', 'Sort By Price: Low to High']}
-				onChangeHandler={setAscending}
-			/>
-			<Button
-				onClick={() => query({ category, subCategory, ascending })}
-				styles={{
-					margin: '0',
-					marginLeft: '1rem',
-					backgroundColor: '#4e002d',
-					color: '#fff'
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between'
 				}}
-				hoverable
 			>
-				Search
-			</Button>
+				<DropDown
+					className={classes['drop-down']}
+					value={ascending}
+					list={['Sort By Price: High to Low', 'Sort By Price: Low to High']}
+					onChangeHandler={setAscending}
+				/>
+				<Button
+					onClick={() => query({ category, subCategory, ascending })}
+					styles={{
+						margin: '0',
+						marginLeft: '1rem',
+						backgroundColor: '#4e002d',
+						color: '#fff'
+					}}
+					hoverable
+				>
+					Search
+				</Button>
+			</div>
 		</section>
 	);
 };

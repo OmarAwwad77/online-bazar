@@ -18,6 +18,7 @@ const Confirmation = props => {
 
 	return (
 		<WithModelComponent
+			modelClass={classes['model']}
 			cancel={props.cancel}
 			usingRouter={props.usingRouter}
 			noModel={props.noModel}

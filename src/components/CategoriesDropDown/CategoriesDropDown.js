@@ -40,13 +40,13 @@ const CategoriesDropDown = props => {
 			className={[classes['drop-downs-container'], props.className].join(' ')}
 		>
 			<DropDown
-				size={{ width: '49%', height: '100%' }}
+				className={props.dropDownsClass}
 				value={props.categoryState}
 				list={['Phones', 'Laptops', 'Cameras', 'Tablets']}
 				onChangeHandler={onChangeHandlerMainCat}
 			/>
 			<DropDown
-				size={{ width: '49%', height: '100%' }}
+				className={props.dropDownsClass}
 				value={props.subCategoryState}
 				list={subCategoryList(props.categoryState)}
 				onChangeHandler={onChangeHandlerSubCat}

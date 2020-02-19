@@ -8,8 +8,8 @@
 
 .backdrop .model {
 	position: fixed;
-	width: 35%;
-	height: 57%;
+	/* width: 35%;
+	height: 57%; */
 	overflow-y: auto;
 	background-color: #fff;
 	top: -50%;

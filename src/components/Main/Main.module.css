@@ -16,8 +16,13 @@
 	gap: 4rem 2rem;
 	justify-items: center;
 	padding: 5rem 0;
-	width: 90%;
 	grid-template-rows: minmax(45rem, min-content);
 	grid-auto-rows: minmax(45rem, min-content);
-	grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+}
+
+@media only screen and (max-width: 540px) {
+	.filters_container {
+		padding: 5.5rem 0.5rem;
+	}
 }

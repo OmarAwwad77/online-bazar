@@ -1,7 +1,8 @@
 .image-upload {
 	background-color: #f5f7fa;
 	border-radius: 0.5rem;
-	width: 33%;
+	width: 14.2rem;
+	height: 14.2rem;
 	font-size: 1.1rem;
 	display: flex;
 	flex-direction: column;
@@ -9,6 +10,7 @@
 	align-items: center;
 	transition: all 0.3s ease;
 	position: relative;
+	margin-bottom: 1rem;
 }
 
 .image-upload__error-message {

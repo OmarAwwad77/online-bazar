@@ -7,7 +7,7 @@
 	text-transform: capitalize;
 	grid-template-rows: 50% repeat(7, min-content);
 	grid-template-columns: repeat(2, 1fr);
-	gap: 1rem 5rem;
+	gap: 1rem;
 	grid-template-areas:
 		'slider slider'
 		'name name'
@@ -17,6 +17,11 @@
 		'contact contactValue'
 		'desc desc'
 		'descValue descValue';
+}
+
+.model {
+	width: 50%;
+	height: 90%;
 }
 
 .item-details__slider {
@@ -173,7 +178,6 @@
 	text-transform: capitalize;
 	font-weight: 700;
 	font-size: 1.6rem;
-	margin-right: 0.7rem;
 }
 
 .item-details__price {
@@ -183,7 +187,7 @@
 
 .item-details__price-value {
 	grid-area: priceValue;
-	justify-self: start;
+	/* justify-self: start; */
 }
 
 .item-details__dollar-sign {
@@ -200,7 +204,7 @@
 
 .item-details__category-value {
 	grid-area: categoryValue;
-	justify-self: start;
+	/* justify-self: start; */
 }
 
 .item-details__time {
@@ -210,7 +214,7 @@
 
 .item-details__time-value {
 	grid-area: timeValue;
-	justify-self: start;
+	/* justify-self: start; */
 }
 
 .item-details__contact {
@@ -220,7 +224,8 @@
 
 .item-details__contact-value {
 	grid-area: contactValue;
-	justify-self: start;
+	text-transform: none;
+	/* justify-self: start; */
 }
 
 .item-details__desc {
@@ -236,4 +241,32 @@
 	columns: 10rem 1;
 	text-align: justify;
 	line-height: 1.5;
+}
+
+.item-details__price-value,
+.item-details__category-value,
+.item-details__time-value,
+.item-details__contact-value {
+	word-break: break-all;
+}
+
+@media only screen and (max-width: 680px) {
+	.model {
+		width: 70%;
+		height: 80%;
+	}
+
+	.item-details__titles,
+	.item-details {
+		font-size: 1.4rem;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.model {
+		width: 85%;
+	}
+	.item-details {
+		padding: 3rem 1rem;
+	}
 }
