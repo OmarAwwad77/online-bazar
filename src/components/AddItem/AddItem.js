@@ -5,9 +5,10 @@ import ImageUpload from './ImageUpload/ImageUpload';
 import Button from '../../UI/Button/Button';
 import imageCompression from 'browser-image-compression';
 import { db, storageRef, storage } from '../../config/configfb';
-import { useLocation } from 'react-router-dom';
+import { useLocation, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { updateItem } from '../../store/actions';
+import WithModelComponent from '../Model/WithModelComponent';
 
 const AddItem = props => {
 	const [inputsS, setInputsS] = useState({
@@ -266,9 +267,16 @@ const AddItem = props => {
 		}
 	};
 
+	const imageUploadsClass = props.withModel
+		? classes['form__image-uploads--with-model']
+		: classes['form__image-uploads'];
+
 	return (
 		<section className={classes['add-item']}>
-			<form className={classes['form']} onSubmit={null}>
+			<form
+				className={[classes['form'], classes['form--with-model']].join(' ')}
+				onSubmit={null}
+			>
 				<input
 					style={
 						!inputsS.productName.valid && inputsS.productName.touched
@@ -317,7 +325,7 @@ const AddItem = props => {
 					subCategoryState={subCategoryState}
 				/>
 				<span className={classes['form__error-message']}></span>
-				<section className={classes['form__image-uploads']}>
+				<section className={imageUploadsClass}>
 					<ImageUpload
 						inputId='main'
 						url={imagesS.main.url}
@@ -373,11 +381,23 @@ const mapStateToProps = ({ auth, items }) => ({
 	myItems: items.myItems
 });
 
-const mapDisptachToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
 	updateItem: (itemId, item) => dispatch(updateItem(itemId, item))
 });
 
-export default connect(mapStateToProps, mapDisptachToProps)(AddItem);
+const AddItemWithModel = (
+	props // props here are the AddItem props
+) => (
+	<WithModelComponent
+		usingRouter
+		modelClass={classes['model']}
+		noModel={!props.withModel}
+	>
+		{() => <AddItem {...props} />}
+	</WithModelComponent>
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddItemWithModel);
 
 const checkValidity = (val, validationObj) => {
 	if (validationObj.required) {

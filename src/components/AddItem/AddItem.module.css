@@ -6,8 +6,13 @@
 	align-items: center;
 }
 
+.model {
+	width: 50rem;
+	height: 90%;
+}
+
 .add-item {
-	padding: 8rem 0;
+	padding: 8rem 1rem;
 }
 
 .drop-downs-container {
@@ -21,6 +26,10 @@
 
 .form {
 	width: 42rem;
+}
+
+.form--with-model {
+	width: 100%;
 }
 
 .form > * {
@@ -70,9 +79,32 @@
 	width: 43rem;
 }
 
+.form__image-uploads--with-model {
+	display: flex;
+	justify-content: space-between;
+	height: 15rem;
+	width: 43rem;
+}
+
 .form__submit-button--disabled {
 	cursor: not-allowed !important;
 	opacity: 0.3;
+}
+
+@media only screen and (max-width: 660px) {
+	.model {
+		width: 80%;
+		height: 80%;
+	}
+}
+
+@media only screen and (max-width: 580px) {
+	.form__image-uploads--with-model {
+		flex-direction: column;
+		align-items: center;
+		width: initial;
+		height: initial;
+	}
 }
 
 @media only screen and (max-width: 540px) {

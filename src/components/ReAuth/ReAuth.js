@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import classes from './ReAuth.module.css';
-import withModel from '../Model/withModel';
+import WithModelComponent from '../Model/WithModelComponent';
 import * as actionCreators from '../../store/actions';
 import Button from '../../UI/Button/Button';
 import Confirmation from '../../UI/Confirmation/Confirmation';
 import { connect } from 'react-redux';
-import fb from '../../config/configfb';
+import fb, { storageRef } from '../../config/configfb';
 
 const ReAuth = props => {
 	const [deleteConfirmed, setDeleteConfirmed] = useState(false);
@@ -45,7 +45,7 @@ const ReAuth = props => {
 	const signInWithPassword =
 		props.providerId !== 'google.com' && props.providerId !== 'facebook.com';
 
-	const formContent = signInWithPassword ? (
+	const formContent = true ? (
 		<>
 			<input
 				onChange={e => inputChangeHandler(e, 'email')}
@@ -74,7 +74,7 @@ const ReAuth = props => {
 			</p>
 			{formContent}
 			<Button
-				styles={{ ...buttonsStyles, marginTop: '2rem' }}
+				styles={{ ...buttonsStyles, marginTop: '2rem', marginBottom: '1rem' }}
 				hoverable
 				onClick={continueHandler}
 			>
@@ -105,4 +105,10 @@ const mapDispatchToProps = dispatch => ({
 		dispatch(actionCreators.reAuth(user, isDeleteAction, credentials))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withModel(ReAuth));
+const ReAuthWithModel = storeProps => (
+	<WithModelComponent usingRouter modelClass={classes['model']}>
+		{close => <ReAuth closeModel={close} {...storeProps} />}
+	</WithModelComponent>
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReAuthWithModel);

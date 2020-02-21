@@ -6,7 +6,8 @@ import H2 from '../../UI/H2/H2';
 import Card from './Card/Card';
 import { connect } from 'react-redux';
 import { toggleItemFav } from '../../store/actions';
-import { db } from '../../config/configfb';
+import VisibilitySensor from '../VisibilitySensor/VisibilitySensor';
+import { Spring, config } from 'react-spring/renderprops';
 
 const Main = props => {
 	// useEffect(() => {
@@ -31,7 +32,18 @@ const Main = props => {
 		<div className={classes.main}>
 			<Hero auth={props.userId} />
 			<section className={classes.filters_container}>
-				<H2 id='products'>filter products by categories</H2>
+				<Spring
+					from={{ opacity: 0 }}
+					to={{ opacity: 1 }}
+					config={{ friction: 26, tension: 30 }}
+				>
+					{animProps => (
+						<H2 style={animProps} id='products'>
+							filter products by categories
+						</H2>
+					)}
+				</Spring>
+
 				<Filters />
 			</section>
 			<section className={classes.card_container}>

@@ -29,7 +29,15 @@
 
 @media only screen and (max-width: 600px) {
 	.model {
-		width: 70%;
-		height: 50%rem;
+		width: 29rem;
+		height: 25rem;
+	}
+	.confirmation__title {
+		text-align: center;
+		width: 80%;
+		margin-bottom: 4rem;
+		font-size: 1.6rem;
+		text-transform: capitalize;
+		line-height: 2.5rem;
 	}
 }

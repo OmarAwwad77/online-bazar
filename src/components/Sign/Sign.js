@@ -233,4 +233,7 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(withModel(Sign));
+export default connect(
+	null,
+	mapDispatchToProps
+)(withModel(Sign, classes['model']));

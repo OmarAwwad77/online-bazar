@@ -58,7 +58,11 @@ function App(props) {
 			<Route component={ReAuth} path='/:path/re-auth' />
 			<Route component={SignOut} path='/sign-out' />
 			<Route
-				render={() => (
+				render={props => <AddItem withModel {...props} />}
+				path='/:path/edit-item'
+			/>
+			{/* <Route
+				render={props => (
 					<WithModelComponent
 						modelStyles={{ width: '50%', height: '80%' }}
 						usingRouter
@@ -67,7 +71,7 @@ function App(props) {
 					</WithModelComponent>
 				)}
 				path='/:path/edit-item'
-			/>
+			/> */}
 			<Switch>
 				<Route component={Favorites} path='/favorites' />
 				<Route component={AddItem} path='/add-item' />

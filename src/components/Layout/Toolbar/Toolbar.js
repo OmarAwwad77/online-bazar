@@ -30,7 +30,7 @@ const Toolbar = props => {
 		},
 		{
 			name: 'Categories',
-			path: '/home/#products',
+
 			noActiveStyle: true
 		},
 		{
@@ -85,7 +85,11 @@ const Toolbar = props => {
 	dropDowns.forEach((dropDown, i) => {
 		if (dropDown.hasCallBacks) {
 			Object.keys(dropDown.dropDownItems).forEach(key => {
-				dropDowns[i].dropDownItems[key].func = props.actions[key];
+				dropDowns[i].dropDownItems[key].func = () => {
+					setBarsS(prevState => !prevState);
+					props.actions[key] && props.actions[key]();
+				};
+				// dropDowns[i].dropDownItems[key].func = props.actions[key];
 			});
 		}
 	});
@@ -113,7 +117,7 @@ const Toolbar = props => {
 
 	return (
 		<header style={toolbarBackgroundColor} className={classes.toolbar}>
-			<Logo height='80%' width='25%' spanFirst='#ff0061' spanSecond='#4e002d' />
+			<Logo height='80%' spanFirst='#ff0061' spanSecond='#4e002d' />
 			<Bars
 				className={classes['bars-icon']}
 				onClick={() => setBarsS(prevState => !prevState)}

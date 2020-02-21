@@ -96,3 +96,10 @@
 		color: #fff;
 	}
 }
+
+@media only screen and (max-width: 600px) {
+	.nav_item .nested_dropdown {
+		right: 100%;
+		left: initial;
+	}
+}

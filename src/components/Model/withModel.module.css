@@ -3,19 +3,17 @@
 	height: 100vh;
 	width: 100vw;
 	background-color: rgba(0, 0, 0, 0.45);
-	z-index: 100;
+	z-index: 300;
 }
 
 .backdrop .model {
 	position: fixed;
-	/* width: 35%;
-	height: 57%; */
 	overflow-y: auto;
 	background-color: #fff;
 	top: -50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	z-index: 200;
+	z-index: 350;
 	animation: slideDown 0.4s ease-out forwards;
 }
 

@@ -12,6 +12,12 @@
 	justify-content: space-around;
 }
 
+@media only screen and (min-width: 1100px) {
+	.main_nav .nav_items {
+		justify-content: space-evenly;
+	}
+}
+
 @media only screen and (max-width: 931px) {
 	.main_nav {
 		visibility: hidden;

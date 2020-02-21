@@ -6,6 +6,8 @@ import DropDown from '../../../UI/AngleArrow/DropDown/DropDown';
 import { connect } from 'react-redux';
 import { queryItems } from '../../../store/actions';
 import { withRouter } from 'react-router-dom';
+import { Spring } from 'react-spring/renderprops';
+import VisibilitySensor from '../../VisibilitySensor/VisibilitySensor';
 
 const Filters = props => {
 	const [category, setCategory] = useState('Laptops');
@@ -36,45 +38,70 @@ const Filters = props => {
 		}
 	};
 
-	return (
+	const filters = (
 		<section className={classes.filters}>
-			<CategoriesDropDown
-				dropDownsClass={classes['categories__drop-downs']}
-				query
-				className={classes['drop-downs-container']}
-				setCategoryState={setCategory}
-				setSubCategoryState={setSubCategory}
-				categoryState={category}
-				subCategoryState={subCategory}
-			/>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-between'
-				}}
-			>
-				<DropDown
-					className={classes['drop-down']}
-					value={ascending}
-					list={['Sort By Price: High to Low', 'Sort By Price: Low to High']}
-					onChangeHandler={setAscending}
-				/>
-				<Button
-					onClick={() => query({ category, subCategory, ascending })}
-					styles={{
-						margin: '0',
-						marginLeft: '1rem',
-						backgroundColor: '#4e002d',
-						color: '#fff'
-					}}
-					hoverable
-				>
-					Search
-				</Button>
-			</div>
+			<VisibilitySensor once partialVisibility>
+				{isVisible => (
+					<Spring
+						from={{ x: 10, opacity: 0 }}
+						to={{ x: isVisible ? 0 : 10, opacity: isVisible ? 1 : 0 }}
+						config={{ mass: 1, friction: 20, tension: 90 }}
+					>
+						{animProps => (
+							<>
+								<CategoriesDropDown
+									style={{
+										transform: `translateX(-${animProps.x}rem)`,
+										opacity: `${animProps.opacity}`
+									}}
+									dropDownsClass={classes['categories__drop-downs']}
+									query
+									className={classes['drop-downs-container']}
+									setCategoryState={setCategory}
+									setSubCategoryState={setSubCategory}
+									categoryState={category}
+									subCategoryState={subCategory}
+								/>
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										transform: `translateX(${animProps.x}rem)`,
+										opacity: `${animProps.opacity}`
+									}}
+								>
+									<DropDown
+										className={classes['drop-down']}
+										value={ascending}
+										list={[
+											'Sort By Price: High to Low',
+											'Sort By Price: Low to High'
+										]}
+										onChangeHandler={setAscending}
+									/>
+									<Button
+										onClick={() => query({ category, subCategory, ascending })}
+										styles={{
+											margin: '0',
+											marginLeft: '1rem',
+											backgroundColor: '#4e002d',
+											color: '#fff'
+										}}
+										hoverable
+									>
+										Search
+									</Button>
+								</div>
+							</>
+						)}
+					</Spring>
+				)}
+			</VisibilitySensor>
 		</section>
 	);
+
+	return filters;
 };
 
 const mapDispatchToProps = dispatch => ({

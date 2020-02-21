@@ -13,13 +13,15 @@ const NavItem = props => {
 				{arr.map(el => (
 					<li key={el}>
 						<NavLink
-							onClick={() =>
+							onClick={() => {
 								props.setToolbarQuery({
 									category: main,
 									subCategory: el,
 									ascending: 'Sort By Price: Low to High'
-								})
-							}
+								});
+
+								props.closeNav();
+							}}
 							smooth
 							to='/#products'
 						>
@@ -52,7 +54,7 @@ const NavItem = props => {
 		} else {
 			listContent = Object.keys(props.config).map(el => (
 				<li key={el}>
-					<NavLink
+					{/* <NavLink
 						smooth
 						to='/#products'
 						onClick={() =>
@@ -64,7 +66,8 @@ const NavItem = props => {
 						}
 					>
 						{el}
-					</NavLink>
+					</NavLink> */}
+					<a>{el}</a>
 					{createUnorderedList(props.config[el], el)}
 				</li>
 			));
@@ -83,7 +86,10 @@ const NavItem = props => {
 	// </ul> : null;
 
 	return (
-		<li className={classes.nav_item} onClick={props.closeNav}>
+		<li
+			className={classes.nav_item}
+			onClick={!props.config ? props.closeNav : undefined}
+		>
 			<NavLink
 				onClick={props.onClick}
 				smooth

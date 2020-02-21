@@ -37,6 +37,7 @@ const CategoriesDropDown = props => {
 	props.className && containerClasses.unshift(props.className);
 	return (
 		<section
+			style={props.style}
 			className={[classes['drop-downs-container'], props.className].join(' ')}
 		>
 			<DropDown
