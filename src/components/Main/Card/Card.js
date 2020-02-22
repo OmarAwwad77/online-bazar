@@ -14,7 +14,7 @@ const card = props => {
 		<HeartEmpty id='icon' style={{ color: '#ff0061' }} />
 	);
 	return (
-		<div className={classes.card}>
+		<div style={props.style} className={classes.card}>
 			<div
 				className={classes.image}
 				style={{ backgroundImage: `url(${props.url})` }}

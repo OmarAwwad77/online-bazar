@@ -10,6 +10,11 @@
 	background-color: #fff;
 	overflow: hidden;
 	text-align: center;
+	transition: box-shadow 0.3s ease-out;
+}
+
+.card:hover {
+	box-shadow: 0 20px 70px -10px rgba(0, 0, 0, 0.4);
 }
 
 .card .image {

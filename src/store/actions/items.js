@@ -19,53 +19,79 @@ const queryItemsFailed = error => ({
 });
 
 export const queryItems = (queryObj, all = false) => {
-	// return async dispatch => {
-	// 	const queryItems = [];
-	// 	const order = queryObj.asc ? ['itemPrice'] : ['itemPrice', 'desc'];
-	// 	const extractItems = (querySnapshot, filterOut) => {
-	// 		querySnapshot.forEach(doc => {
-	// 			if (filterOut && filterOut.includes(doc.data().subCategory)) return;
-	// 			queryItems.push({ itemId: doc.id, ...doc.data() });
-	// 		});
-	// 		dispatch(queryItemsSync(queryItems));
-	// 	};
-	// 	dispatch(queryingItems());
-	// 	try {
-	// 		if (all) {
-	// 			const querySnapshot = await db
-	// 				.collection('items')
-	// 				.orderBy(...order)
-	// 				.get();
-	// 			console.log('querySnapshot', querySnapshot);
-	// 			extractItems(querySnapshot);
-	// 		} else {
-	// 			if (!queryObj.subCategory || queryObj.subCategory === 'Others') {
-	// 				const querySnapshot = await db
-	// 					.collection('items')
-	// 					.where('mainCategory', '==', queryObj.mainCategory)
-	// 					.orderBy(...order)
-	// 					.get();
-	// 				const filterOut = queryObj.subCategory === 'Others' && [
-	// 					'Sony',
-	// 					'Canon'
-	// 				];
-	// 				extractItems(querySnapshot, filterOut);
-	// 			} else {
-	// 				const querySnapshot = await db
-	// 					.collection('items')
-	// 					.where('mainCategory', '==', queryObj.mainCategory)
-	// 					.where('subCategory', '==', queryObj.subCategory)
-	// 					.orderBy(...order)
-	// 					.get();
-	// 				extractItems(querySnapshot);
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 		dispatch(queryItemsFailed(error));
-	// 	}
-	// };
-	return { type: 'nothing' };
+	return async (dispatch, getState) => {
+		const queryItems = [];
+		const order = queryObj.asc ? ['itemPrice'] : ['itemPrice', 'desc'];
+
+		const extractItems = (querySnapshot, filterOut) => {
+			querySnapshot.forEach(doc => {
+				if (filterOut && filterOut.includes(doc.data().subCategory)) return;
+				queryItems.push({ itemId: doc.id, ...doc.data() });
+			});
+
+			// check if any of the items is favorited by the user
+			const userId = getState().auth.user && getState().auth.user.uid;
+			if (userId) {
+				db.collection('users')
+					.doc(userId)
+					.get()
+					.then(doc => {
+						if (doc.exists) {
+							const newQueryItems = queryItems.map(item => {
+								if (doc.data().favorites.includes(item.itemId)) {
+									return { ...item, isFav: true };
+								} else {
+									return { ...item, isFav: false };
+								}
+							});
+							dispatch(queryItemsSync(newQueryItems));
+							return;
+						}
+					})
+					.catch(error => {
+						dispatch(queryItemsFailed(error));
+					});
+			}
+
+			dispatch(queryItemsSync(queryItems));
+		}; // end of extractItems func
+
+		dispatch(queryingItems());
+		try {
+			if (all) {
+				const querySnapshot = await db
+					.collection('items')
+					.orderBy(...order)
+					.get();
+				console.log('querySnapshot', querySnapshot);
+				extractItems(querySnapshot);
+			} else {
+				if (!queryObj.subCategory || queryObj.subCategory === 'Others') {
+					const querySnapshot = await db
+						.collection('items')
+						.where('mainCategory', '==', queryObj.mainCategory)
+						.orderBy(...order)
+						.get();
+					const filterOut = queryObj.subCategory === 'Others' && [
+						'Sony',
+						'Canon'
+					];
+					extractItems(querySnapshot, filterOut);
+				} else {
+					const querySnapshot = await db
+						.collection('items')
+						.where('mainCategory', '==', queryObj.mainCategory)
+						.where('subCategory', '==', queryObj.subCategory)
+						.orderBy(...order)
+						.get();
+					extractItems(querySnapshot);
+				}
+			}
+		} catch (error) {
+			console.log(error);
+			dispatch(queryItemsFailed(error));
+		}
+	};
 };
 
 const fetchingMyItems = () => ({ type: actionTypes.FETCHING_MY_ITEMS });

@@ -9,6 +9,7 @@ import { useLocation, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { updateItem } from '../../store/actions';
 import WithModelComponent from '../Model/WithModelComponent';
+import { Spring, config } from 'react-spring/renderprops';
 
 const AddItem = props => {
 	const [inputsS, setInputsS] = useState({
@@ -271,107 +272,149 @@ const AddItem = props => {
 		? classes['form__image-uploads--with-model']
 		: classes['form__image-uploads'];
 
+	const formClasses = [classes['form']];
+	props.withModel && formClasses.push(classes['form--with-model']);
+
 	return (
 		<section className={classes['add-item']}>
-			<form
-				className={[classes['form'], classes['form--with-model']].join(' ')}
-				onSubmit={null}
-			>
-				<input
-					style={
-						!inputsS.productName.valid && inputsS.productName.touched
-							? { borderColor: 'red' }
-							: {}
-					}
-					value={inputsS.productName.value}
-					onChange={e => inputsOnChange(e, 'productName')}
-					placeholder='Product Name'
-					className={classes['form__input']}
-				/>
-				<span className={classes['form__error-message']}>
-					{inputsS.productName.errorMessage}
-				</span>
-				<input
-					value={inputsS.productPrice.value}
-					onChange={e => inputsOnChange(e, 'productPrice')}
-					placeholder='Product Price In $'
-					className={classes['form__input']}
-				/>
-				<span className={classes['form__error-message']}>
-					{inputsS.productPrice.errorMessage}
-				</span>
-				<input
-					value={inputsS.phoneNo.value}
-					onChange={e => inputsOnChange(e, 'phoneNo')}
-					placeholder='Contact Number'
-					className={classes['form__input']}
-				/>
-				<span className={classes['form__error-message']}>
-					{inputsS.phoneNo.errorMessage}
-				</span>
-				<textarea
-					value={inputsS.productDesc.value}
-					onChange={e => inputsOnChange(e, 'productDesc')}
-					placeholder='Product Description'
-					className={classes['form__text-area']}
-				/>
-				<span className={classes['form__error-message']}></span>
-				<CategoriesDropDown
-					className={classes['drop-downs-container']}
-					dropDownsClass={classes['categories__drop-downs']}
-					setCategoryState={setCategoryState}
-					categoryState={categoryState}
-					setSubCategoryState={setSubCategoryState}
-					subCategoryState={subCategoryState}
-				/>
-				<span className={classes['form__error-message']}></span>
-				<section className={imageUploadsClass}>
-					<ImageUpload
-						inputId='main'
-						url={imagesS.main.url}
-						onSwitch={() => onSwitchImage('main')}
-						onCancel={() => onCancel('main')}
-						onChange={e => imagesOnChange('main', e)}
-						errorMessage={imagesS.main.errorMessage}
-						loading={imagesS.main.loading}
-					/>
-					<ImageUpload
-						inputId='extra1'
-						url={imagesS.extra1.url}
-						onSwitch={() => onSwitchImage('extra1')}
-						onCancel={() => onCancel('extra1')}
-						onChange={e => imagesOnChange('extra1', e)}
-						errorMessage={imagesS.extra1.errorMessage}
-						loading={imagesS.extra1.loading}
-					/>
-					<ImageUpload
-						inputId='extra2'
-						url={imagesS.extra2.url}
-						onSwitch={() => onSwitchImage('extra2')}
-						onCancel={() => onCancel('extra2')}
-						onChange={e => imagesOnChange('extra2', e)}
-						errorMessage={imagesS.extra2.errorMessage}
-						loading={imagesS.extra2.loading}
-					/>
-				</section>
-				<span className={classes['form__error-message']}></span>
-				<Button
-					onClick={onSubmit}
-					className={
-						formValidityS ? '' : classes['form__submit-button--disabled']
-					}
-					hoverable={formValidityS}
-					styles={{
-						color: '#fff',
-						backgroundColor: '#ff0061',
-						textAlign: 'center',
-						maxWidth: '42rem'
-					}}
-					hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
-				>
-					{inEditingMode ? 'Edit' : 'Upload'}
-				</Button>
-			</form>
+			<Spring from={{ opacity: 0, x: 150 }} to={{ opacity: 1, x: 0 }}>
+				{animProps => (
+					<form className={formClasses.join(' ')} onSubmit={null}>
+						<input
+							style={{
+								borderColor:
+									!inputsS.productName.valid && inputsS.productName.touched
+										? 'red'
+										: '#00000059',
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(${animProps.x}%)`
+							}}
+							value={inputsS.productName.value}
+							onChange={e => inputsOnChange(e, 'productName')}
+							placeholder='Product Name'
+							className={classes['form__input']}
+						/>
+						<span className={classes['form__error-message']}>
+							{inputsS.productName.errorMessage}
+						</span>
+						<input
+							style={{
+								borderColor:
+									!inputsS.productPrice.valid && inputsS.productPrice.touched
+										? 'red'
+										: '#00000059',
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(-${animProps.x}%)`
+							}}
+							value={inputsS.productPrice.value}
+							onChange={e => inputsOnChange(e, 'productPrice')}
+							placeholder='Product Price In $'
+							className={classes['form__input']}
+						/>
+						<span className={classes['form__error-message']}>
+							{inputsS.productPrice.errorMessage}
+						</span>
+						<input
+							style={{
+								borderColor:
+									!inputsS.phoneNo.valid && inputsS.phoneNo.touched
+										? 'red'
+										: '#00000059',
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(${animProps.x}%)`
+							}}
+							value={inputsS.phoneNo.value}
+							onChange={e => inputsOnChange(e, 'phoneNo')}
+							placeholder='Contact Number'
+							className={classes['form__input']}
+						/>
+						<span className={classes['form__error-message']}>
+							{inputsS.phoneNo.errorMessage}
+						</span>
+						<textarea
+							style={{
+								borderColor:
+									!inputsS.productDesc.valid && inputsS.productDesc.touched
+										? 'red'
+										: '#00000059',
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(-${animProps.x}%)`
+							}}
+							value={inputsS.productDesc.value}
+							onChange={e => inputsOnChange(e, 'productDesc')}
+							placeholder='Product Description'
+							className={classes['form__text-area']}
+						/>
+						<span className={classes['form__error-message']}></span>
+						<CategoriesDropDown
+							style={{
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(${animProps.x}%)`
+							}}
+							className={classes['drop-downs-container']}
+							dropDownsClass={classes['categories__drop-downs']}
+							setCategoryState={setCategoryState}
+							categoryState={categoryState}
+							setSubCategoryState={setSubCategoryState}
+							subCategoryState={subCategoryState}
+						/>
+						<span className={classes['form__error-message']}></span>
+						<section
+							style={{
+								opacity: `${animProps.opacity}`,
+								transform: `translateX(-${animProps.x}%)`
+							}}
+							className={imageUploadsClass}
+						>
+							<ImageUpload
+								inputId='main'
+								url={imagesS.main.url}
+								onSwitch={() => onSwitchImage('main')}
+								onCancel={() => onCancel('main')}
+								onChange={e => imagesOnChange('main', e)}
+								errorMessage={imagesS.main.errorMessage}
+								loading={imagesS.main.loading}
+							/>
+							<ImageUpload
+								inputId='extra1'
+								url={imagesS.extra1.url}
+								onSwitch={() => onSwitchImage('extra1')}
+								onCancel={() => onCancel('extra1')}
+								onChange={e => imagesOnChange('extra1', e)}
+								errorMessage={imagesS.extra1.errorMessage}
+								loading={imagesS.extra1.loading}
+							/>
+							<ImageUpload
+								inputId='extra2'
+								url={imagesS.extra2.url}
+								onSwitch={() => onSwitchImage('extra2')}
+								onCancel={() => onCancel('extra2')}
+								onChange={e => imagesOnChange('extra2', e)}
+								errorMessage={imagesS.extra2.errorMessage}
+								loading={imagesS.extra2.loading}
+							/>
+						</section>
+						<span className={classes['form__error-message']}></span>
+						<Button
+							onClick={onSubmit}
+							className={
+								formValidityS ? '' : classes['form__submit-button--disabled']
+							}
+							hoverable={formValidityS}
+							styles={{
+								color: '#fff',
+								backgroundColor: '#ff0061',
+								textAlign: 'center',
+								maxWidth: '42rem',
+								opacity: `${animProps.opacity}`
+							}}
+							hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
+						>
+							{inEditingMode ? 'Edit' : 'Upload'}
+						</Button>
+					</form>
+				)}
+			</Spring>
 		</section>
 	);
 };

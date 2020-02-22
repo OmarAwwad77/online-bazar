@@ -17,7 +17,7 @@ const VisibilitySensor = props => {
 };
 
 export default VisibilitySensor;
-
+// partialVisibility
 // 	 <VisibilitySensor once>
 // 	{({ isVisible }) => (
 // 		<Spring
