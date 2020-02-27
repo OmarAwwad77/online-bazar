@@ -5,13 +5,13 @@ import { Spring } from 'react-spring/renderprops';
 const page = props => {
 	return (
 		<section className={classes['Page']}>
-			<Spring from={{ opacity: 0, x: 10 }} to={{ opacity: 1, x: 0 }}>
+			<Spring from={{ opacity: 0, x: 100 }} to={{ opacity: 1, x: 0 }}>
 				{animProps => (
 					<>
 						<h2
 							style={{
 								opacity: animProps.opacity,
-								transform: `translateX(${animProps.x}rem)`
+								transform: `translateX(${animProps.x}%)`
 							}}
 							className={classes['Page__title']}
 						>
@@ -20,7 +20,7 @@ const page = props => {
 						<div
 							style={{
 								opacity: animProps.opacity,
-								transform: `translateX(-${animProps.x}rem)`
+								transform: `translateX(-${animProps.x}%)`
 							}}
 							className={classes['Page__divider']}
 						/>

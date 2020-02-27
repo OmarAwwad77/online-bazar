@@ -10,7 +10,7 @@
 	justify-items: center;
 	align-items: center;
 	grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-	grid-template-rows: repeat(1, minmax(45rem, min-content));
-	grid-auto-rows: minmax(30rem, 1fr);
+	grid-template-rows: min-content;
+	grid-auto-rows: min-content;
 	gap: 2rem 1rem;
 }

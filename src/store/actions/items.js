@@ -1,6 +1,31 @@
 import * as actionTypes from './actionTypes';
 import { db, storage, addArray, removeArr } from '../../config/configfb';
 
+export const addItem = item => {
+	return async dispatch => {
+		try {
+			await db.collection('items').add(item);
+			dispatch(addItemSync());
+		} catch (error) {
+			dispatch(addItemFailed(error));
+		}
+	};
+};
+
+const addItemFailed = error => ({
+	type: actionTypes.ADD_ITEM_FAILED,
+	payload: { error }
+});
+
+const addItemSync = () => ({
+	type: actionTypes.ADD_ITEM
+});
+
+export const setShouldRedirect = val => ({
+	type: actionTypes.SET_SHOULD_REDIRECT,
+	payload: { val }
+});
+
 export const setToolbarQuery = toolbarQuery => ({
 	type: actionTypes.SET_TOOLBAR_QUERY,
 	payload: { toolbarQuery }
@@ -51,9 +76,9 @@ export const queryItems = (queryObj, all = false) => {
 					.catch(error => {
 						dispatch(queryItemsFailed(error));
 					});
+			} else {
+				dispatch(queryItemsSync(queryItems));
 			}
-
-			dispatch(queryItemsSync(queryItems));
 		}; // end of extractItems func
 
 		dispatch(queryingItems());
@@ -118,7 +143,6 @@ export const fetchMyItems = userId => {
 			querySnapshot.forEach(doc => {
 				const item = { ...doc.data(), itemId: doc.id };
 				items.push(item);
-				console.log(item);
 			});
 			dispatch(fetchMyItemsSync(items));
 		} catch (error) {
@@ -275,3 +299,7 @@ export const toggleItemFav = (itemId, userId, remove) => {
 		}
 	};
 };
+
+export const clearItemsError = () => ({
+	type: actionTypes.CLEAR_ITEMS_ERROR
+});

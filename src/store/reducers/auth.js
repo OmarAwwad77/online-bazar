@@ -5,7 +5,8 @@ const initialState = {
 	error: null,
 	user: null,
 	reAuth: null,
-	signRedirectPath: '/'
+	signRedirectPath: '/',
+	redirect: false
 };
 
 const authReducer = (state = initialState, action) => {
@@ -13,7 +14,9 @@ const authReducer = (state = initialState, action) => {
 		case actionTypes.SET_SIGN_REDIRECT_PATH:
 			return {
 				...state,
-				signRedirectPath: action.payload.path
+				signRedirectPath: action.payload.path,
+				redirect: false,
+				error: null
 			};
 
 		case actionTypes.SIGN_OUT_SUCCESS:
@@ -31,14 +34,17 @@ const authReducer = (state = initialState, action) => {
 		case actionTypes.CHANGE_PASSWORD_REQUEST:
 			return {
 				...state,
-				reAuth: 'change'
+				reAuth: 'change',
+				redirect: false,
+				error: null
 			};
 
 		case actionTypes.CHANGE_PASSWORD_SUCCESS:
 			return {
 				...state,
 				reAuth: null,
-				loading: false
+				loading: false,
+				redirect: true
 			};
 
 		case actionTypes.CHANGE_PASSWORD_FAIL:
@@ -66,7 +72,8 @@ const authReducer = (state = initialState, action) => {
 				...state,
 				user: null,
 				loading: false,
-				reAuth: null
+				reAuth: null,
+				redirect: true
 			};
 
 		case actionTypes.DELETE_ACCOUNT_FAIL:
@@ -79,7 +86,9 @@ const authReducer = (state = initialState, action) => {
 		case actionTypes.DELETE_ACCOUNT_REQUEST:
 			return {
 				...state,
-				reAuth: 'delete'
+				reAuth: 'delete',
+				redirect: false,
+				error: null
 			};
 
 		case actionTypes.AUTH_START:
@@ -106,6 +115,12 @@ const authReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 				error: action.payload.error
+			};
+
+		case actionTypes.CLEAR_AUTH_ERROR:
+			return {
+				...state,
+				error: null
 			};
 
 		default:

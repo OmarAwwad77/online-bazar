@@ -27,43 +27,43 @@
 
 .card .image .overlay {
 	position: absolute;
-	top: 50%;
-	right: 50%;
-	visibility: hidden;
-	height: 0;
-	width: 0;
 	transition: all 0.4s ease;
 	background: linear-gradient(
 		to bottom,
 		rgba(128, 3, 80, 0.65) 0%,
 		rgba(28, 15, 42, 0.65) 99%
 	);
+	visibility: visible;
+	top: 10%;
+	left: 0;
+	height: 24%;
+	width: 30%;
 }
 
 .card .image .overlay .svg {
-	opacity: 0;
-	width: 12rem;
-	height: 12rem;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	transition: all 0.3s ease;
 	cursor: pointer;
-}
-
-.card .image:hover .overlay {
-	visibility: visible;
-	top: 0;
-	right: 0;
-	height: 100%;
-	width: 100%;
-}
-
-.card .image:hover .svg {
 	opacity: 1;
 	height: 5rem;
 	width: 5rem;
+}
+
+.card .image:hover .overlay {
+	/* visibility: visible;
+	top: 10%;
+	left: 0;
+	height: 24%;
+	width: 30%; */
+}
+
+.card .image:hover .svg {
+	/* opacity: 1;
+	height: 5rem;
+	width: 5rem; */
 }
 
 .card .product_title {

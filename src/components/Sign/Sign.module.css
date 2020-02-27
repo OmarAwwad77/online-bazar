@@ -15,6 +15,21 @@
 	align-items: center;
 }
 
+.error-title {
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	font-size: 3rem;
+	width: 100%;
+	background-color: #ff0061;
+	color: #fff;
+	padding: 2rem;
+}
+
+.error-message {
+	font-size: 2.5rem;
+}
+
 .form .sign_with_button {
 	align-self: center;
 	font-size: 1.4rem;
@@ -82,5 +97,9 @@
 	.model {
 		width: 90%;
 		height: 65%;
+	}
+	.model .error-title,
+	.model .error-message {
+		font-size: 2rem;
 	}
 }

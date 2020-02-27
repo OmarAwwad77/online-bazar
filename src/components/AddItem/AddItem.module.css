@@ -13,6 +13,7 @@
 
 .add-item {
 	padding: 8rem 1rem;
+	background-color: #fff;
 }
 
 .drop-downs-container {
@@ -88,7 +89,7 @@
 
 .form__submit-button--disabled {
 	cursor: not-allowed !important;
-	opacity: 0.3;
+	opacity: 0.3 !important;
 }
 
 @media only screen and (max-width: 660px) {

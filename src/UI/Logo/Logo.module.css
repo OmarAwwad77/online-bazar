@@ -1,6 +1,7 @@
 .logo_container {
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 }
 .Logo-footer__container {
 	display: flex;

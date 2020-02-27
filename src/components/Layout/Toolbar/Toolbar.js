@@ -7,21 +7,26 @@ import { withRouter } from 'react-router-dom';
 
 const Toolbar = props => {
 	const [barsS, setBarsS] = useState(null);
-	const knownPaths = [
-		'/add-item',
-		'/my-items',
-		'/my-items/edit-item',
-		'/item-details',
-		'/favorites',
-		'/favorites/item-details'
-	];
-	const currentPath = props.location.pathname;
+	// const knownPaths = [
+	// 	'/add-item',
+	// 	'/my-items',
+	// 	'/my-items/edit-item',
+	// 	'/item-details',
+	// 	'/favorites',
+	// 	'/favorites/item-details'
+	// ];
+	// const currentPath = props.location.pathname;
 
-	const toolbarBackgroundColor =
-		knownPaths.includes(currentPath) ||
-		currentPath.substr(currentPath.lastIndexOf('/')) === '/re-auth'
-			? { backgroundColor: 'rgba(0,0,0,0.1)' }
-			: { backgroundColor: '#fff' };
+	// const toolbarBackgroundColor =
+	// 	knownPaths.includes(currentPath) ||
+	// 	currentPath.substr(currentPath.lastIndexOf('/')) === '/re-auth'
+	// 		? { backgroundColor: 'rgba(0,0,0,0.1)' }
+	// 		: { backgroundColor: '#fff' };
+	const currentPath = props.location.pathname;
+	const toolbarBackgroundColor = ['/', '/#products'].includes(currentPath)
+		? { backgroundColor: '#fff' }
+		: { backgroundColor: 'rgba(0,0,0,0.1)' };
+
 	const links = [
 		{
 			name: 'Home',
@@ -64,14 +69,14 @@ const Toolbar = props => {
 					func: () => {},
 					path:
 						props.location.pathname === '/'
-							? '/home' + '/re-auth'
+							? '/re-auth'
 							: props.location.pathname + '/re-auth'
 				},
 				'Delete Account': {
 					func: () => {},
 					path:
 						props.location.pathname === '/'
-							? '/home' + '/re-auth'
+							? '/re-auth'
 							: props.location.pathname + '/re-auth'
 				}
 			}
@@ -116,14 +121,19 @@ const Toolbar = props => {
 		  );
 
 	return (
-		<header style={toolbarBackgroundColor} className={classes.toolbar}>
-			<Logo height='80%' spanFirst='#ff0061' spanSecond='#4e002d' />
+		<header style={{ ...toolbarBackgroundColor }} className={classes.toolbar}>
+			<Logo
+				height='80%'
+				onClick={() => props.history.push('/')}
+				spanFirst='#ff0061'
+				spanSecond='#4e002d'
+			/>
 			<Bars
 				className={classes['bars-icon']}
 				onClick={() => setBarsS(prevState => !prevState)}
 			/>
 			<NavItems
-				closeNav={() => setBarsS(prevState => !prevState)}
+				closeNav={() => setBarsS(false)}
 				items={links}
 				show={barsS}
 				dropDowns={dropDowns}

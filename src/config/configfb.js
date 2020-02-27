@@ -19,5 +19,6 @@ export const addArray = firebase.firestore.FieldValue.arrayUnion;
 export const removeArr = firebase.firestore.FieldValue.arrayRemove;
 export const storageRef = firebase.storage().ref();
 export const storage = firebase.storage();
+export const auth = firebase.auth;
 
 export default firebase;

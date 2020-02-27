@@ -15,6 +15,7 @@ const Filters = props => {
 	const [ascending, setAscending] = useState('Sort By Price: Low to High');
 
 	useEffect(() => {
+		console.log('Filters: QueryItems');
 		setCategory(props.toolbarQuery.category);
 		setSubCategory(props.toolbarQuery.subCategory);
 		query(props.toolbarQuery);

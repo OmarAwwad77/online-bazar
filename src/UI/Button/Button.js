@@ -1,16 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = (props) => {
-    // const styles = [classes.button];
-    // props.active && styles.push(classes.active);
-    const active = props.active && (props.activeStyles || { backgroundColor: props.styles.color, color: props.styles.backgroundColor });
-    const hover = props.hoverable && (props.hoverStyles || (props.active ? props.styles : { color: props.styles.backgroundColor, backgroundColor: props.styles.color }));
-    const disabled = props.disabled && (`
+const Button = props => {
+	// const styles = [classes.button];
+	// props.active && styles.push(classes.active);
+	const active =
+		props.active &&
+		(props.activeStyles || {
+			backgroundColor: props.styles.color,
+			color: props.styles.backgroundColor
+		});
+	const hover =
+		props.hoverable &&
+		(props.hoverStyles ||
+			(props.active
+				? props.styles
+				: {
+						color: props.styles.backgroundColor,
+						backgroundColor: props.styles.color
+				  }));
+	const disabled =
+		props.disabled &&
+		`
         opacity: 0.3;
         cursor: not-allowed;
-    `);
-    const StyledLink = styled.a`
+    `;
+	const StyledLink = styled.span`
         &:hover{
             ${!props.disabled && hover}
         }
@@ -28,9 +43,11 @@ const Button = (props) => {
         ${active}
         ${disabled}
     `;
-    return (
-        <StyledLink onClick={props.onClick} className={props.className} >{props.children}</StyledLink>
-    );
-}
+	return (
+		<StyledLink onClick={props.onClick} className={props.className}>
+			{props.children}
+		</StyledLink>
+	);
+};
 
 export default Button;

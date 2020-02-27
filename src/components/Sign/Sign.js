@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import classes from './Sign.module.css';
 import Button from '../../UI/Button/Button';
-import withModel from '../Model/withModel';
 import { ReactComponent as Google } from '../../assets/google.svg';
 import { ReactComponent as Facebook } from '../../assets/facebook.svg';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions';
+import Model from '../Model/Model';
+import Spinner from '../../UI/Spinner/Spinner';
 
 const checkValidity = (val, validationObj) => {
 	let isValid = true;
@@ -14,6 +15,11 @@ const checkValidity = (val, validationObj) => {
 	if (validationObj.isRequired) {
 		isValid = val.trim() !== '' && isValid;
 		val.trim() === '' && errorsArr.push('Required Field');
+	}
+	if (validationObj.match) {
+		isValid = val.trim() === validationObj.match && isValid;
+		val.trim() !== validationObj.match &&
+			errorsArr.push('Passwords Should Match');
 	}
 	if (validationObj.isEmail) {
 		const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -60,11 +66,11 @@ const Sign = props => {
 			validation: { isRequired: true, minLen: 6, maxLen: 12 },
 			errors: []
 		},
-		contact: {
+		confirmPassword: {
 			value: '',
 			isValid: false,
 			touched: false,
-			validation: { isRequired: true, isNumeric: true },
+			validation: { isRequired: true, match: '' },
 			errors: []
 		}
 	});
@@ -72,7 +78,7 @@ const Sign = props => {
 	const checkOverallFormValidity = stateObj => {
 		let isFormValid = true;
 		for (let element in stateObj) {
-			if (element === 'contact' && isSignInState) {
+			if (element === 'confirmPassword' && isSignInState) {
 				continue;
 			}
 			isFormValid = stateObj[element].isValid && isFormValid;
@@ -86,6 +92,12 @@ const Sign = props => {
 
 	const inputChangedHandler = (e, inputIdentifier) => {
 		const newVal = e.target.value;
+		const confirmPasswordObj = { ...inputsState['confirmPassword'] };
+		if (inputIdentifier === 'password') {
+			const validationObject = { ...confirmPasswordObj.validation };
+			validationObject.match = newVal;
+			confirmPasswordObj.validation = validationObject;
+		}
 		const inputUpdatedState = { ...inputsState[inputIdentifier] };
 		const { isValid, errors } = checkValidity(
 			newVal,
@@ -97,7 +109,8 @@ const Sign = props => {
 		inputUpdatedState['errors'] = errors;
 		const newInputsState = {
 			...inputsState,
-			...{ [inputIdentifier]: inputUpdatedState }
+			confirmPassword: confirmPasswordObj,
+			[inputIdentifier]: inputUpdatedState
 		};
 		setInputsState(newInputsState);
 		setFromValidity(checkOverallFormValidity(newInputsState));
@@ -112,118 +125,134 @@ const Sign = props => {
 	};
 
 	return (
-		<form className={classes.form} onSubmit={formOnSubmitHandler}>
-			<div
-				onClick={() => formOnSubmitHandler('google')}
-				className={classes.sign_with_button}
-			>
-				<Google />
-				<span>Sign in with Google</span>
-			</div>
-			<div
-				onClick={() => formOnSubmitHandler('facebook')}
-				className={classes.sign_with_button}
-			>
-				<Facebook />
-				<span>Sign in with Facebook</span>
-			</div>
-			<input
-				style={
-					!inputsState.email.isValid && inputsState.email.touched
-						? { borderBottom: '1px solid red' }
-						: null
-				}
-				onChange={e => inputChangedHandler(e, 'email')}
-				value={inputsState.email.value}
-				placeholder='Email'
-				className={classes.input}
-			/>
-			<span className={classes.error_messages}>
-				{inputsState.email.errors[0] === 'Required Field'
-					? 'Required Field'
-					: inputsState.email.errors.join(', ')}
-			</span>
-
-			<input
-				style={
-					!inputsState.password.isValid && inputsState.password.touched
-						? { borderBottom: '1px solid red' }
-						: null
-				}
-				onChange={e => inputChangedHandler(e, 'password')}
-				value={inputsState.password.value}
-				placeholder='Password'
-				className={classes.input}
-			/>
-			<span className={classes.error_messages}>
-				{inputsState.password.errors[0] === 'Required Field'
-					? 'Required Field'
-					: inputsState.password.errors.join(', ')}
-			</span>
-
-			{isSignInState ? null : (
+		<Model modelClass={classes['model']} goBack={props.history.goBack}>
+			{props.loading ? (
+				<Spinner />
+			) : props.error && !props.error.message ? (
 				<>
-					{' '}
+					<div className={classes['error-title']}>Error</div>
+					<p className={classes['error-message']}>Something Went Wrong.</p>
+				</>
+			) : (
+				<form className={classes.form} onSubmit={formOnSubmitHandler}>
+					<div
+						onClick={() => formOnSubmitHandler('google')}
+						className={classes.sign_with_button}
+					>
+						<Google />
+						<span>Sign in with Google</span>
+					</div>
+					<div
+						onClick={() => formOnSubmitHandler('facebook')}
+						className={classes.sign_with_button}
+					>
+						<Facebook />
+						<span>Sign in with Facebook</span>
+					</div>
 					<input
 						style={
-							!inputsState.contact.isValid && inputsState.contact.touched
+							!inputsState.email.isValid && inputsState.email.touched
 								? { borderBottom: '1px solid red' }
 								: null
 						}
-						onChange={e => inputChangedHandler(e, 'contact')}
-						value={inputsState.contact.value}
-						placeholder='Contact Number'
+						onChange={e => inputChangedHandler(e, 'email')}
+						value={inputsState.email.value}
+						placeholder='Email'
 						className={classes.input}
 					/>
 					<span className={classes.error_messages}>
-						{inputsState.contact.errors[0] === 'Required Field'
+						{inputsState.email.errors[0] === 'Required Field'
 							? 'Required Field'
-							: inputsState.contact.errors.join(', ')}
+							: inputsState.email.errors.join(', ')}
 					</span>
-				</>
+
+					<input
+						style={
+							!inputsState.password.isValid && inputsState.password.touched
+								? { borderBottom: '1px solid red' }
+								: null
+						}
+						onChange={e => inputChangedHandler(e, 'password')}
+						value={inputsState.password.value}
+						placeholder='Password'
+						className={classes.input}
+					/>
+					<span className={classes.error_messages}>
+						{inputsState.password.errors[0] === 'Required Field'
+							? 'Required Field'
+							: inputsState.password.errors.join(', ')}
+					</span>
+
+					{isSignInState ? null : (
+						<>
+							{' '}
+							<input
+								style={
+									!inputsState.confirmPassword.isValid &&
+									inputsState.confirmPassword.touched
+										? { borderBottom: '1px solid red' }
+										: null
+								}
+								onChange={e => inputChangedHandler(e, 'confirmPassword')}
+								value={inputsState.confirmPassword.value}
+								placeholder='Confirm Password'
+								className={classes.input}
+							/>
+							<span className={classes.error_messages}>
+								{inputsState.confirmPassword.errors[0] === 'Required Field'
+									? 'Required Field'
+									: inputsState.confirmPassword.errors.join(', ')}
+							</span>
+						</>
+					)}
+					<span className={classes.error_messages}>
+						{props.error && props.error.message}
+					</span>
+					<Button
+						onClick={() =>
+							formOnSubmitHandler(
+								null,
+								inputsState.email.value,
+								inputsState.password.value
+							)
+						}
+						disabled={!isFormValidState}
+						className={classes.button}
+						styles={{
+							borderRadius: '2.5rem',
+							border: '1px solid #ff0061',
+							backgroundColor: '#fff',
+							color: '#ff0061'
+						}}
+						hoverable
+					>
+						{' '}
+						{isSignInState ? 'Sign In' : 'Sign Up'}
+					</Button>
+					<Button
+						onClick={e => signInStateHandler(e)}
+						className={classes.button}
+						styles={{
+							borderRadius: '2.5rem',
+							border: '1px solid #ff0061',
+							backgroundColor: '#fff',
+							color: '#ff0061'
+						}}
+						hoverable
+					>
+						{' '}
+						{isSignInState ? 'Switch To Sign Up' : 'Switch To Sign In'}
+					</Button>
+				</form>
 			)}
-			<Button
-				onClick={() =>
-					formOnSubmitHandler(
-						null,
-						inputsState.email.value,
-						inputsState.password.value
-					)
-				}
-				disabled={!isFormValidState}
-				className={classes.button}
-				styles={{
-					borderRadius: '2.5rem',
-					border: '1px solid #ff0061',
-					backgroundColor: '#fff',
-					color: '#ff0061'
-				}}
-				hoverable
-			>
-				{' '}
-				{isSignInState ? 'Sign In' : 'Sign Up'}
-			</Button>
-			<Button
-				onClick={e => signInStateHandler(e)}
-				className={classes.button}
-				styles={{
-					borderRadius: '2.5rem',
-					border: '1px solid #ff0061',
-					backgroundColor: '#fff',
-					color: '#ff0061'
-				}}
-				hoverable
-			>
-				{' '}
-				{isSignInState ? 'Switch To Sign Up' : 'Switch To Sign In'}
-			</Button>
-		</form>
+		</Model>
 	);
 };
 
-// const mapStateToProps = state => {
-
-// }
+const mapStateToProps = ({ auth }) => ({
+	loading: auth.loading,
+	error: auth.error
+});
 const mapDispatchToProps = dispatch => {
 	return {
 		authenticateUserWithProvider: provider =>
@@ -233,7 +262,4 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(
-	null,
-	mapDispatchToProps
-)(withModel(Sign, classes['model']));
+export default connect(mapStateToProps, mapDispatchToProps)(Sign);

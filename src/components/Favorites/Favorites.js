@@ -4,8 +4,9 @@ import Page from '../../UI/Page/Page';
 import { connect } from 'react-redux';
 import Card from '../Main/Card/Card';
 import { fetchFavorites, toggleItemFav } from '../../store/actions';
-import { useTransition, animated, config } from 'react-spring';
+import { useTransition, animated } from 'react-spring';
 import Spinner from '../../UI/Spinner/Spinner';
+// import { useLocation } from 'react-router-dom';
 
 // props.favorites.map(item => (
 // 	<Card
@@ -25,7 +26,7 @@ import Spinner from '../../UI/Spinner/Spinner';
 // 	/>
 // ))
 
-const AnimatedCards = ({ items, push, url, toggleFav, userId }) => {
+const AnimatedCards = ({ items, push, url, toggleFav, userId, getUrl }) => {
 	const transitions = useTransition(items, item => item.itemId, {
 		from: { transform: `translateY(50%)`, opacity: 0 },
 		enter: { transform: `translateY(0)`, opacity: 1 },
@@ -42,11 +43,18 @@ const AnimatedCards = ({ items, push, url, toggleFav, userId }) => {
 					itemPrice={item.itemPrice}
 					itemName={item.itemName}
 					isFav
-					infoClicked={() => push(url + '/item-details')}
+					infoClicked={() => push(getUrl(item.itemId))}
 					toggleFavHandler={() => toggleFav(item.itemId, userId, true)}
 				/>
 			) : (
-				<div>'sfsdfsdfsdfdsfsdfsd'</div>
+				<div
+					style={{
+						textTransform: 'capitalize',
+						fontSize: '1.5rem'
+					}}
+				>
+					you haven't added any items yet
+				</div>
 			)}
 		</animated.div>
 	));
@@ -56,9 +64,13 @@ const Favorites = props => {
 	useEffect(() => {
 		props.fetchFavorites(props.userId);
 	}, []);
+	const pathname = props.match.url;
+	const getUrl = itemId =>
+		`${pathname.replace(/\//g, '')}/item-details/${itemId}`;
 
 	let content = null;
-	if (props.favorites) {
+
+	if (props.favorites && !props.loading) {
 		content =
 			props.favorites.length !== 0 ? (
 				<AnimatedCards
@@ -67,6 +79,7 @@ const Favorites = props => {
 					url={props.match.url}
 					toggleFav={props.toggleFav}
 					userId={props.userId}
+					getUrl={getUrl}
 				/>
 			) : (
 				<AnimatedCards items={[{ itemId: 'noItems' }]} />
@@ -87,7 +100,8 @@ const Favorites = props => {
 
 const mapStateToProps = ({ items, auth }) => ({
 	favorites: items.favorites,
-	userId: auth.user.uid
+	userId: auth.user.uid,
+	loading: items.loading
 });
 
 const mapDispatchToProps = dispatch => ({

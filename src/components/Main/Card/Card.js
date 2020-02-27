@@ -19,11 +19,13 @@ const card = props => {
 				className={classes.image}
 				style={{ backgroundImage: `url(${props.url})` }}
 			>
-				<div className={classes.overlay}>
-					<span className={classes.svg} onClick={props.toggleFavHandler}>
-						{heartIcon}
-					</span>
-				</div>
+				{props.isFav !== undefined && (
+					<div className={classes.overlay}>
+						<span className={classes.svg} onClick={props.toggleFavHandler}>
+							{heartIcon}
+						</span>
+					</div>
+				)}
 			</div>
 			<p className={classes.product_title}>{props.itemName}</p>
 			<div className={classes.card_info}>

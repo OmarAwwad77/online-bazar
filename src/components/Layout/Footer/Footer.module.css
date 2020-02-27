@@ -14,11 +14,15 @@
 	align-self: center;
 }
 
-.footer ul a {
+.footer ul a:link,
+.footer ul a:visited {
+	color: #fff;
+	text-decoration: none;
 	transition: color 0.3s ease;
 }
 
-.footer ul a:hover {
+.footer ul a:hover,
+.footer ul a:active {
 	color: #ff0061;
 }
 

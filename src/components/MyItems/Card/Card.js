@@ -11,7 +11,7 @@ const card = props => {
 	const styles = [classes['card'], props.className];
 
 	return (
-		<div className={styles.join(' ')}>
+		<div style={props.style} className={styles.join(' ')}>
 			<img alt='' src={props.mainUrl} className={classes['card__image']} />
 
 			<section className={classes['card__description']}>

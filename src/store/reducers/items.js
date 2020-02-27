@@ -8,9 +8,10 @@ const initialState = {
 		ascending: 'Sort By Price: Low to High'
 	},
 	queryItems: [],
-	myItems: [],
+	myItems: null,
 	error: null,
-	loading: false
+	loading: false,
+	redirect: false
 };
 
 const removeItem = (arr, id) => arr.filter(item => item.itemId !== id);
@@ -37,6 +38,29 @@ const updateQueryItemsFav = (itemId, items, remove, queryItems = true) => {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case actionTypes.ADD_ITEM:
+			return {
+				...state,
+				loading: false,
+				error: null,
+				redirect: true
+			};
+
+		case actionTypes.ADDING_ITEM:
+			return {
+				...state,
+				loading: true,
+				error: null
+			};
+
+		case actionTypes.ADD_ITEM_FAILED:
+			console.log(action.payload);
+			return {
+				...state,
+				loading: false,
+				error: action.payload.error
+			};
+
 		case actionTypes.SET_TOOLBAR_QUERY:
 			return {
 				...state,
@@ -176,6 +200,18 @@ export default (state = initialState, action) => {
 				...state,
 				loading: false,
 				error: action.payload.error
+			};
+
+		case actionTypes.CLEAR_ITEMS_ERROR:
+			return {
+				...state,
+				error: null
+			};
+
+		case actionTypes.SET_SHOULD_REDIRECT:
+			return {
+				...state,
+				redirect: false
 			};
 
 		// case actionTypes.ADD_ITEM:

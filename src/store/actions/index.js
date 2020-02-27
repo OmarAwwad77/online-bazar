@@ -6,7 +6,8 @@ export {
 	deleteAccountRequest,
 	changePasswordRequest,
 	reAuth,
-	setSignRedirectPath
+	setSignRedirectPath,
+	clearAuthError
 } from './auth';
 
 export {
@@ -16,5 +17,8 @@ export {
 	toggleItemFav,
 	fetchFavorites,
 	queryItems,
-	setToolbarQuery
+	setToolbarQuery,
+	clearItemsError,
+	addItem,
+	setShouldRedirect
 } from './items';

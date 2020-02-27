@@ -5,11 +5,13 @@ import ImageUpload from './ImageUpload/ImageUpload';
 import Button from '../../UI/Button/Button';
 import imageCompression from 'browser-image-compression';
 import { db, storageRef, storage } from '../../config/configfb';
-import { useLocation, withRouter } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateItem } from '../../store/actions';
+import { addItem, updateItem, clearItemsError } from '../../store/actions';
 import WithModelComponent from '../Model/WithModelComponent';
 import { Spring, config } from 'react-spring/renderprops';
+import Spinner from '../../UI/Spinner/Spinner';
+import withErrorModel from '../Model/withErrorModel';
 
 const AddItem = props => {
 	const [inputsS, setInputsS] = useState({
@@ -100,7 +102,8 @@ const AddItem = props => {
 		}
 	}, []);
 
-	const queryItemId = new URLSearchParams(useLocation().search).get('itemId');
+	// const queryItemId = new URLSearchParams(useLocation().search).get('itemId');
+	const { itemId: queryItemId } = useParams();
 	const inEditingMode = queryItemId ? true : false;
 
 	const onCancel = id => {
@@ -260,11 +263,10 @@ const AddItem = props => {
 		};
 
 		if (inEditingMode) {
+			props.closeModel();
 			props.updateItem(queryItemId, itemToUpload);
 		} else {
-			db.collection('items')
-				.add(itemToUpload)
-				.catch(() => console.log('Something Went Wrong'));
+			props.addItem(itemToUpload);
 		}
 	};
 
@@ -277,168 +279,190 @@ const AddItem = props => {
 
 	return (
 		<section className={classes['add-item']}>
-			<Spring from={{ opacity: 0, x: 150 }} to={{ opacity: 1, x: 0 }}>
-				{animProps => (
-					<form className={formClasses.join(' ')} onSubmit={null}>
-						<input
-							style={{
-								borderColor:
-									!inputsS.productName.valid && inputsS.productName.touched
-										? 'red'
-										: '#00000059',
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(${animProps.x}%)`
-							}}
-							value={inputsS.productName.value}
-							onChange={e => inputsOnChange(e, 'productName')}
-							placeholder='Product Name'
-							className={classes['form__input']}
-						/>
-						<span className={classes['form__error-message']}>
-							{inputsS.productName.errorMessage}
-						</span>
-						<input
-							style={{
-								borderColor:
-									!inputsS.productPrice.valid && inputsS.productPrice.touched
-										? 'red'
-										: '#00000059',
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(-${animProps.x}%)`
-							}}
-							value={inputsS.productPrice.value}
-							onChange={e => inputsOnChange(e, 'productPrice')}
-							placeholder='Product Price In $'
-							className={classes['form__input']}
-						/>
-						<span className={classes['form__error-message']}>
-							{inputsS.productPrice.errorMessage}
-						</span>
-						<input
-							style={{
-								borderColor:
-									!inputsS.phoneNo.valid && inputsS.phoneNo.touched
-										? 'red'
-										: '#00000059',
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(${animProps.x}%)`
-							}}
-							value={inputsS.phoneNo.value}
-							onChange={e => inputsOnChange(e, 'phoneNo')}
-							placeholder='Contact Number'
-							className={classes['form__input']}
-						/>
-						<span className={classes['form__error-message']}>
-							{inputsS.phoneNo.errorMessage}
-						</span>
-						<textarea
-							style={{
-								borderColor:
-									!inputsS.productDesc.valid && inputsS.productDesc.touched
-										? 'red'
-										: '#00000059',
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(-${animProps.x}%)`
-							}}
-							value={inputsS.productDesc.value}
-							onChange={e => inputsOnChange(e, 'productDesc')}
-							placeholder='Product Description'
-							className={classes['form__text-area']}
-						/>
-						<span className={classes['form__error-message']}></span>
-						<CategoriesDropDown
-							style={{
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(${animProps.x}%)`
-							}}
-							className={classes['drop-downs-container']}
-							dropDownsClass={classes['categories__drop-downs']}
-							setCategoryState={setCategoryState}
-							categoryState={categoryState}
-							setSubCategoryState={setSubCategoryState}
-							subCategoryState={subCategoryState}
-						/>
-						<span className={classes['form__error-message']}></span>
-						<section
-							style={{
-								opacity: `${animProps.opacity}`,
-								transform: `translateX(-${animProps.x}%)`
-							}}
-							className={imageUploadsClass}
-						>
-							<ImageUpload
-								inputId='main'
-								url={imagesS.main.url}
-								onSwitch={() => onSwitchImage('main')}
-								onCancel={() => onCancel('main')}
-								onChange={e => imagesOnChange('main', e)}
-								errorMessage={imagesS.main.errorMessage}
-								loading={imagesS.main.loading}
+			{props.redirect && <Redirect to='/my-items' />}
+			{props.loading ? (
+				<Spinner />
+			) : (
+				<Spring from={{ opacity: 0, x: 150 }} to={{ opacity: 1, x: 0 }}>
+					{animProps => (
+						<form className={formClasses.join(' ')}>
+							<input
+								style={{
+									borderColor:
+										!inputsS.productName.valid && inputsS.productName.touched
+											? 'red'
+											: '#00000059',
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(${animProps.x}%)`
+								}}
+								value={inputsS.productName.value}
+								onChange={e => inputsOnChange(e, 'productName')}
+								placeholder='Product Name'
+								className={classes['form__input']}
 							/>
-							<ImageUpload
-								inputId='extra1'
-								url={imagesS.extra1.url}
-								onSwitch={() => onSwitchImage('extra1')}
-								onCancel={() => onCancel('extra1')}
-								onChange={e => imagesOnChange('extra1', e)}
-								errorMessage={imagesS.extra1.errorMessage}
-								loading={imagesS.extra1.loading}
+							<span className={classes['form__error-message']}>
+								{inputsS.productName.errorMessage}
+							</span>
+							<input
+								style={{
+									borderColor:
+										!inputsS.productPrice.valid && inputsS.productPrice.touched
+											? 'red'
+											: '#00000059',
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(-${animProps.x}%)`
+								}}
+								value={inputsS.productPrice.value}
+								onChange={e => inputsOnChange(e, 'productPrice')}
+								placeholder='Product Price In $'
+								className={classes['form__input']}
 							/>
-							<ImageUpload
-								inputId='extra2'
-								url={imagesS.extra2.url}
-								onSwitch={() => onSwitchImage('extra2')}
-								onCancel={() => onCancel('extra2')}
-								onChange={e => imagesOnChange('extra2', e)}
-								errorMessage={imagesS.extra2.errorMessage}
-								loading={imagesS.extra2.loading}
+							<span className={classes['form__error-message']}>
+								{inputsS.productPrice.errorMessage}
+							</span>
+							<input
+								style={{
+									borderColor:
+										!inputsS.phoneNo.valid && inputsS.phoneNo.touched
+											? 'red'
+											: '#00000059',
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(${animProps.x}%)`
+								}}
+								value={inputsS.phoneNo.value}
+								onChange={e => inputsOnChange(e, 'phoneNo')}
+								placeholder='Contact Number'
+								className={classes['form__input']}
 							/>
-						</section>
-						<span className={classes['form__error-message']}></span>
-						<Button
-							onClick={onSubmit}
-							className={
-								formValidityS ? '' : classes['form__submit-button--disabled']
-							}
-							hoverable={formValidityS}
-							styles={{
-								color: '#fff',
-								backgroundColor: '#ff0061',
-								textAlign: 'center',
-								maxWidth: '42rem',
-								opacity: `${animProps.opacity}`
-							}}
-							hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
-						>
-							{inEditingMode ? 'Edit' : 'Upload'}
-						</Button>
-					</form>
-				)}
-			</Spring>
+							<span className={classes['form__error-message']}>
+								{inputsS.phoneNo.errorMessage}
+							</span>
+							<textarea
+								style={{
+									borderColor:
+										!inputsS.productDesc.valid && inputsS.productDesc.touched
+											? 'red'
+											: '#00000059',
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(-${animProps.x}%)`
+								}}
+								value={inputsS.productDesc.value}
+								onChange={e => inputsOnChange(e, 'productDesc')}
+								placeholder='Product Description'
+								className={classes['form__text-area']}
+							/>
+							<span className={classes['form__error-message']}></span>
+							<CategoriesDropDown
+								style={{
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(${animProps.x}%)`,
+									zIndex: 1
+								}}
+								className={classes['drop-downs-container']}
+								dropDownsClass={classes['categories__drop-downs']}
+								setCategoryState={setCategoryState}
+								categoryState={categoryState}
+								setSubCategoryState={setSubCategoryState}
+								subCategoryState={subCategoryState}
+							/>
+							<span className={classes['form__error-message']}></span>
+							<section
+								style={{
+									opacity: `${animProps.opacity}`,
+									transform: `translateX(-${animProps.x}%)`
+								}}
+								className={imageUploadsClass}
+							>
+								<ImageUpload
+									inputId='main'
+									url={imagesS.main.url}
+									onSwitch={() => onSwitchImage('main')}
+									onCancel={() => onCancel('main')}
+									onChange={e => imagesOnChange('main', e)}
+									errorMessage={imagesS.main.errorMessage}
+									loading={imagesS.main.loading}
+								/>
+								<ImageUpload
+									inputId='extra1'
+									url={imagesS.extra1.url}
+									onSwitch={() => onSwitchImage('extra1')}
+									onCancel={() => onCancel('extra1')}
+									onChange={e => imagesOnChange('extra1', e)}
+									errorMessage={imagesS.extra1.errorMessage}
+									loading={imagesS.extra1.loading}
+								/>
+								<ImageUpload
+									inputId='extra2'
+									url={imagesS.extra2.url}
+									onSwitch={() => onSwitchImage('extra2')}
+									onCancel={() => onCancel('extra2')}
+									onChange={e => imagesOnChange('extra2', e)}
+									errorMessage={imagesS.extra2.errorMessage}
+									loading={imagesS.extra2.loading}
+								/>
+							</section>
+							<span className={classes['form__error-message']}></span>
+							<Button
+								onClick={onSubmit}
+								className={
+									formValidityS ? '' : classes['form__submit-button--disabled']
+								}
+								hoverable={formValidityS}
+								styles={{
+									color: '#fff',
+									backgroundColor: '#ff0061',
+									textAlign: 'center',
+									maxWidth: '42rem',
+									opacity: `${animProps.opacity}`
+								}}
+								hoverStyles={{ backgroundColor: '#4e002d', color: '#fff' }}
+							>
+								{inEditingMode ? 'Edit' : 'Upload'}
+							</Button>
+						</form>
+					)}
+				</Spring>
+			)}
 		</section>
 	);
 };
 
 const mapStateToProps = ({ auth, items }) => ({
 	user: auth.user,
-	myItems: items.myItems
+	myItems: items.myItems,
+	loading: items.loading,
+	hasError: items.error ? true : false,
+	redirect: items.redirect
 });
 
 const mapDispatchToProps = dispatch => ({
-	updateItem: (itemId, item) => dispatch(updateItem(itemId, item))
+	addItem: item => dispatch(addItem(item)),
+	updateItem: (itemId, item) => dispatch(updateItem(itemId, item)),
+	clearItemsError: () => dispatch(clearItemsError())
 });
 
-const AddItemWithModel = (
-	props // props here are the AddItem props
-) => (
-	<WithModelComponent
-		usingRouter
-		modelClass={classes['model']}
-		noModel={!props.withModel}
-	>
-		{() => <AddItem {...props} />}
-	</WithModelComponent>
-);
+const AddItemWithModel = props => {
+	let Component = null;
+
+	if (props.withModel) {
+		Component = (
+			<WithModelComponent show usingRouter modelClass={classes['model']}>
+				{close => <AddItem closeModel={close} {...props} />}
+			</WithModelComponent>
+		);
+		return Component;
+	} else {
+		Component = withErrorModel(AddItem);
+		return <Component {...props} />;
+	}
+};
+
+// console.log('props', props);
+// return (
+// 	<WithModelComponent show usingRouter modelClass={classes['model']}>
+// 		{() => <AddItem {...props} />}
+// 	</WithModelComponent>
+// );
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddItemWithModel);
 

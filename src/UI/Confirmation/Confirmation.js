@@ -18,6 +18,7 @@ const Confirmation = props => {
 
 	return (
 		<WithModelComponent
+			show={props.show}
 			modelClass={classes['model']}
 			modelStyles={props.modelStyles}
 			cancel={props.cancel}

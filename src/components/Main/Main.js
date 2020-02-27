@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Hero from './Hero/Hero';
 import classes from './Main.module.css';
 import Filters from './Filters/Filters';
@@ -7,27 +7,13 @@ import Card from './Card/Card';
 import { connect } from 'react-redux';
 import { toggleItemFav } from '../../store/actions';
 import VisibilitySensor from '../VisibilitySensor/VisibilitySensor';
-import { Spring, config } from 'react-spring/renderprops';
+import { Spring } from 'react-spring/renderprops';
+import { useLocation } from 'react-router-dom';
 
 const Main = props => {
-	// useEffect(() => {
-	// 	if (props.uerId) {
-	// 		db.collection('users')
-	// 			.doc(props.userId)
-	// 			.get()
-	// 			.then(doc => {
-	// 				if (doc.exists) {
-	// 					console.log(doc.data().favorites);
-	// 				} else {
-	// 					console.log(`doesn't exists`);
-	// 				}
-	// 			})
-	// 			.catch(error => {
-	// 				console.log('error', error);
-	// 			});
-	// 	}
-	// }, []);
-
+	const { pathname } = useLocation();
+	const getUrl = itemId =>
+		`${pathname.replace(/\//g, '')}/item-details/${itemId}`;
 	return (
 		<div className={classes.main}>
 			<Hero auth={props.userId} />
@@ -71,9 +57,7 @@ const Main = props => {
 										itemPrice={item.itemPrice}
 										itemName={item.itemName}
 										isFav={item.isFav}
-										infoClicked={() =>
-											props.history.push(props.match.url + '/item-details')
-										}
+										infoClicked={() => props.history.push(getUrl(item.itemId))}
 										toggleFavHandler={() =>
 											props.toggleFav(item.itemId, props.userId, item.isFav)
 										}
@@ -84,24 +68,6 @@ const Main = props => {
 					</VisibilitySensor>
 				))}
 			</section>
-
-			{/* {props.items.map(item => (
-					<Card
-						key={item.itemId}
-						id={item.itemId}
-						url={item.mainUrl}
-						timeStamp={item.timeStamp}
-						itemPrice={item.itemPrice}
-						itemName={item.itemName}
-						isFav={item.isFav}
-						infoClicked={() =>
-							props.history.push(props.match.url + '/item-details')
-						}
-						toggleFavHandler={() =>
-							props.toggleFav(item.itemId, props.userId, item.isFav)
-						}
-					/>
-				))} */}
 		</div>
 	);
 };

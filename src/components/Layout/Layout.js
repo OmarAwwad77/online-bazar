@@ -21,7 +21,7 @@ const Layout = props => {
 	// 	props.setCurrentUser('localStorage');
 
 	const addItemAction = props.isAuth
-		? null
+		? () => props.setShouldRedirect(false)
 		: () => props.setSignRedirectPath('/add-item');
 	return (
 		<div className={classes.grid}>
@@ -31,7 +31,10 @@ const Layout = props => {
 					'Sing Out': null,
 					'Change Password': props.changePasswordRequest,
 					'Delete Account': props.deleteAccountRequest,
-					'Sign in/up': () => props.setSignRedirectPath('/'),
+					'Sign in/up': () => {
+						props.setSignRedirectPath('/');
+						// props.clearAuthError();
+					},
 					'Add Item': addItemAction
 				}}
 				providerId={props.providerId}

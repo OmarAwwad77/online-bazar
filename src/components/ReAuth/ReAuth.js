@@ -4,8 +4,16 @@ import WithModelComponent from '../Model/WithModelComponent';
 import * as actionCreators from '../../store/actions';
 import Button from '../../UI/Button/Button';
 import Confirmation from '../../UI/Confirmation/Confirmation';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import fb, { storageRef } from '../../config/configfb';
+import { auth } from '../../config/configfb';
+import Spinner from '../../UI/Spinner/Spinner';
+import styled from 'styled-components';
+import {
+	StyledMessage,
+	StyledTitle,
+	modelStyles
+} from '../Model/withErrorModel';
 
 const ReAuth = props => {
 	const [deleteConfirmed, setDeleteConfirmed] = useState(false);
@@ -31,7 +39,7 @@ const ReAuth = props => {
 						newPassword: formInputsState.newPassword
 				  };
 
-		props.reAuth(user, isDeleteAction, credentials);
+		props.reAuth(auth().currentUser, isDeleteAction, credentials);
 	};
 
 	const buttonsStyles = {
@@ -40,12 +48,11 @@ const ReAuth = props => {
 		backgroundColor: '#fff',
 		color: '#ff0061'
 	};
-	const user = fb.auth().currentUser;
 
 	const signInWithPassword =
 		props.providerId !== 'google.com' && props.providerId !== 'facebook.com';
 
-	const formContent = true ? (
+	const formContent = signInWithPassword ? (
 		<>
 			<input
 				onChange={e => inputChangeHandler(e, 'email')}
@@ -92,12 +99,31 @@ const ReAuth = props => {
 			/>
 		);
 	}
+	if (props.loading) {
+		content = props.loading && <Spinner />;
+	} else if (props.error) {
+		const Div = styled.div`
+			${props => props.styles}
+		`;
+		content = (
+			<Div styles={modelStyles}>
+				<StyledTitle>Error</StyledTitle>
+				<StyledMessage>something went wrong</StyledMessage>
+			</Div>
+		);
+	} else if (!props.reAuthAction || props.redirect) {
+		content = <Redirect to='/' />;
+	}
+
 	return content;
 };
 
 const mapStateToProps = ({ auth }) => ({
 	reAuthAction: auth.reAuth,
-	providerId: auth.user && auth.user.providerId
+	providerId: auth.user && auth.user.providerId,
+	loading: auth.loading,
+	redirect: auth.redirect,
+	error: auth.error
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -106,7 +132,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ReAuthWithModel = storeProps => (
-	<WithModelComponent usingRouter modelClass={classes['model']}>
+	<WithModelComponent show usingRouter modelClass={classes['model']}>
 		{close => <ReAuth closeModel={close} {...storeProps} />}
 	</WithModelComponent>
 );

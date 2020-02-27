@@ -16,7 +16,11 @@ const Logo = props => {
 			config={config.wobbly}
 		>
 			{animProps => (
-				<div style={animProps} className={logoContainerClasses.join(' ')}>
+				<div
+					style={animProps}
+					onClick={props.onClick}
+					className={logoContainerClasses.join(' ')}
+				>
 					{/* <Logo className={classes.logo} /> */}
 					<img className={classes.logo_image} src={logo} />
 					<span

@@ -2,9 +2,19 @@ import React from 'react';
 import classes from './Footer.module.css';
 import Logo from '../../../UI/Logo/Logo';
 import { ReactComponent as Envelope } from '../../../assets/envelope.svg';
+import { HashLink } from 'react-router-hash-link';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setToolbarQuery } from '../../../store/actions';
 
 const footer = props => {
 	const sytleClasses = [classes.footer, props.styleClass];
+	// const footerLinksStyle = { textDecoration: 'none' };
+	const setQuery = category => ({
+		category: category,
+		subCategory: 'All SubCategories',
+		ascending: 'Sort By Price: Low to High'
+	});
 	return (
 		<section className={sytleClasses.join(' ')}>
 			<section className={classes.logo}>
@@ -20,37 +30,47 @@ const footer = props => {
 				<h2 className={classes.categories_title}>Categories</h2>
 				<ul className={classes.categories_list}>
 					<li>
-						<a>phones</a>
+						<HashLink
+							smooth
+							to='/#products'
+							onClick={() => props.setQueryToolbar(setQuery('Phones'))}
+						>
+							phones
+						</HashLink>
 					</li>
 					<li>
-						<a>cameras</a>
+						<HashLink
+							smooth
+							to='/#products'
+							onClick={() => props.setQueryToolbar(setQuery('Cameras'))}
+						>
+							cameras
+						</HashLink>
 					</li>
 					<li>
-						<a>laptops</a>
+						<HashLink
+							smooth
+							to='/#products'
+							onClick={() => props.setQueryToolbar(setQuery('Laptops'))}
+						>
+							laptops
+						</HashLink>
 					</li>
 					<li>
-						<a>tablets</a>
+						<HashLink
+							smooth
+							to='/#products'
+							onClick={() => props.setQueryToolbar(setQuery('Tablets'))}
+						>
+							tablets
+						</HashLink>
 					</li>
 				</ul>
 			</section>
 			<section className={classes.links}>
 				<h2 className={classes.links_title}>Links</h2>
 				<ul className={classes.links_list}>
-					<li>
-						<a>home</a>
-					</li>
-					<li>
-						<a>account</a>
-					</li>
-					<li>
-						<a>my items</a>
-					</li>
-					<li>
-						<a>add itme</a>
-					</li>
-					<li>
-						<a>favourits</a>
-					</li>
+					{createFooterLinks(props.isAuth)}
 				</ul>
 			</section>
 			<section className={classes.contact}>
@@ -66,4 +86,42 @@ const footer = props => {
 	);
 };
 
-export default footer;
+const mapDispatchToProps = dispatch => ({
+	setQueryToolbar: query => dispatch(setToolbarQuery(query))
+});
+
+const mapStateToProps = ({ auth }) => ({
+	isAuth: auth.user ? true : false
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(footer);
+
+const createFooterLinks = isAuth =>
+	isAuth ? (
+		<>
+			<li>
+				<Link to='/'>home</Link>
+			</li>
+			<li>
+				<Link to='/my-items'>my items</Link>
+			</li>
+			<li>
+				<Link to='/add-item'>add item</Link>
+			</li>
+			<li>
+				<Link to='/favorites'>favorites</Link>
+			</li>
+		</>
+	) : (
+		<>
+			<li>
+				<Link to='/'>home</Link>
+			</li>
+			<li>
+				<Link to='/sign'>add item</Link>
+			</li>
+			<li>
+				<Link to='/sign'>Sign in/up</Link>
+			</li>
+		</>
+	);
