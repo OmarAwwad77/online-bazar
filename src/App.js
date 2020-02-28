@@ -46,43 +46,37 @@ const AnimatedRouteSign = props => {
 };
 
 function App(props) {
-	console.log('App: rendering');
+	let isAuth = props.auth || localStorage.getItem('uid');
 	useEffect(() => {
-		if (localStorage.getItem('uid')) {
-			props.setCurrentUser('localStorage');
+		if (!props.auth) {
+			if (localStorage.getItem('uid')) {
+				props.setCurrentUser('localStorage');
+			} else {
+				fb.auth().onAuthStateChanged(ur => {
+					const user = ur && {
+						uid: ur.uid,
+						email: ur.email,
+						providerId: ur.providerData[0].providerId
+					};
+					props.setCurrentUser(user);
+				});
+			}
 		}
-		fb.auth().onAuthStateChanged(ur => {
-			const user = ur && {
-				uid: ur.uid,
-				email: ur.email,
-				providerId: ur.providerData[0].providerId
-			};
-			props.setCurrentUser(user);
-		});
-	}, []);
-	// const isAuth = localStorage.getItem('uid') || props.auth;
-	// !isAuth &&
-	// fb.auth().onAuthStateChanged(ur => {
-	// 	const user = ur && {
-	// 		uid: ur.uid,
-	// 		email: ur.email,
-	// 		providerId: ur.providerData[0].providerId
-	// 	};
-	// 	props.setCurrentUser(user);
-	// 	console.log('have an auth listener');
-	// });
-
-	// !props.auth &&
-	// 	localStorage.getItem('uid') &&
-	// 	props.setCurrentUser('localStorage');
+	}, [props.auth]);
 
 	const mainRoutes = (
 		<>
-			{/* <Route component={Sign} path={['/sign', '/add-item']} /> */}
 			<Route component={ItemDetails} path={['/item-details/:itemId']} />
 			<Route component={Backdrop} path={['/sign', '/add-item']} />
-			<Route component={Main} path='/' />
 			<AnimatedRouteSign location={useLocation()} />
+			<Switch>
+				<Route
+					component={Main}
+					exact
+					path={['/', '/sign', '/add-item', '/item-details/:itemId']}
+				/>
+				<Route render={props => <Redirect to='/' />} path='/' />
+			</Switch>
 		</>
 	);
 
@@ -95,10 +89,6 @@ function App(props) {
 			<Route component={ReAuth} path={['/:path/re-auth', '/re-auth']} />
 			<Route component={SignOut} path='/sign-out' />
 
-			{/* <Route
-				render={props => <AddItem {...props} withModel={true} />}
-				path='/:path/edit-item/:itemId'
-			/> */}
 			<Switch>
 				<Route component={Favorites} path='/favorites' />
 				<Route component={AddItem} path='/add-item' />
@@ -106,7 +96,7 @@ function App(props) {
 				<Route
 					component={Main}
 					exact
-					path={['/', '/item-details/:itemId', '/#products']}
+					path={['/', '/item-details/:itemId', '/#products', '/re-auth']}
 				/>
 				<Route render={props => <Redirect to='/' />} path='/' />
 			</Switch>
@@ -117,13 +107,13 @@ function App(props) {
 			<Layout
 				setShouldRedirect={props.setShouldRedirect}
 				setSignRedirectPath={props.setSignRedirectPath}
-				isAuth={props.auth}
+				isAuth={isAuth}
 				changePasswordRequest={props.changePasswordRequest}
 				deleteAccountRequest={props.deleteAccountRequest}
 				setCurrentUser={props.setCurrentUser}
 				providerId={props.providerId}
 			>
-				{props.auth ? routes : mainRoutes}
+				{isAuth ? routes : mainRoutes}
 			</Layout>
 		</div>
 	);
@@ -131,8 +121,8 @@ function App(props) {
 
 const mapStateToProps = ({ auth }) => {
 	return {
-		auth: auth.user ? true : false,
-		providerId: auth.user ? auth.user.providerId : null
+		providerId: auth.user ? auth.user.providerId : null,
+		auth: auth.user ? true : false
 	};
 };
 

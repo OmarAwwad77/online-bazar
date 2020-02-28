@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import fb from '../../config/configfb';
+import fb, { db } from '../../config/configfb';
 
 export const authStart = () => ({ type: actionTypes.AUTH_START });
 
@@ -144,6 +144,17 @@ const deleteAccountFail = error => ({
 const deleteAccount = user => {
 	return async dispatch => {
 		try {
+			dispatch({ type: actionTypes.CLEAR_MY_ITEMS });
+
+			const querySnapshot = await db
+				.collection('items')
+				.where('ownerUid', '==', user.uid)
+				.get();
+
+			querySnapshot.forEach(async doc => {
+				await doc.ref.delete();
+			});
+
 			clearLocalStorage();
 			await user.delete();
 			dispatch(deleteAccountSuccess());
@@ -215,4 +226,8 @@ export const reAuth = (user, isDeleteAction, credentialsObj = null) => {
 export const setSignRedirectPath = path => ({
 	type: actionTypes.SET_SIGN_REDIRECT_PATH,
 	payload: { path }
+});
+
+export const resetRedirectAuth = () => ({
+	type: actionTypes.RESET_REDIRECT
 });

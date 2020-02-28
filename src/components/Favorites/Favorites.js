@@ -62,8 +62,8 @@ const AnimatedCards = ({ items, push, url, toggleFav, userId, getUrl }) => {
 
 const Favorites = props => {
 	useEffect(() => {
-		props.fetchFavorites(props.userId);
-	}, []);
+		props.userId && props.fetchFavorites(props.userId);
+	}, [props.userId]);
 	const pathname = props.match.url;
 	const getUrl = itemId =>
 		`${pathname.replace(/\//g, '')}/item-details/${itemId}`;
@@ -100,7 +100,7 @@ const Favorites = props => {
 
 const mapStateToProps = ({ items, auth }) => ({
 	favorites: items.favorites,
-	userId: auth.user.uid,
+	userId: auth.user && auth.user.uid,
 	loading: items.loading
 });
 

@@ -7,7 +7,7 @@ const initialState = {
 		subCategory: 'All SubCategories',
 		ascending: 'Sort By Price: Low to High'
 	},
-	queryItems: [],
+	queryItems: null,
 	myItems: null,
 	error: null,
 	loading: false,
@@ -124,7 +124,7 @@ export default (state = initialState, action) => {
 				...state,
 				favorites: updateQueryItemsFav(
 					action.payload.itemId,
-					state.favorites,
+					state.favorites ? state.favorites : [],
 					true,
 					false
 				),
@@ -212,6 +212,18 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				redirect: false
+			};
+
+		case actionTypes.RESET_REDIRECT:
+			return {
+				...state,
+				redirect: false
+			};
+
+		case actionTypes.CLEAR_MY_ITEMS:
+			return {
+				...state,
+				myItems: null
 			};
 
 		// case actionTypes.ADD_ITEM:

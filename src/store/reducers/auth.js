@@ -123,6 +123,12 @@ const authReducer = (state = initialState, action) => {
 				error: null
 			};
 
+		case actionTypes.RESET_REDIRECT:
+			return {
+				...state,
+				redirect: false
+			};
+
 		default:
 			return state;
 	}

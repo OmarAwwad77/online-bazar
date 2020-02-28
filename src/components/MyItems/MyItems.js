@@ -20,18 +20,23 @@ const AnimatedCards = ({ items, editAction, deleteAction }) => {
 	});
 
 	const trails = useTrail(items.length, {
-		from: { width: 80, opacity: 1 },
+		from: { width: 80 },
 		config,
-		to: { width: 100, opacity: 1 }
+		to: { width: 100 }
 	});
+
+	console.log(trails.length === transition.length);
+	console.log('trails', trails);
+	console.log('transition', transition);
 
 	return transition.map(({ item, key, props }, index) => (
 		<animated.div key={key} style={{ ...props, margin: '2rem 1rem' }}>
 			{item.itemId !== 'noItems' ? (
 				<animated.div
 					style={{
-						opacity: trails[index].opacity,
-						width: trails[index].width.interpolate(width => `${width}%`)
+						width: trails[index]
+							? trails[index].width.interpolate(width => `${width}%`)
+							: '100%'
 					}}
 				>
 					<Card
@@ -48,7 +53,7 @@ const AnimatedCards = ({ items, editAction, deleteAction }) => {
 					/>
 				</animated.div>
 			) : (
-				<div>No Items</div>
+				<div style={{ textAlign: 'center' }}>No Items</div>
 			)}
 		</animated.div>
 	));
@@ -76,10 +81,11 @@ const AnimatedRoute = props => {
 const MyItems = props => {
 	const [showConfirmationState, setConfirmationState] = useState(false);
 	const [itemState, setItemState] = useState({ itemId: null });
+	console.log('my-items');
 	useEffect(() => {
 		// fetch data
-		props.fetchMyItems(props.userId);
-	}, []);
+		props.userId && props.fetchMyItems(props.userId);
+	}, [props.userId]);
 
 	const deleteAction = itemId => {
 		setConfirmationState(!showConfirmationState);
@@ -90,8 +96,7 @@ const MyItems = props => {
 		props.history.push(
 			`/${props.match.url.replace(/\//g, '')}/edit-item/${itemId}`
 		);
-
-		// props.history.push('/my-items/edit-item');
+		console.log(`/${props.match.url.replace(/\//g, '')}/edit-item/${itemId}`);
 	};
 
 	const itemUrls = itemId => {
@@ -104,9 +109,9 @@ const MyItems = props => {
 	const location = useLocation();
 
 	let content = null;
-	if (props.myItems && !props.loading) {
+	if (props.myItems) {
 		content =
-			props.myItems.length !== 0 ? (
+			props.myItems && props.myItems.length !== 0 ? (
 				<>
 					<AnimatedCards
 						items={props.myItems}
@@ -115,17 +120,6 @@ const MyItems = props => {
 					/>
 
 					<AnimatedRoute location={location} />
-					{/* <AnimatedRoute
-						render={props => <AddItem {...props} withModel={true} />}
-						path='/:path/edit-item/:itemId'
-						atEnter={{ opacity: 1, top: 50 }}
-						atLeave={{ opacity: 0.5, to: -100 }}
-						atActive={{ opacity: 1, top: 50 }}
-						mapStyles={styles => ({
-							opacity: `${styles.opacity}`,
-							top: `${styles.top}%`
-						})}
-					/> */}
 				</>
 			) : (
 				<AnimatedCards items={[{ itemId: 'noItems' }]} />
@@ -151,17 +145,6 @@ const MyItems = props => {
 			>
 				{content}
 			</Page>
-
-			{/* <AnimatedRoute
-      path="/sidebar"
-      component={Sidebar}
-      atEnter={{ offset: -100 }}
-      atLeave={{ offset: -100 }}
-      atActive={{ offset: 0 }}
-      mapStyles={(styles) => ({
-        transform: `translateX(${styles.offset}%)`,
-      })}
-    /> */}
 		</>
 	);
 };
@@ -174,8 +157,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = ({ auth, items }) => ({
 	myItems: items.myItems,
-	userId: auth.user.uid,
-	loading: items.loading,
+	userId: auth.user && auth.user.uid,
 	hasError: items.error ? true : false
 });
 

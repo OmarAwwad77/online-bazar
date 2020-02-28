@@ -9,11 +9,13 @@ import { toggleItemFav } from '../../store/actions';
 import VisibilitySensor from '../VisibilitySensor/VisibilitySensor';
 import { Spring } from 'react-spring/renderprops';
 import { useLocation } from 'react-router-dom';
+import Spinner from '../../UI/Spinner/Spinner';
 
 const Main = props => {
 	const { pathname } = useLocation();
 	const getUrl = itemId =>
 		`${pathname.replace(/\//g, '')}/item-details/${itemId}`;
+	console.log('main running');
 	return (
 		<div className={classes.main}>
 			<Hero auth={props.userId} />
@@ -33,40 +35,47 @@ const Main = props => {
 				<Filters />
 			</section>
 			<section className={classes.card_container}>
-				{props.items.map(item => (
-					<VisibilitySensor key={item.itemId} once partialVisibility>
-						{isVisible => (
-							<Spring
-								from={{
-									opacity: 0,
-									transform: 'translateY(50%)'
-								}}
-								to={{
-									opacity: isVisible ? 1 : 0,
-									transform: isVisible ? 'translateY(0)' : 'translateY(50%)'
-								}}
-								config={{ friction: 8, tension: 160 }}
-							>
-								{animProps => (
-									<Card
-										// key={item.itemId}
-										style={animProps}
-										id={item.itemId}
-										url={item.mainUrl}
-										timeStamp={item.timeStamp}
-										itemPrice={item.itemPrice}
-										itemName={item.itemName}
-										isFav={item.isFav}
-										infoClicked={() => props.history.push(getUrl(item.itemId))}
-										toggleFavHandler={() =>
-											props.toggleFav(item.itemId, props.userId, item.isFav)
-										}
-									/>
-								)}
-							</Spring>
-						)}
-					</VisibilitySensor>
-				))}
+				{props.items ? (
+					props.items.map(item => (
+						<VisibilitySensor key={item.itemId} once partialVisibility>
+							{isVisible => (
+								<Spring
+									from={{
+										opacity: 0,
+										transform: 'translateY(50%)'
+									}}
+									to={{
+										opacity: isVisible ? 1 : 0,
+										transform: isVisible ? 'translateY(0)' : 'translateY(50%)'
+									}}
+									config={{ friction: 8, tension: 160 }}
+								>
+									{animProps => (
+										<Card
+											// key={item.itemId}
+											style={animProps}
+											id={item.itemId}
+											url={item.mainUrl}
+											timeStamp={item.timeStamp}
+											itemPrice={item.itemPrice}
+											itemName={item.itemName}
+											isFav={item.isFav}
+											infoClicked={() =>
+												props.history.push(getUrl(item.itemId))
+											}
+											toggleFavHandler={() => {
+												console.log('clicked');
+												props.toggleFav(item.itemId, props.userId, item.isFav);
+											}}
+										/>
+									)}
+								</Spring>
+							)}
+						</VisibilitySensor>
+					))
+				) : (
+					<Spinner />
+				)}
 			</section>
 		</div>
 	);

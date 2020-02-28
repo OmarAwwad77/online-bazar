@@ -7,7 +7,8 @@ export {
 	changePasswordRequest,
 	reAuth,
 	setSignRedirectPath,
-	clearAuthError
+	clearAuthError,
+	resetRedirectAuth
 } from './auth';
 
 export {
@@ -20,5 +21,7 @@ export {
 	setToolbarQuery,
 	clearItemsError,
 	addItem,
-	setShouldRedirect
+	setShouldRedirect,
+	resetRedirect,
+	clearMyItems
 } from './items';

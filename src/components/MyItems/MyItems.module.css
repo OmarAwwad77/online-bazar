@@ -12,6 +12,7 @@
 .Page__content-container {
 	display: flex;
 	flex-direction: column;
+	align-self: stretch;
 }
 
 @media only screen and (max-width: 550px) {

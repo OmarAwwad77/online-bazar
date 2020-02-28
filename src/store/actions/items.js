@@ -71,6 +71,9 @@ export const queryItems = (queryObj, all = false) => {
 							});
 							dispatch(queryItemsSync(newQueryItems));
 							return;
+						} else {
+							const items = queryItems.map(item => ({ ...item, isFav: false }));
+							dispatch(queryItemsSync(items));
 						}
 					})
 					.catch(error => {
@@ -302,4 +305,12 @@ export const toggleItemFav = (itemId, userId, remove) => {
 
 export const clearItemsError = () => ({
 	type: actionTypes.CLEAR_ITEMS_ERROR
+});
+
+export const resetRedirect = () => ({
+	type: actionTypes.RESET_REDIRECT
+});
+
+export const clearMyItems = () => ({
+	type: actionTypes.CLEAR_MY_ITEMS
 });

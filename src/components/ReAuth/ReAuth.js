@@ -112,6 +112,7 @@ const ReAuth = props => {
 			</Div>
 		);
 	} else if (!props.reAuthAction || props.redirect) {
+		props.redirect && props.resetRedirectAuth();
 		content = <Redirect to='/' />;
 	}
 
@@ -128,7 +129,8 @@ const mapStateToProps = ({ auth }) => ({
 
 const mapDispatchToProps = dispatch => ({
 	reAuth: (user, isDeleteAction, credentials) =>
-		dispatch(actionCreators.reAuth(user, isDeleteAction, credentials))
+		dispatch(actionCreators.reAuth(user, isDeleteAction, credentials)),
+	resetRedirectAuth: () => dispatch(actionCreators.resetRedirectAuth())
 });
 
 const ReAuthWithModel = storeProps => (

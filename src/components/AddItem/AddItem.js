@@ -7,7 +7,12 @@ import imageCompression from 'browser-image-compression';
 import { db, storageRef, storage } from '../../config/configfb';
 import { useParams, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addItem, updateItem, clearItemsError } from '../../store/actions';
+import {
+	addItem,
+	updateItem,
+	clearItemsError,
+	resetRedirect
+} from '../../store/actions';
 import WithModelComponent from '../Model/WithModelComponent';
 import { Spring, config } from 'react-spring/renderprops';
 import Spinner from '../../UI/Spinner/Spinner';
@@ -19,7 +24,7 @@ const AddItem = props => {
 			value: '',
 			valid: false,
 			errorMessage: null,
-			validation: { required: true, max: 35 },
+			validation: { required: true, max: 55 },
 			touched: false
 		},
 		productPrice: {
@@ -117,10 +122,16 @@ const AddItem = props => {
 
 	const startUploading = async (id, file) => {
 		// start compressing
-		setImagesS({
-			...imagesS,
+		// setImagesS({
+		// 	...imagesS,
+		// 	[id]: { ...imagesS[id], loading: true, errorMessage: null }
+		// });
+
+		setImagesS(preState => ({
+			...preState,
 			[id]: { ...imagesS[id], loading: true, errorMessage: null }
-		});
+		}));
+
 		const options = {
 			maxSizeMB: 0.25,
 			maxWidthOrHeight: 1920,
@@ -135,10 +146,15 @@ const AddItem = props => {
 			const url = await snapshot.task.snapshot.ref.getDownloadURL();
 			console.log('url', url);
 			// set image
-			setImagesS({
-				...imagesS,
+			// setImagesS({
+			// 	...imagesS,
+			// 	[id]: { ...imagesS[id], loading: false, url, errorMessage: null }
+			// });
+
+			setImagesS(preState => ({
+				...preState,
 				[id]: { ...imagesS[id], loading: false, url, errorMessage: null }
-			});
+			}));
 		} catch (error) {
 			// set error
 			setImagesS({
@@ -277,6 +293,7 @@ const AddItem = props => {
 	const formClasses = [classes['form']];
 	props.withModel && formClasses.push(classes['form--with-model']);
 
+	props.redirect && props.resetRedirect();
 	return (
 		<section className={classes['add-item']}>
 			{props.redirect && <Redirect to='/my-items' />}
@@ -438,7 +455,8 @@ const mapStateToProps = ({ auth, items }) => ({
 const mapDispatchToProps = dispatch => ({
 	addItem: item => dispatch(addItem(item)),
 	updateItem: (itemId, item) => dispatch(updateItem(itemId, item)),
-	clearItemsError: () => dispatch(clearItemsError())
+	clearItemsError: () => dispatch(clearItemsError()),
+	resetRedirect: () => dispatch(resetRedirect())
 });
 
 const AddItemWithModel = props => {

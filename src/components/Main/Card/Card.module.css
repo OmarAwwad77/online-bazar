@@ -20,7 +20,7 @@
 .card .image {
 	position: relative;
 	height: 75%;
-	background-size: cover;
+	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 }
@@ -75,6 +75,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	border-top: 1px solid;
 }
 
 .card .card_info {
