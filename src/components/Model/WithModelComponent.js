@@ -10,13 +10,11 @@ const WithModelComponent = props => {
 		if (isInitialMount.current && showS === props.show) {
 		} else {
 			setShowS(props.show);
-			console.log('show', props.show);
 		}
 	}, [props.show]);
 
 	useEffect(() => {
 		if (!isInitialMount.current && showS !== props.show) {
-			console.log('change route');
 			// props.history.goBack();
 		}
 	}, [showS]);

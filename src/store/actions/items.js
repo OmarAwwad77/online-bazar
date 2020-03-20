@@ -91,7 +91,7 @@ export const queryItems = (queryObj, all = false) => {
 					.collection('items')
 					.orderBy(...order)
 					.get();
-				console.log('querySnapshot', querySnapshot);
+
 				extractItems(querySnapshot);
 			} else {
 				if (!queryObj.subCategory || queryObj.subCategory === 'Others') {
@@ -116,7 +116,6 @@ export const queryItems = (queryObj, all = false) => {
 				}
 			}
 		} catch (error) {
-			console.log(error);
 			dispatch(queryItemsFailed(error));
 		}
 	};
@@ -194,11 +193,10 @@ export const fetchFavorites = userId => {
 							...items[index].data(),
 							itemId
 						}));
-					console.log('transformedItems', transformedItems);
+
 					dispatch(fetchFavoritesSync(transformedItems));
 				})
 				.catch(error => {
-					console.log('error', error);
 					dispatch(fetchFavoritesFailed(error));
 				});
 		} else {

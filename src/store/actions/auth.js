@@ -197,7 +197,6 @@ export const reAuth = (user, isDeleteAction, credentialsObj = null) => {
 			);
 			dispatch(reAuthStart());
 			try {
-				console.log(user);
 				await user.reauthenticateWithCredential(credentials);
 				isDeleteAction
 					? dispatch(deleteAccount(user))

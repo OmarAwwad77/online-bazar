@@ -17,7 +17,6 @@ import { useTransition, animated } from 'react-spring';
 import Backdrop from './components/Model/Backdrop';
 
 const AnimatedRouteSign = props => {
-	console.log('App: animated Router rendering');
 	const transition = useTransition(
 		props.location,
 		location => location.pathname,

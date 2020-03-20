@@ -144,7 +144,7 @@ const AddItem = props => {
 				.child('items/' + file.name)
 				.put(compressedFile);
 			const url = await snapshot.task.snapshot.ref.getDownloadURL();
-			console.log('url', url);
+
 			// set image
 			// setImagesS({
 			// 	...imagesS,

@@ -54,7 +54,6 @@ export default (state = initialState, action) => {
 			};
 
 		case actionTypes.ADD_ITEM_FAILED:
-			console.log(action.payload);
 			return {
 				...state,
 				loading: false,

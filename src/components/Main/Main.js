@@ -15,7 +15,7 @@ const Main = props => {
 	const { pathname } = useLocation();
 	const getUrl = itemId =>
 		`${pathname.replace(/\//g, '')}/item-details/${itemId}`;
-	console.log('main running');
+
 	return (
 		<div className={classes.main}>
 			<Hero auth={props.userId} />
@@ -64,7 +64,6 @@ const Main = props => {
 												props.history.push(getUrl(item.itemId))
 											}
 											toggleFavHandler={() => {
-												console.log('clicked');
 												props.toggleFav(item.itemId, props.userId, item.isFav);
 											}}
 										/>

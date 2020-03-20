@@ -25,9 +25,9 @@ const AnimatedCards = ({ items, editAction, deleteAction }) => {
 		to: { width: 100 }
 	});
 
-	console.log(trails.length === transition.length);
-	console.log('trails', trails);
-	console.log('transition', transition);
+	// console.log(trails.length === transition.length);
+	// console.log('trails', trails);
+	// console.log('transition', transition);
 
 	return transition.map(({ item, key, props }, index) => (
 		<animated.div key={key} style={{ ...props, margin: '2rem 1rem' }}>
@@ -81,7 +81,7 @@ const AnimatedRoute = props => {
 const MyItems = props => {
 	const [showConfirmationState, setConfirmationState] = useState(false);
 	const [itemState, setItemState] = useState({ itemId: null });
-	console.log('my-items');
+
 	useEffect(() => {
 		// fetch data
 		props.userId && props.fetchMyItems(props.userId);
@@ -96,7 +96,6 @@ const MyItems = props => {
 		props.history.push(
 			`/${props.match.url.replace(/\//g, '')}/edit-item/${itemId}`
 		);
-		console.log(`/${props.match.url.replace(/\//g, '')}/edit-item/${itemId}`);
 	};
 
 	const itemUrls = itemId => {
