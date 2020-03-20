@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Footer.module.css';
 import Logo from '../../../UI/Logo/Logo';
 import { ReactComponent as Envelope } from '../../../assets/envelope.svg';
+import { ReactComponent as Github } from '../../../assets/github.svg';
 import { HashLink } from 'react-router-hash-link';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -76,10 +77,24 @@ const footer = props => {
 			<section className={classes.contact}>
 				<h2 className={classes.contact_title}>Contact Me</h2>
 				<div className={classes.contact_email}>
-					<span className={classes.contact_envelope}>
+					<span className={classes.contact_icons}>
 						<Envelope />
 					</span>
 					<span>OmarAwwad010@gmail.com</span>
+				</div>
+				<div className={classes.contact_github}>
+					<span className={classes.contact_icons}>
+						<Github />
+					</span>
+					<span>
+						<a
+							className={classes['github-link']}
+							href='https://github.com/OmarAwwad77'
+							target='_blank'
+						>
+							Github Account
+						</a>
+					</span>
 				</div>
 			</section>
 		</section>

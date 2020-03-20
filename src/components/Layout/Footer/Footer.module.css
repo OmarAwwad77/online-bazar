@@ -68,18 +68,29 @@
 	align-self: center;
 }
 
-.footer .contact_envelope {
+.footer .contact_icons {
 	width: 2.5rem;
 	margin-right: 0.5rem;
 	color: crimson;
+	fill: crimson;
 }
 
-.footer .contact_email {
+.footer .contact_email,
+.footer .contact_github {
 	display: flex;
 	align-items: center;
 	font-size: 1.4rem;
 	font-family: initial;
 	margin: 4rem 0 auto 0;
+}
+
+.footer .contact_github {
+	margin-top: 2rem;
+}
+
+.github-link {
+	text-decoration: none;
+	color: white;
 }
 
 @media only screen and (max-width: 874px) {
