@@ -4,21 +4,22 @@ import Logo from '../../../UI/Logo/Logo';
 import { ReactComponent as Envelope } from '../../../assets/envelope.svg';
 import { ReactComponent as Github } from '../../../assets/github.svg';
 import { HashLink } from 'react-router-hash-link';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setToolbarQuery } from '../../../store/actions';
 
-const footer = props => {
+const Footer = (props) => {
 	const sytleClasses = [classes.footer, props.styleClass];
 	// const footerLinksStyle = { textDecoration: 'none' };
-	const setQuery = category => ({
+	let { push } = useHistory();
+	const setQuery = (category) => ({
 		category: category,
 		subCategory: 'All SubCategories',
-		ascending: 'Sort By Price: Low to High'
+		ascending: 'Sort By Price: Low to High',
 	});
 	return (
 		<section className={sytleClasses.join(' ')}>
-			<section className={classes.logo}>
+			<section onClick={() => push('/')} className={classes.logo}>
 				<Logo
 					bright
 					spanFirst='#ff0061'
@@ -101,17 +102,17 @@ const footer = props => {
 	);
 };
 
-const mapDispatchToProps = dispatch => ({
-	setQueryToolbar: query => dispatch(setToolbarQuery(query))
+const mapDispatchToProps = (dispatch) => ({
+	setQueryToolbar: (query) => dispatch(setToolbarQuery(query)),
 });
 
 const mapStateToProps = ({ auth }) => ({
-	isAuth: auth.user ? true : false
+	isAuth: auth.user ? true : false,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(footer);
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
 
-const createFooterLinks = isAuth =>
+const createFooterLinks = (isAuth) =>
 	isAuth ? (
 		<>
 			<li>

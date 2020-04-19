@@ -1,8 +1,8 @@
 import * as actionTypes from './actionTypes';
 import { db, storage, addArray, removeArr } from '../../config/configfb';
 
-export const addItem = item => {
-	return async dispatch => {
+export const addItem = (item) => {
+	return async (dispatch) => {
 		try {
 			await db.collection('items').add(item);
 			dispatch(addItemSync());
@@ -12,35 +12,35 @@ export const addItem = item => {
 	};
 };
 
-const addItemFailed = error => ({
+const addItemFailed = (error) => ({
 	type: actionTypes.ADD_ITEM_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
 const addItemSync = () => ({
-	type: actionTypes.ADD_ITEM
+	type: actionTypes.ADD_ITEM,
 });
 
-export const setShouldRedirect = val => ({
+export const setShouldRedirect = (val) => ({
 	type: actionTypes.SET_SHOULD_REDIRECT,
-	payload: { val }
+	payload: { val },
 });
 
-export const setToolbarQuery = toolbarQuery => ({
+export const setToolbarQuery = (toolbarQuery) => ({
 	type: actionTypes.SET_TOOLBAR_QUERY,
-	payload: { toolbarQuery }
+	payload: { toolbarQuery },
 });
 
 const queryingItems = () => ({ type: actionTypes.QUERYING_ITEMS });
 
-const queryItemsSync = queryItems => ({
+const queryItemsSync = (queryItems) => ({
 	type: actionTypes.QUERY_ITEMS,
-	payload: { queryItems }
+	payload: { queryItems },
 });
 
-const queryItemsFailed = error => ({
+const queryItemsFailed = (error) => ({
 	type: actionTypes.QUERY_ITEMS_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
 export const queryItems = (queryObj, all = false) => {
@@ -49,7 +49,7 @@ export const queryItems = (queryObj, all = false) => {
 		const order = queryObj.asc ? ['itemPrice'] : ['itemPrice', 'desc'];
 
 		const extractItems = (querySnapshot, filterOut) => {
-			querySnapshot.forEach(doc => {
+			querySnapshot.forEach((doc) => {
 				if (filterOut && filterOut.includes(doc.data().subCategory)) return;
 				queryItems.push({ itemId: doc.id, ...doc.data() });
 			});
@@ -60,9 +60,9 @@ export const queryItems = (queryObj, all = false) => {
 				db.collection('users')
 					.doc(userId)
 					.get()
-					.then(doc => {
+					.then((doc) => {
 						if (doc.exists) {
-							const newQueryItems = queryItems.map(item => {
+							const newQueryItems = queryItems.map((item) => {
 								if (doc.data().favorites.includes(item.itemId)) {
 									return { ...item, isFav: true };
 								} else {
@@ -72,11 +72,14 @@ export const queryItems = (queryObj, all = false) => {
 							dispatch(queryItemsSync(newQueryItems));
 							return;
 						} else {
-							const items = queryItems.map(item => ({ ...item, isFav: false }));
+							const items = queryItems.map((item) => ({
+								...item,
+								isFav: false,
+							}));
 							dispatch(queryItemsSync(items));
 						}
 					})
-					.catch(error => {
+					.catch((error) => {
 						dispatch(queryItemsFailed(error));
 					});
 			} else {
@@ -102,7 +105,7 @@ export const queryItems = (queryObj, all = false) => {
 						.get();
 					const filterOut = queryObj.subCategory === 'Others' && [
 						'Sony',
-						'Canon'
+						'Canon',
 					];
 					extractItems(querySnapshot, filterOut);
 				} else {
@@ -123,18 +126,18 @@ export const queryItems = (queryObj, all = false) => {
 
 const fetchingMyItems = () => ({ type: actionTypes.FETCHING_MY_ITEMS });
 
-const fetchMyItemsSync = myItems => ({
+const fetchMyItemsSync = (myItems) => ({
 	type: actionTypes.FETCH_MY_ITEMS,
-	payload: { myItems }
+	payload: { myItems },
 });
 
-const fetchMyItemsFailed = error => ({
+const fetchMyItemsFailed = (error) => ({
 	type: actionTypes.FETCH_MY_ITEMS_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
-export const fetchMyItems = userId => {
-	return async dispatch => {
+export const fetchMyItems = (userId) => {
+	return async (dispatch) => {
 		dispatch(fetchingMyItems());
 		try {
 			const querySnapshot = await db
@@ -142,7 +145,7 @@ export const fetchMyItems = userId => {
 				.where('ownerUid', '==', userId)
 				.get();
 			const items = [];
-			querySnapshot.forEach(doc => {
+			querySnapshot.forEach((doc) => {
 				const item = { ...doc.data(), itemId: doc.id };
 				items.push(item);
 			});
@@ -155,35 +158,27 @@ export const fetchMyItems = userId => {
 
 const fetchingFavorites = () => ({ type: actionTypes.FETCHING_FAVORITES });
 
-const fetchFavoritesSync = favorites => ({
+const fetchFavoritesSync = (favorites) => ({
 	type: actionTypes.FETCH_FAVORITES,
-	payload: { favorites }
+	payload: { favorites },
 });
 
-const fetchFavoritesFailed = error => ({
+const fetchFavoritesFailed = (error) => ({
 	type: actionTypes.FETCH_FAVORITES_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
-export const fetchFavorites = userId => {
-	return async dispatch => {
+export const fetchFavorites = (userId) => {
+	return async (dispatch) => {
 		dispatch(fetchingFavorites());
-		const doc = await db
-			.collection('users')
-			.doc(userId)
-			.get();
+		const doc = await db.collection('users').doc(userId).get();
 		if (doc.exists) {
 			const promises = [];
-			doc.data().favorites.forEach(itemId => {
-				promises.push(
-					db
-						.collection('items')
-						.doc(itemId)
-						.get()
-				);
+			doc.data().favorites.forEach((itemId) => {
+				promises.push(db.collection('items').doc(itemId).get());
 			});
 			Promise.all(promises)
-				.then(items => {
+				.then((items) => {
 					// if (!items[0].exists) {
 					// 	return Promise.reject('item do not exist');
 					// }
@@ -191,12 +186,12 @@ export const fetchFavorites = userId => {
 						.data()
 						.favorites.map((itemId, index) => ({
 							...items[index].data(),
-							itemId
+							itemId,
 						}));
 
 					dispatch(fetchFavoritesSync(transformedItems));
 				})
-				.catch(error => {
+				.catch((error) => {
 					dispatch(fetchFavoritesFailed(error));
 				});
 		} else {
@@ -207,34 +202,31 @@ export const fetchFavorites = userId => {
 
 const deletingItem = () => ({ type: actionTypes.DELETING_ITEM });
 
-const deleteItemSync = id => ({
+const deleteItemSync = (id) => ({
 	type: actionTypes.DELETE_ITEM,
-	payload: { id }
+	payload: { id },
 });
 
-const deleteItemFailed = error => ({
+const deleteItemFailed = (error) => ({
 	type: actionTypes.DELETE_ITEM_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
 export const deleteItem = (id, urls) => {
-	return dispatch => {
+	return (dispatch) => {
 		dispatch(deletingItem());
 		const promises = [];
-		const promise1 = db
-			.collection('items')
-			.doc(id)
-			.delete();
+		const promise1 = db.collection('items').doc(id).delete();
 
 		promises.push(promise1);
-		urls.forEach(url => {
+		urls.forEach((url) => {
 			const imgRef = storage.refFromURL(url);
 			promises.push(imgRef.delete());
 		});
 
 		Promise.all(promises)
-			.then(_ => dispatch(deleteItemSync(id)))
-			.catch(error => dispatch(deleteItemFailed(error)));
+			.then((_) => dispatch(deleteItemSync(id)))
+			.catch((error) => dispatch(deleteItemFailed(error)));
 	};
 };
 
@@ -242,22 +234,19 @@ const updatingItem = () => ({ type: actionTypes.UPDATING_ITEM });
 
 const updateItemSync = (itemId, item) => ({
 	type: actionTypes.UPDATE_ITEM,
-	payload: { item, itemId }
+	payload: { item, itemId },
 });
 
-const updateItemFailed = error => ({
+const updateItemFailed = (error) => ({
 	type: actionTypes.UPDATE_ITEM_FAILED,
-	payload: { error }
+	payload: { error },
 });
 
 export const updateItem = (itemId, item) => {
-	return async dispatch => {
+	return async (dispatch) => {
 		dispatch(updatingItem());
 		try {
-			await db
-				.collection('items')
-				.doc(itemId)
-				.set(item);
+			await db.collection('items').doc(itemId).set(item);
 			dispatch(updateItemSync(itemId, item));
 		} catch (error) {
 			dispatch(updateItemFailed(error));
@@ -265,34 +254,34 @@ export const updateItem = (itemId, item) => {
 	};
 };
 
-const unFavoriteItem = itemId => ({
+const unFavoriteItem = (itemId) => ({
 	type: actionTypes.UNFAVORITE_ITEM,
-	payload: { itemId }
+	payload: { itemId },
 });
 
-const FavoriteItem = itemId => ({
+const FavoriteItem = (itemId) => ({
 	type: actionTypes.FAVORITE_ITEM,
-	payload: { itemId }
+	payload: { itemId },
 });
 
 export const toggleItemFav = (itemId, userId, remove) => {
-	return async dispatch => {
+	return async (dispatch) => {
 		try {
 			if (remove) {
 				dispatch(unFavoriteItem(itemId));
 				await db
 					.collection('users')
 					.doc(userId)
-					.set({
-						favorites: removeArr(itemId)
+					.update({
+						favorites: removeArr(itemId),
 					});
 			} else {
 				dispatch(FavoriteItem(itemId));
 				await db
 					.collection('users')
 					.doc(userId)
-					.set({
-						favorites: addArray(itemId)
+					.update({
+						favorites: addArray(itemId),
 					});
 			}
 		} catch (error) {
@@ -302,13 +291,13 @@ export const toggleItemFav = (itemId, userId, remove) => {
 };
 
 export const clearItemsError = () => ({
-	type: actionTypes.CLEAR_ITEMS_ERROR
+	type: actionTypes.CLEAR_ITEMS_ERROR,
 });
 
 export const resetRedirect = () => ({
-	type: actionTypes.RESET_REDIRECT
+	type: actionTypes.RESET_REDIRECT,
 });
 
 export const clearMyItems = () => ({
-	type: actionTypes.CLEAR_MY_ITEMS
+	type: actionTypes.CLEAR_MY_ITEMS,
 });

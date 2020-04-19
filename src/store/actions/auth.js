@@ -5,12 +5,12 @@ export const authStart = () => ({ type: actionTypes.AUTH_START });
 
 export const authSuccess = () => ({ type: actionTypes.AUTH_SUCCESS });
 
-export const authFail = error => ({
+export const authFail = (error) => ({
 	type: actionTypes.AUTH_FAIL,
-	payload: { error }
+	payload: { error },
 });
 
-const setLocalStorage = user => {
+const setLocalStorage = (user) => {
 	localStorage.setItem('uid', user.uid);
 	localStorage.setItem('email', user.email);
 	localStorage.setItem('providerId', user.providerId);
@@ -20,7 +20,7 @@ const clearLocalStorage = () => {
 	localStorage.clear();
 };
 
-export const setCurrentUser = user => {
+export const setCurrentUser = (user) => {
 	if (user === 'localStorage') {
 		return {
 			type: actionTypes.SET_CURRENT_USER,
@@ -28,15 +28,15 @@ export const setCurrentUser = user => {
 				currentUser: {
 					uid: localStorage.getItem('uid'),
 					email: localStorage.getItem('email'),
-					providerId: localStorage.getItem('providerId')
-				}
-			}
+					providerId: localStorage.getItem('providerId'),
+				},
+			},
 		};
 	} else if (user !== null) {
 		let currentUser = {
 			uid: user.uid,
 			email: user.email,
-			providerId: user.providerId
+			providerId: user.providerId,
 		};
 		setLocalStorage(user);
 		return { type: actionTypes.SET_CURRENT_USER, payload: { currentUser } };
@@ -47,14 +47,14 @@ export const setCurrentUser = user => {
 
 const signOutSuccess = () => ({ type: actionTypes.SIGN_OUT_SUCCESS });
 
-const signOutFail = error => ({
+const signOutFail = (error) => ({
 	type: actionTypes.SIGN_OUT_FAIL,
-	payload: { error }
+	payload: { error },
 });
 
 export const signOut = () => {
 	clearLocalStorage();
-	return async dispatch => {
+	return async (dispatch) => {
 		try {
 			await fb.auth().signOut();
 			dispatch(signOutSuccess());
@@ -64,8 +64,8 @@ export const signOut = () => {
 	};
 };
 
-export const providerSignIn = provider => {
-	return async dispatch => {
+export const providerSignIn = (provider) => {
+	return async (dispatch) => {
 		dispatch(authStart());
 		if (provider === 'google') {
 			const provider = new fb.auth.GoogleAuthProvider();
@@ -88,7 +88,7 @@ export const providerSignIn = provider => {
 };
 
 export const auth = (email, password, isSignIn) => {
-	const setAuthError = errorCode => {
+	const setAuthError = (errorCode) => {
 		const errorObj = {};
 		if (errorCode === 'auth/email-already-in-use') {
 			errorObj.message = 'The Email Address Already Exists';
@@ -99,7 +99,7 @@ export const auth = (email, password, isSignIn) => {
 		}
 		return errorObj;
 	};
-	return async dispatch => {
+	return async (dispatch) => {
 		dispatch(authStart());
 		if (isSignIn) {
 			try {
@@ -123,26 +123,26 @@ export const clearAuthError = () => ({ type: actionTypes.CLEAR_AUTH_ERROR });
 
 const reAuthStart = () => ({ type: actionTypes.REAUTH_START });
 
-const reAuthFail = error => ({
+const reAuthFail = (error) => ({
 	type: actionTypes.REAUTH_FAIL,
-	payload: { error }
+	payload: { error },
 });
 
 export const deleteAccountRequest = () => ({
-	type: actionTypes.DELETE_ACCOUNT_REQUEST
+	type: actionTypes.DELETE_ACCOUNT_REQUEST,
 });
 
 const deleteAccountSuccess = () => ({
-	type: actionTypes.DELETE_ACCOUNT_SUCCESS
+	type: actionTypes.DELETE_ACCOUNT_SUCCESS,
 });
 
-const deleteAccountFail = error => ({
+const deleteAccountFail = (error) => ({
 	type: actionTypes.DELETE_ACCOUNT_FAIL,
-	payload: { error }
+	payload: { error },
 });
 
-const deleteAccount = user => {
-	return async dispatch => {
+const deleteAccount = (user) => {
+	return async (dispatch) => {
 		try {
 			dispatch({ type: actionTypes.CLEAR_MY_ITEMS });
 
@@ -151,7 +151,7 @@ const deleteAccount = user => {
 				.where('ownerUid', '==', user.uid)
 				.get();
 
-			querySnapshot.forEach(async doc => {
+			querySnapshot.forEach(async (doc) => {
 				await doc.ref.delete();
 			});
 
@@ -159,26 +159,27 @@ const deleteAccount = user => {
 			await user.delete();
 			dispatch(deleteAccountSuccess());
 		} catch (error) {
+			console.log(error);
 			dispatch(deleteAccountFail(error.message));
 		}
 	};
 };
 
 export const changePasswordRequest = () => ({
-	type: actionTypes.CHANGE_PASSWORD_REQUEST
+	type: actionTypes.CHANGE_PASSWORD_REQUEST,
 });
 
 const changePasswordSuccess = () => ({
-	type: actionTypes.CHANGE_PASSWORD_SUCCESS
+	type: actionTypes.CHANGE_PASSWORD_SUCCESS,
 });
 
-const changePasswordFail = error => ({
+const changePasswordFail = (error) => ({
 	type: actionTypes.CHANGE_PASSWORD_FAIL,
-	payload: { error }
+	payload: { error },
 });
 
 const changePassword = (user, password) => {
-	return async dispatch => {
+	return async (dispatch) => {
 		try {
 			await user.updatePassword(password);
 			dispatch(changePasswordSuccess());
@@ -189,7 +190,7 @@ const changePassword = (user, password) => {
 };
 
 export const reAuth = (user, isDeleteAction, credentialsObj = null) => {
-	return async dispatch => {
+	return async (dispatch) => {
 		if (credentialsObj) {
 			const credentials = fb.auth.EmailAuthProvider.credential(
 				credentialsObj.email,
@@ -222,11 +223,11 @@ export const reAuth = (user, isDeleteAction, credentialsObj = null) => {
 	};
 };
 
-export const setSignRedirectPath = path => ({
+export const setSignRedirectPath = (path) => ({
 	type: actionTypes.SET_SIGN_REDIRECT_PATH,
-	payload: { path }
+	payload: { path },
 });
 
 export const resetRedirectAuth = () => ({
-	type: actionTypes.RESET_REDIRECT
+	type: actionTypes.RESET_REDIRECT,
 });

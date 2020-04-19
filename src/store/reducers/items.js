@@ -5,16 +5,16 @@ const initialState = {
 	toolbarQuery: {
 		category: 'Laptops',
 		subCategory: 'All SubCategories',
-		ascending: 'Sort By Price: Low to High'
+		ascending: 'Sort By Price: Low to High',
 	},
 	queryItems: null,
 	myItems: null,
 	error: null,
 	loading: false,
-	redirect: false
+	redirect: false,
 };
 
-const removeItem = (arr, id) => arr.filter(item => item.itemId !== id);
+const removeItem = (arr, id) => arr.filter((item) => item.itemId !== id);
 const addItem = (arr, item) => [...arr, item];
 const updateMyItems = (itemId, item, arr) => {
 	const newArr = removeItem(arr, itemId);
@@ -24,12 +24,22 @@ const updateMyItems = (itemId, item, arr) => {
 
 const updateQueryItemsFav = (itemId, items, remove, queryItems = true) => {
 	if (queryItems) {
-		const updatedItem = {
-			...items.find(item => item.itemId === itemId),
-			isFav: remove ? false : true
-		};
-		const newArr = items.filter(item => item.itemId !== itemId);
-		newArr.push(updatedItem);
+		const newArr = items.map((item) => {
+			if (item.itemId === itemId) {
+				return {
+					...item,
+					isFav: remove ? false : true,
+				};
+			}
+			return item;
+		});
+		// const updatedItem = {
+		// 	...items.find((item) => item.itemId === itemId),
+		// 	isFav: remove ? false : true,
+		// };
+		// const newArr = items.filter((item) => item.itemId !== itemId);
+		// newArr.push(updatedItem);
+
 		return newArr;
 	} else {
 		return removeItem(items, itemId);
@@ -43,69 +53,69 @@ export default (state = initialState, action) => {
 				...state,
 				loading: false,
 				error: null,
-				redirect: true
+				redirect: true,
 			};
 
 		case actionTypes.ADDING_ITEM:
 			return {
 				...state,
 				loading: true,
-				error: null
+				error: null,
 			};
 
 		case actionTypes.ADD_ITEM_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.SET_TOOLBAR_QUERY:
 			return {
 				...state,
-				toolbarQuery: action.payload.toolbarQuery
+				toolbarQuery: action.payload.toolbarQuery,
 			};
 
 		case actionTypes.QUERYING_ITEMS:
 			return {
 				...state,
 				loading: true,
-				error: null
+				error: null,
 			};
 
 		case actionTypes.QUERY_ITEMS:
 			return {
 				...state,
 				loading: false,
-				queryItems: action.payload.queryItems
+				queryItems: action.payload.queryItems,
 			};
 
 		case actionTypes.QUERY_ITEMS_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.FETCHING_FAVORITES:
 			return {
 				...state,
 				loading: true,
-				error: null
+				error: null,
 			};
 
 		case actionTypes.FETCH_FAVORITES:
 			return {
 				...state,
 				loading: false,
-				favorites: action.payload.favorites
+				favorites: action.payload.favorites,
 			};
 
 		case actionTypes.FETCH_FAVORITES_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.FAVORITE_ITEM:
@@ -115,7 +125,7 @@ export default (state = initialState, action) => {
 					action.payload.itemId,
 					state.queryItems,
 					false
-				)
+				),
 			};
 
 		case actionTypes.UNFAVORITE_ITEM:
@@ -131,49 +141,49 @@ export default (state = initialState, action) => {
 					action.payload.itemId,
 					state.queryItems,
 					true
-				)
+				),
 			};
 
 		case actionTypes.FETCHING_MY_ITEMS:
 			return {
 				...state,
 				loading: true,
-				error: null
+				error: null,
 			};
 
 		case actionTypes.FETCH_MY_ITEMS:
 			return {
 				...state,
 				loading: false,
-				myItems: action.payload.myItems
+				myItems: action.payload.myItems,
 			};
 
 		case actionTypes.FETCH_MY_ITEMS_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.DELETING_ITEM:
 			return {
 				...state,
 				error: null,
-				loading: true
+				loading: true,
 			};
 
 		case actionTypes.UPDATING_ITEM:
 			return {
 				...state,
 				error: null,
-				loading: true
+				loading: true,
 			};
 
 		case actionTypes.UPDATE_ITEM_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.UPDATE_ITEM:
@@ -184,45 +194,45 @@ export default (state = initialState, action) => {
 					action.payload.itemId,
 					action.payload.item,
 					state.myItems
-				)
+				),
 			};
 
 		case actionTypes.DELETE_ITEM:
 			return {
 				...state,
 				loading: false,
-				myItems: removeItem(state.myItems, action.payload.id)
+				myItems: removeItem(state.myItems, action.payload.id),
 			};
 
 		case actionTypes.DELETE_ITEM_FAILED:
 			return {
 				...state,
 				loading: false,
-				error: action.payload.error
+				error: action.payload.error,
 			};
 
 		case actionTypes.CLEAR_ITEMS_ERROR:
 			return {
 				...state,
-				error: null
+				error: null,
 			};
 
 		case actionTypes.SET_SHOULD_REDIRECT:
 			return {
 				...state,
-				redirect: false
+				redirect: false,
 			};
 
 		case actionTypes.RESET_REDIRECT:
 			return {
 				...state,
-				redirect: false
+				redirect: false,
 			};
 
 		case actionTypes.CLEAR_MY_ITEMS:
 			return {
 				...state,
-				myItems: null
+				myItems: null,
 			};
 
 		// case actionTypes.ADD_ITEM:

@@ -45,10 +45,10 @@ const checkValidity = (val, validationObj) => {
 	return { isValid, errors: errorsArr };
 };
 
-const Sign = props => {
+const Sign = (props) => {
 	const [isSignInState, setSingInState] = useState(true);
 	const signInStateHandler = () => {
-		setSingInState(prevState => !prevState);
+		setSingInState((prevState) => !prevState);
 	};
 	const [isFormValidState, setFromValidity] = useState(false);
 	const [inputsState, setInputsState] = useState({
@@ -57,25 +57,25 @@ const Sign = props => {
 			isValid: false,
 			touched: false,
 			validation: { isRequired: true, isEmail: true },
-			errors: []
+			errors: [],
 		},
 		password: {
 			value: '',
 			isValid: false,
 			touched: false,
 			validation: { isRequired: true, minLen: 6, maxLen: 12 },
-			errors: []
+			errors: [],
 		},
 		confirmPassword: {
 			value: '',
 			isValid: false,
 			touched: false,
 			validation: { isRequired: true, match: '' },
-			errors: []
-		}
+			errors: [],
+		},
 	});
 
-	const checkOverallFormValidity = stateObj => {
+	const checkOverallFormValidity = (stateObj) => {
 		let isFormValid = true;
 		for (let element in stateObj) {
 			if (element === 'confirmPassword' && isSignInState) {
@@ -87,7 +87,7 @@ const Sign = props => {
 	};
 
 	useEffect(() => setFromValidity(checkOverallFormValidity(inputsState)), [
-		isSignInState
+		isSignInState,
 	]);
 
 	const inputChangedHandler = (e, inputIdentifier) => {
@@ -110,7 +110,7 @@ const Sign = props => {
 		const newInputsState = {
 			...inputsState,
 			confirmPassword: confirmPasswordObj,
-			[inputIdentifier]: inputUpdatedState
+			[inputIdentifier]: inputUpdatedState,
 		};
 		setInputsState(newInputsState);
 		setFromValidity(checkOverallFormValidity(newInputsState));
@@ -155,7 +155,7 @@ const Sign = props => {
 								? { borderBottom: '1px solid red' }
 								: null
 						}
-						onChange={e => inputChangedHandler(e, 'email')}
+						onChange={(e) => inputChangedHandler(e, 'email')}
 						value={inputsState.email.value}
 						placeholder='Email'
 						className={classes.input}
@@ -172,7 +172,8 @@ const Sign = props => {
 								? { borderBottom: '1px solid red' }
 								: null
 						}
-						onChange={e => inputChangedHandler(e, 'password')}
+						type='password'
+						onChange={(e) => inputChangedHandler(e, 'password')}
 						value={inputsState.password.value}
 						placeholder='Password'
 						className={classes.input}
@@ -193,7 +194,8 @@ const Sign = props => {
 										? { borderBottom: '1px solid red' }
 										: null
 								}
-								onChange={e => inputChangedHandler(e, 'confirmPassword')}
+								type='password'
+								onChange={(e) => inputChangedHandler(e, 'confirmPassword')}
 								value={inputsState.confirmPassword.value}
 								placeholder='Confirm Password'
 								className={classes.input}
@@ -222,7 +224,7 @@ const Sign = props => {
 							borderRadius: '2.5rem',
 							border: '1px solid #ff0061',
 							backgroundColor: '#fff',
-							color: '#ff0061'
+							color: '#ff0061',
 						}}
 						hoverable
 					>
@@ -230,13 +232,13 @@ const Sign = props => {
 						{isSignInState ? 'Sign In' : 'Sign Up'}
 					</Button>
 					<Button
-						onClick={e => signInStateHandler(e)}
+						onClick={(e) => signInStateHandler(e)}
 						className={classes.button}
 						styles={{
 							borderRadius: '2.5rem',
 							border: '1px solid #ff0061',
 							backgroundColor: '#fff',
-							color: '#ff0061'
+							color: '#ff0061',
 						}}
 						hoverable
 					>
@@ -251,14 +253,14 @@ const Sign = props => {
 
 const mapStateToProps = ({ auth }) => ({
 	loading: auth.loading,
-	error: auth.error
+	error: auth.error,
 });
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
 	return {
-		authenticateUserWithProvider: provider =>
+		authenticateUserWithProvider: (provider) =>
 			dispatch(actionCreators.providerSignIn(provider)),
 		authenticateUser: (email, password, isSignIn) =>
-			dispatch(actionCreators.auth(email, password, isSignIn))
+			dispatch(actionCreators.auth(email, password, isSignIn)),
 	};
 };
 

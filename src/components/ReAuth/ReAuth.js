@@ -12,20 +12,20 @@ import styled from 'styled-components';
 import {
 	StyledMessage,
 	StyledTitle,
-	modelStyles
+	modelStyles,
 } from '../Model/withErrorModel';
 
-const ReAuth = props => {
+const ReAuth = (props) => {
 	const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 	const [formInputsState, setformInputsState] = useState({
 		email: '',
 		password: '',
-		newPassword: ''
+		newPassword: '',
 	});
 	const inputChangeHandler = (e, identifier) =>
 		setformInputsState({
 			...formInputsState,
-			[identifier]: e.target.value
+			[identifier]: e.target.value,
 		});
 
 	const continueHandler = () => {
@@ -36,7 +36,7 @@ const ReAuth = props => {
 				: {
 						email: formInputsState.email,
 						password: formInputsState.password,
-						newPassword: formInputsState.newPassword
+						newPassword: formInputsState.newPassword,
 				  };
 
 		props.reAuth(auth().currentUser, isDeleteAction, credentials);
@@ -46,7 +46,7 @@ const ReAuth = props => {
 		borderRadius: '2.5rem',
 		border: '1px solid #ff0061',
 		backgroundColor: '#fff',
-		color: '#ff0061'
+		color: '#ff0061',
 	};
 
 	const signInWithPassword =
@@ -55,20 +55,22 @@ const ReAuth = props => {
 	const formContent = signInWithPassword ? (
 		<>
 			<input
-				onChange={e => inputChangeHandler(e, 'email')}
+				onChange={(e) => inputChangeHandler(e, 'email')}
 				className={classes['reauth-form__input']}
 				placeholder='Email'
 			/>
 			<input
-				onChange={e => inputChangeHandler(e, 'password')}
+				onChange={(e) => inputChangeHandler(e, 'password')}
 				className={classes['reauth-form__input']}
 				placeholder='Password'
+				type='password'
 			/>
 			{props.reAuthAction === 'change' && (
 				<input
-					onChange={e => inputChangeHandler(e, 'newPassword')}
+					onChange={(e) => inputChangeHandler(e, 'newPassword')}
 					className={classes['reauth-form__input']}
 					placeholder='New Password'
+					type='password'
 				/>
 			)}
 		</>
@@ -103,7 +105,7 @@ const ReAuth = props => {
 		content = props.loading && <Spinner />;
 	} else if (props.error) {
 		const Div = styled.div`
-			${props => props.styles}
+			${(props) => props.styles}
 		`;
 		content = (
 			<Div styles={modelStyles}>
@@ -124,18 +126,18 @@ const mapStateToProps = ({ auth }) => ({
 	providerId: auth.user && auth.user.providerId,
 	loading: auth.loading,
 	redirect: auth.redirect,
-	error: auth.error
+	error: auth.error,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
 	reAuth: (user, isDeleteAction, credentials) =>
 		dispatch(actionCreators.reAuth(user, isDeleteAction, credentials)),
-	resetRedirectAuth: () => dispatch(actionCreators.resetRedirectAuth())
+	resetRedirectAuth: () => dispatch(actionCreators.resetRedirectAuth()),
 });
 
-const ReAuthWithModel = storeProps => (
+const ReAuthWithModel = (storeProps) => (
 	<WithModelComponent show usingRouter modelClass={classes['model']}>
-		{close => <ReAuth closeModel={close} {...storeProps} />}
+		{(close) => <ReAuth closeModel={close} {...storeProps} />}
 	</WithModelComponent>
 );
 

@@ -13,4 +13,5 @@
 	grid-template-rows: min-content;
 	grid-auto-rows: min-content;
 	gap: 2rem 1rem;
+	width: 90%;
 }
