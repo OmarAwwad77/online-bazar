@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = props => {
+const Button = (props) => {
 	// const styles = [classes.button];
 	// props.active && styles.push(classes.active);
 	const active =
 		props.active &&
 		(props.activeStyles || {
 			backgroundColor: props.styles.color,
-			color: props.styles.backgroundColor
+			color: props.styles.backgroundColor,
 		});
 	const hover =
 		props.hoverable &&
@@ -17,7 +17,7 @@ const Button = props => {
 				? props.styles
 				: {
 						color: props.styles.backgroundColor,
-						backgroundColor: props.styles.color
+						backgroundColor: props.styles.color,
 				  }));
 	const disabled =
 		props.disabled &&
@@ -41,7 +41,9 @@ const Button = props => {
         cursor: pointer;
         ${props.styles}
         ${active}
-        ${disabled}
+				${disabled}
+		
+
     `;
 	return (
 		<StyledLink onClick={props.onClick} className={props.className}>

@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 import { Spring } from 'react-spring/renderprops';
 import VisibilitySensor from '../../VisibilitySensor/VisibilitySensor';
 
-const Filters = props => {
+const Filters = (props) => {
 	const [category, setCategory] = useState('Laptops');
 	const [subCategory, setSubCategory] = useState('All SubCategories');
 	const [ascending, setAscending] = useState('Sort By Price: Low to High');
@@ -20,7 +20,7 @@ const Filters = props => {
 		query(props.toolbarQuery);
 	}, [props.toolbarQuery]);
 
-	const query = queryState => {
+	const query = (queryState) => {
 		const asc =
 			queryState.ascending === 'Sort By Price: Low to High' ? true : false;
 		const queryObj = { asc };
@@ -33,7 +33,7 @@ const Filters = props => {
 			props.queryItems({
 				...queryObj,
 				mainCategory: queryState.category,
-				subCategory: queryState.subCategory
+				subCategory: queryState.subCategory,
 			});
 		}
 	};
@@ -41,18 +41,19 @@ const Filters = props => {
 	const filters = (
 		<section className={classes.filters}>
 			<VisibilitySensor once partialVisibility>
-				{isVisible => (
+				{(isVisible) => (
 					<Spring
 						from={{ x: 10, opacity: 0 }}
 						to={{ x: isVisible ? 0 : 10, opacity: isVisible ? 1 : 0 }}
 						config={{ mass: 1, friction: 20, tension: 90 }}
 					>
-						{animProps => (
+						{(animProps) => (
 							<>
 								<CategoriesDropDown
 									style={{
+										zIndex: '5',
 										transform: `translateX(-${animProps.x}rem)`,
-										opacity: `${animProps.opacity}`
+										opacity: `${animProps.opacity}`,
 									}}
 									dropDownsClass={classes['categories__drop-downs']}
 									query
@@ -64,11 +65,12 @@ const Filters = props => {
 								/>
 								<div
 									style={{
+										zIndex: '4',
 										display: 'flex',
 										flexDirection: 'row',
 										justifyContent: 'space-between',
 										transform: `translateX(${animProps.x}rem)`,
-										opacity: `${animProps.opacity}`
+										opacity: `${animProps.opacity}`,
 									}}
 								>
 									<DropDown
@@ -76,7 +78,7 @@ const Filters = props => {
 										value={ascending}
 										list={[
 											'Sort By Price: High to Low',
-											'Sort By Price: Low to High'
+											'Sort By Price: Low to High',
 										]}
 										onChangeHandler={setAscending}
 									/>
@@ -86,7 +88,7 @@ const Filters = props => {
 											margin: '0',
 											marginLeft: '1rem',
 											backgroundColor: '#4e002d',
-											color: '#fff'
+											color: '#fff',
 										}}
 										hoverable
 									>
@@ -104,12 +106,12 @@ const Filters = props => {
 	return filters;
 };
 
-const mapDispatchToProps = dispatch => ({
-	queryItems: (queryObj, all) => dispatch(queryItems(queryObj, all))
+const mapDispatchToProps = (dispatch) => ({
+	queryItems: (queryObj, all) => dispatch(queryItems(queryObj, all)),
 });
 
 const mapStateToProps = ({ items }) => ({
-	toolbarQuery: items.toolbarQuery
+	toolbarQuery: items.toolbarQuery,
 });
 
 export default connect(
